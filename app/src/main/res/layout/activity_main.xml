@@ -37,15 +37,9 @@
                 android:id="@+id/rcvr_tl_tabs"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:elevation="6dp"
+                android:elevation="0dp"
                 android:minHeight="?attr/actionBarSize"
                 android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"/>
-
-            <!--
-            <com.daimajia.slider.library.SliderLayout
-                android:id="@+id/slider"
-                android:layout_width="match_parent"
-                android:layout_height="200dp" />-->
 
         </LinearLayout>
 

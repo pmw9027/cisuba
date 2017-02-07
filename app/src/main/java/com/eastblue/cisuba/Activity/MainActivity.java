@@ -38,7 +38,16 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         ButterKnife.bind(this);
+        init();
+    }
 
+    void init() {
+
+        setSupportActionBar(mToolbar);
+        dtToggle = new ActionBarDrawerToggle(this, mDrawerLayout, mToolbar, 0, R.string.app_name);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+
+        mTabLayout.setSelectedTabIndicatorHeight(0);
         mTabAdapter = new TabPagerAdapter(getSupportFragmentManager(), this);
         mViewPager.setAdapter(mTabAdapter);
         mTabLayout.setupWithViewPager(mViewPager);
@@ -49,31 +58,6 @@ public class MainActivity extends AppCompatActivity {
         }
 
         mTabLayout.getTabAt(0).select();
-        //init();
-    }
-
-    void init() {
-
-        setSupportActionBar(mToolbar);
-        dtToggle = new ActionBarDrawerToggle(this, mDrawerLayout, mToolbar, 0, R.string.app_name);
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        HashMap<String,Integer> file_maps = new HashMap<String, Integer>();
-        file_maps.put("BANNER", R.drawable.banner_1);
-        for(String name : file_maps.keySet()){
-            TextSliderView textSliderView = new TextSliderView(this);
-            // initialize a SliderLayout
-            textSliderView
-                    .description(name)
-                    .image(file_maps.get(name))
-                    .setScaleType(BaseSliderView.ScaleType.Fit);
-
-            //add your extra information
-            textSliderView.bundle(new Bundle());
-            textSliderView.getBundle()
-                    .putString("extra",name);
-
-            //mBannerSlider.addSlider(textSliderView);
-        }
     }
 
     @Override

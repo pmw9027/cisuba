@@ -3,28 +3,34 @@
     android:orientation="vertical" android:layout_width="match_parent"
     android:layout_height="wrap_content">
 
-    <android.support.v7.widget.Toolbar
+    <com.eastblue.cisuba.View.CisubaToolbar
         android:id="@+id/toolbar"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:minHeight="?attr/actionBarSize">
 
         <FrameLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+            android:gravity="center"
+            android:layout_gravity="center_vertical|center_horizontal"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
 
             <ImageView
-                android:layout_width="match_parent"
+                android:layout_marginRight="15dp"
+                android:layout_gravity="center"
+                android:layout_width="100dp"
                 android:layout_height="20dp"
-                android:src="@drawable/tab_logo"/>
+                android:src="@drawable/tab_logo_string"/>
+
+            <ImageView
+                android:layout_marginLeft="100dp"
+                android:layout_width="80dp"
+                android:layout_height="?attr/actionBarSize"
+                android:background="@drawable/tab_logo"/>
 
         </FrameLayout>
-        <ImageView
-            android:layout_gravity="center"
-            android:layout_width="100dp"
-            android:layout_height="20dp"
-            android:src="@drawable/tab_logo_string"/>
 
-    </android.support.v7.widget.Toolbar>
+    </com.eastblue.cisuba.View.CisubaToolbar>
     
 </LinearLayout>
