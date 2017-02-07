@@ -7,7 +7,11 @@ import android.support.v4.app.FragmentPagerAdapter;
 import android.view.LayoutInflater;
 import android.view.View;
 
+import com.eastblue.cisuba.Fragment.EtcFragment;
+import com.eastblue.cisuba.Fragment.FindLocationFragment;
 import com.eastblue.cisuba.Fragment.HomeFragment;
+import com.eastblue.cisuba.Fragment.LocationFragment;
+import com.eastblue.cisuba.Fragment.ProfileFragment;
 import com.eastblue.cisuba.R;
 
 /**
@@ -28,6 +32,12 @@ public class TabPagerAdapter extends FragmentPagerAdapter {
             R.drawable.tab5_selector
     };
 
+    static final int HOME_FRAGMENT = 0;
+    static final int NEAR_FRAGMENT = 1;
+    static final int FIND_FRAGMENT = 2;
+    static final int PROFILE_FRAGMENT = 3;
+    static final int ETC_FRAGMENT = 4;
+
     public TabPagerAdapter(FragmentManager fm, Context context) {
         super(fm);
         mContext = context;
@@ -41,7 +51,21 @@ public class TabPagerAdapter extends FragmentPagerAdapter {
 
     @Override
     public Fragment getItem(int position) {
-        return new HomeFragment();
+        switch (position)
+        {
+            case HOME_FRAGMENT:
+                return new HomeFragment();
+            case NEAR_FRAGMENT:
+                return new LocationFragment();
+            case FIND_FRAGMENT:
+                return new FindLocationFragment();
+            case PROFILE_FRAGMENT:
+                return new ProfileFragment();
+            case ETC_FRAGMENT:
+                return new EtcFragment();
+            default:
+                return null;
+        }
     }
 
     @Override

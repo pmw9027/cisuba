@@ -4,6 +4,7 @@
 
     <item
         app:showAsAction="ifRoom"
+        android:icon="@drawable/ic_top_map"
         android:id="@+id/menu_gps"
         android:title="GPS" />
 
