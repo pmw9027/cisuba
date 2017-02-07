@@ -1,0 +1,12 @@
+<component name="libraryTable">
+  <library name="auth-1.1.31">
+    <CLASSES>
+      <root url="jar://$PROJECT_DIR$/app/build/intermediates/exploded-aar/com.kakao.sdk/auth/1.1.31/jars/classes.jar!/" />
+      <root url="file://$PROJECT_DIR$/app/build/intermediates/exploded-aar/com.kakao.sdk/auth/1.1.31/res" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES>
+      <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/com.kakao.sdk/auth/1.1.31/995fe4d0e7233fb48ec8b2aa62f5a75c1f6c4c3d/auth-1.1.31-sources.jar!/" />
+    </SOURCES>
+  </library>
+</component>

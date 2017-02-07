@@ -1,0 +1,12 @@
+<component name="libraryTable">
+  <library name="kakaotalk-1.1.31">
+    <CLASSES>
+      <root url="file://$PROJECT_DIR$/app/build/intermediates/exploded-aar/com.kakao.sdk/kakaotalk/1.1.31/res" />
+      <root url="jar://$PROJECT_DIR$/app/build/intermediates/exploded-aar/com.kakao.sdk/kakaotalk/1.1.31/jars/classes.jar!/" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES>
+      <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/com.kakao.sdk/kakaotalk/1.1.31/7430639df05f63a062bb5d9a9333fd23fb3020f4/kakaotalk-1.1.31-sources.jar!/" />
+    </SOURCES>
+  </library>
+</component>
