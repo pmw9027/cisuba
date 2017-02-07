@@ -7,6 +7,24 @@
         android:id="@+id/toolbar"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:minHeight="?attr/actionBarSize"/>
+        android:minHeight="?attr/actionBarSize">
+
+        <FrameLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <ImageView
+                android:layout_width="match_parent"
+                android:layout_height="20dp"
+                android:src="@drawable/tab_logo"/>
+
+        </FrameLayout>
+        <ImageView
+            android:layout_gravity="center"
+            android:layout_width="100dp"
+            android:layout_height="20dp"
+            android:src="@drawable/tab_logo_string"/>
+
+    </android.support.v7.widget.Toolbar>
     
 </LinearLayout>
