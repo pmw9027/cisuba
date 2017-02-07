@@ -1,5 +1,7 @@
 package com.eastblue.cisuba.Activity;
 
+import android.content.res.Configuration;
+import android.support.annotation.Nullable;
 import android.support.design.widget.TabLayout;
 import android.support.v4.view.ViewPager;
 import android.support.v4.widget.DrawerLayout;
@@ -45,7 +47,7 @@ public class MainActivity extends AppCompatActivity {
 
         setSupportActionBar(mToolbar);
         dtToggle = new ActionBarDrawerToggle(this, mDrawerLayout, mToolbar, 0, R.string.app_name);
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        mDrawerLayout.setDrawerListener(dtToggle);
 
         mTabLayout.setSelectedTabIndicatorHeight(0);
         mTabAdapter = new TabPagerAdapter(getSupportFragmentManager(), this);
@@ -63,5 +65,17 @@ public class MainActivity extends AppCompatActivity {
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    public void onConfigurationChanged(Configuration newConfig) {
+        super.onConfigurationChanged(newConfig);
+        dtToggle.onConfigurationChanged(newConfig);
+    }
+
+    @Override
+    protected void onPostCreate(@Nullable Bundle savedInstanceState) {
+        super.onPostCreate(savedInstanceState);
+        dtToggle.syncState();
     }
 }
