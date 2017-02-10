@@ -36,6 +36,8 @@ public class HomeFragment extends Fragment {
 
     private void init() {
 
+        mBannerSlider.stopAutoCycle();
+
         HashMap<String,Integer> file_maps = new HashMap<String, Integer>();
         file_maps.put("BANNER", R.drawable.banner_1);
         for(String name : file_maps.keySet()){
