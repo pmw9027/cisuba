@@ -80,6 +80,7 @@
     </ScrollView>
 
     <Button
+        android:id="@+id/btn_request_partner"
         android:text="제휴 문의하기"
         android:textStyle="bold"
         android:textColor="@color/White"
