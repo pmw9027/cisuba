@@ -1,14 +1,136 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:orientation="vertical" android:layout_width="match_parent"
+    android:background="@color/LightGrey"
     android:layout_height="match_parent">
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="125dp"
+        android:background="@drawable/background_mypage_top"
         android:orientation="vertical">
 
+        <FrameLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+
+            <ImageButton
+                android:background="@drawable/ic_logout"
+                android:layout_gravity="end"
+                android:layout_width="32dp"
+                android:layout_height="32dp" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+
+                <ImageView
+                    android:layout_marginTop="@dimen/margin_large"
+                    android:id="@+id/imv_profile"
+                    android:layout_gravity="center_horizontal"
+                    android:layout_width="64dp"
+                    android:layout_height="64dp"
+                    android:background="@drawable/profile_pic_sample_login"/>
+
+                <TextView
+                    android:id="@+id/tv_name"
+                    android:text="박주찬"
+                    android:textColor="@color/White"
+                    android:textStyle="bold"
+                    android:layout_marginTop="@dimen/margin_default"
+                    android:layout_gravity="center_horizontal"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content" />
+
+            </LinearLayout>
+
+        </FrameLayout>
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/White"
+        android:padding="@dimen/padding_medium"
+        android:orientation="horizontal">
+
+        <TextView
+            android:text="공지사항"
+            android:textColor="@color/Black"
+            android:textStyle="bold"
+            android:gravity="center|start"
+            android:paddingLeft="@dimen/padding_default"
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="match_parent" />
+
+        <ImageButton
+            android:background="@drawable/ic_more"
+            android:layout_width="32dp"
+            android:layout_height="32dp" />
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/White"
+        android:padding="@dimen/padding_medium"
+        android:orientation="horizontal">
+
+        <TextView
+            android:text="FAQ"
+            android:textColor="@color/Black"
+            android:textStyle="bold"
+            android:gravity="center|start"
+            android:paddingLeft="@dimen/padding_default"
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="match_parent" />
+
+        <ImageButton
+            android:background="@drawable/ic_more"
+            android:layout_width="32dp"
+            android:layout_height="32dp" />
+
+    </LinearLayout>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:layout_marginBottom="@dimen/padding_small"
+        android:background="@color/DarkGray"/>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:padding="@dimen/padding_default"
+        android:orientation="vertical"
+        android:background="@color/White">
+
+        <Button
+            android:id="@+id/btn_request_partner"
+            android:background="@drawable/button_banner_partner"
+            android:layout_marginBottom="@dimen/margin_default"
+            android:layout_width="match_parent"
+            android:layout_height="60dp" />
+
+        <Button
+            android:id="@+id/btn_invite_kakao"
+            android:background="@drawable/button_invite_kakao"
+            android:layout_width="match_parent"
+            android:layout_height="60dp" />
+
+        <ImageView
+            android:src="@drawable/callcenter"
+            android:layout_gravity="center"
+            android:layout_width="100dp"
+            android:layout_height="100dp" />
         
     </LinearLayout>
-    
+
 </LinearLayout>
