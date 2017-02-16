@@ -51,6 +51,7 @@
     </LinearLayout>
 
     <LinearLayout
+        android:id="@+id/lin_notice"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="@color/White"
@@ -75,6 +76,7 @@
     </LinearLayout>
 
     <LinearLayout
+        android:id="@+id/lin_faq"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="@color/White"
@@ -112,14 +114,14 @@
         android:orientation="vertical"
         android:background="@color/White">
 
-        <Button
+        <ImageButton
             android:id="@+id/btn_request_partner"
             android:background="@drawable/button_banner_partner"
             android:layout_marginBottom="@dimen/margin_default"
             android:layout_width="match_parent"
             android:layout_height="60dp" />
 
-        <Button
+        <ImageButton
             android:id="@+id/btn_invite_kakao"
             android:background="@drawable/button_invite_kakao"
             android:layout_width="match_parent"

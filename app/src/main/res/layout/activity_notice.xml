@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/activity_notice"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:background="@color/LightGrey"
+    tools:context="com.eastblue.cisuba.Activity.NoticeActivity">
+
+    <android.support.v7.widget.Toolbar
+        android:id="@+id/toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"></android.support.v7.widget.Toolbar>
+
+    <LinearLayout
+        android:layout_marginTop="1dp"
+        android:layout_marginBottom="@dimen/margin_default"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <Button
+            android:id="@+id/btn_notice"
+            android:background="@color/White"
+            android:textSize="@dimen/text_size_small"
+            android:text="공지사항"
+            android:textColor="@color/product_color"
+            android:textStyle="bold"
+            android:layout_marginRight="1dp"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"/>
+
+        <Button
+            android:id="@+id/btn_faq"
+            android:background="@color/White"
+            android:textSize="@dimen/text_size_small"
+            android:text="FAQ"
+            android:textColor="@color/Black"
+            android:textStyle="bold"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"/>
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:background="@color/White">
+
+        <FrameLayout
+            android:background="@drawable/background_outline"
+            android:layout_margin="@dimen/margin_default"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"></FrameLayout>
+
+        <ExpandableListView
+            android:id="@+id/elv_notice"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"/>
+
+    </LinearLayout>
+
+</LinearLayout>
