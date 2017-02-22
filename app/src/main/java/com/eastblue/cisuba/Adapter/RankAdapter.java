@@ -1,11 +1,17 @@
 package com.eastblue.cisuba.Adapter;
 
 import android.content.Context;
+import android.net.Network;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
+import android.widget.ImageView;
+import android.widget.TextView;
 
+import com.bumptech.glide.Glide;
+import com.eastblue.cisuba.Manager.NetworkManager;
+import com.eastblue.cisuba.Model.ProductModel;
 import com.eastblue.cisuba.R;
 
 import java.util.ArrayList;
@@ -17,7 +23,7 @@ import java.util.ArrayList;
 
 public class RankAdapter extends BaseAdapter {
 
-    private ArrayList<String> mList;
+    private ArrayList<ProductModel> mList;
     private Context mContext;
 
     public RankAdapter(Context context) {
@@ -25,8 +31,8 @@ public class RankAdapter extends BaseAdapter {
         mList = new ArrayList<>();
     }
 
-    public void addItem(String aa) {
-        mList.add("dfdf");
+    public void setArray(ArrayList<ProductModel> array) {
+        mList = array;
     }
 
     @Override
@@ -46,9 +52,33 @@ public class RankAdapter extends BaseAdapter {
 
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
+        ViewBinder viewBinder = null;
+
         if(convertView == null) {
             convertView = LayoutInflater.from(mContext).inflate(R.layout.item_grid_top, parent, false);
+            viewBinder = new ViewBinder(convertView);
+            convertView.setTag(viewBinder);
+        } else {
+            viewBinder = (ViewBinder) convertView.getTag();
         }
+
+        viewBinder.bindObject(mList.get(position));
+
         return convertView;
+    }
+
+    public class ViewBinder {
+        ImageView imvImage;
+        TextView tvName;
+
+        public ViewBinder(View v) {
+            imvImage = (ImageView) v.findViewById(R.id.imv_image);
+            tvName = (TextView) v.findViewById(R.id.tv_name);
+        }
+
+        public void bindObject(ProductModel item) {
+            tvName.setText(item.partnerName);
+            Glide.with(mContext).load(NetworkManager.SERVER_URL + item.mainThumbnail).centerCrop().into(imvImage);
+        }
     }
 }

@@ -12,12 +12,20 @@ import com.daimajia.slider.library.SliderLayout;
 import com.daimajia.slider.library.SliderTypes.BaseSliderView;
 import com.daimajia.slider.library.SliderTypes.TextSliderView;
 import com.eastblue.cisuba.Adapter.RankAdapter;
+import com.eastblue.cisuba.Model.ProductModel;
+import com.eastblue.cisuba.Network.Product;
 import com.eastblue.cisuba.R;
+import com.eastblue.cisuba.Util.HttpUtil;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import retrofit.Callback;
+import retrofit.RetrofitError;
+import retrofit.client.Response;
 
 /**
  * Created by PJC on 2017-02-07.
@@ -61,12 +69,25 @@ public class HomeFragment extends Fragment {
             mBannerSlider.addSlider(textSliderView);
 
             rankAdapter = new RankAdapter(getActivity());
-            rankAdapter.addItem("dfd");
-            rankAdapter.addItem("dfd");
-            rankAdapter.addItem("dfd");
-            rankAdapter.addItem("dfd");
             gridView.setAdapter(rankAdapter);
+
+            getTopProduct();
         }
 
+    }
+
+    void getTopProduct() {
+        HttpUtil.api(Product.class).getTopPartner("1", "4", new Callback<List<ProductModel>>() {
+            @Override
+            public void success(List<ProductModel> productModels, Response response) {
+                rankAdapter.setArray((ArrayList<ProductModel>) productModels);
+                rankAdapter.notifyDataSetChanged();
+            }
+
+            @Override
+            public void failure(RetrofitError error) {
+                error.printStackTrace();
+            }
+        });
     }
 }

@@ -7,6 +7,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AbsListView;
 import android.widget.ListView;
 import android.widget.Toast;
 
@@ -35,6 +36,11 @@ public class LocationFragment extends Fragment {
 
     NearAdapter nearAdapter;
 
+    int currentPage = 0;
+    int loadSize = 5;
+    Boolean firstLoading = true;
+    Boolean lastItemVisibleFlag = false;
+
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -45,16 +51,41 @@ public class LocationFragment extends Fragment {
     }
 
     void init() {
+
+        lvNear.setOnScrollListener(new AbsListView.OnScrollListener() {
+            @Override
+            public void onScroll(AbsListView view, int firstVisibleItem, int visibleItemCount, int totalItemCount) {
+                lastItemVisibleFlag = (totalItemCount > 0) && (firstVisibleItem + visibleItemCount >= totalItemCount);
+            }
+            @Override
+            public void onScrollStateChanged(AbsListView view, int scrollState) {
+                if(scrollState == AbsListView.OnScrollListener.SCROLL_STATE_IDLE && lastItemVisibleFlag) {
+                    if(!firstLoading) {
+                        getProduct(currentPage, loadSize, 1, 2);
+                    }
+                }
+            }
+        });
+
         nearAdapter = new NearAdapter(getActivity());
         lvNear.setAdapter(nearAdapter);
-        getProduct();
+        getProduct(currentPage, loadSize, 1, 2);
     }
 
-    void getProduct() {
-        HttpUtil.api(Product.class).getProduct("0", "10", "1", "0", new Callback<List<ProductModel>>() {
+    void getProduct(int page, int size, int area, int filter) {
+        HttpUtil.api(Product.class).getProduct(page, size, area, filter, new Callback<List<ProductModel>>() {
             @Override
             public void success(List<ProductModel> productModels, Response response) {
-                nearAdapter.setArray((ArrayList<ProductModel>) productModels);
+                if(firstLoading) {
+                    nearAdapter.setArray((ArrayList<ProductModel>) productModels);
+                    firstLoading = false;
+                } else {
+                    for (int i = 0; i < productModels.size(); i++) {
+                        nearAdapter.addItem(productModels.get(i));
+                    }
+                }
+
+                currentPage++;
                 nearAdapter.notifyDataSetChanged();
             }
 

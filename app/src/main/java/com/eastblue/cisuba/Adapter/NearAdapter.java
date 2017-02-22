@@ -39,6 +39,14 @@ public class NearAdapter extends BaseAdapter {
         mList = array;
     }
 
+    public void addItem(ProductModel item) {
+        mList.add(item);
+    }
+
+    public void removeAll() {
+        mList.clear();;
+    }
+
     @Override
     public int getCount() {
         return mList.size();

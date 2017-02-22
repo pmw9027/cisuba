@@ -17,10 +17,17 @@ public interface Product {
 
     @GET("/cisuba")
     void getProduct(
-            @Query("page") String page,
-            @Query("size") String size,
+            @Query("page") int page,
+            @Query("size") int size,
+            @Query("area") int area,
+            @Query("filter") int filter,
+            Callback<List<ProductModel>> callback
+    );
+
+    @GET("/get_topareapartner_list")
+    void getTopPartner(
             @Query("area") String area,
-            @Query("filter") String filter,
+            @Query("size") String size,
             Callback<List<ProductModel>> callback
     );
 }
