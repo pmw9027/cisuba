@@ -7,11 +7,16 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.Toast;
 
+import com.eastblue.cisuba.Network.Partner;
 import com.eastblue.cisuba.R;
+import com.eastblue.cisuba.Util.HttpUtil;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
+import retrofit.Callback;
+import retrofit.RetrofitError;
+import retrofit.client.Response;
 
 public class RequestPartnerActivity extends AppCompatActivity {
 
@@ -38,6 +43,24 @@ public class RequestPartnerActivity extends AppCompatActivity {
                 TextUtils.isEmpty(etName.getText().toString())) {
             Toast.makeText(this, "공란을 모두 채워주세요.", Toast.LENGTH_SHORT).show();
             return;
+        } else {
+
+            HttpUtil.api(Partner.class).requestPartner(
+                    etPartnerName.getText().toString(),
+                    etName.getText().toString(),
+                    etEmailAddress.getText().toString(),
+                    etPhoneNumber.getText().toString(),
+                    new Callback<Response>() {
+                        @Override
+                        public void success(Response response, Response response2) {
+
+                        }
+
+                        @Override
+                        public void failure(RetrofitError error) {
+                            error.printStackTrace();
+                        }
+                    });
         }
 
     }

@@ -13,7 +13,25 @@
             android:layout_width="match_parent"
             android:layout_height="200dp" />
 
+        <TextView
+            android:text="지역별 TOP 4"
+            android:textStyle="bold"
+            android:textColor="@color/Black"
+            android:layout_marginLeft="@dimen/margin_default"
+            android:layout_marginBottom="@dimen/margin_default"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
 
+        <GridView
+            android:id="@+id/grv_count_4"
+            android:padding="@dimen/padding_default"
+            android:layout_width="match_parent"
+            android:layout_height="300dp"
+            android:numColumns="2"
+            android:scrollbars="none"
+            android:verticalSpacing="5dp"
+            android:horizontalSpacing="5dp"
+            android:listSelector="@null" />
 
     </LinearLayout>
 

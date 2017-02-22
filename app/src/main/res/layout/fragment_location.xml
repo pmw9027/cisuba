@@ -4,7 +4,7 @@
     android:layout_height="match_parent">
 
     <LinearLayout
-        android:background="@color/LightGrey"
+        android:background="#ebebeb"
         android:paddingTop="@dimen/padding_default"
         android:paddingRight="@dimen/padding_default"
         android:paddingBottom="@dimen/padding_default"
@@ -33,6 +33,8 @@
     
     <ListView
         android:id="@+id/lv_near"
+        android:dividerHeight="@dimen/margin_default"
+        android:divider="@color/background"
         android:padding="@dimen/padding_medium"
         android:layout_width="match_parent"
         android:layout_height="match_parent"></ListView>

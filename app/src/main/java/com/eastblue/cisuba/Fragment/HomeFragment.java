@@ -6,10 +6,12 @@ import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.GridView;
 
 import com.daimajia.slider.library.SliderLayout;
 import com.daimajia.slider.library.SliderTypes.BaseSliderView;
 import com.daimajia.slider.library.SliderTypes.TextSliderView;
+import com.eastblue.cisuba.Adapter.RankAdapter;
 import com.eastblue.cisuba.R;
 
 import java.util.HashMap;
@@ -24,6 +26,9 @@ import butterknife.ButterKnife;
 public class HomeFragment extends Fragment {
 
     @BindView(R.id.slider) SliderLayout mBannerSlider;
+    @BindView(R.id.grv_count_4) GridView gridView;
+
+    RankAdapter rankAdapter;
 
     @Nullable
     @Override
@@ -54,6 +59,13 @@ public class HomeFragment extends Fragment {
                     .putString("extra",name);
 
             mBannerSlider.addSlider(textSliderView);
+
+            rankAdapter = new RankAdapter(getActivity());
+            rankAdapter.addItem("dfd");
+            rankAdapter.addItem("dfd");
+            rankAdapter.addItem("dfd");
+            rankAdapter.addItem("dfd");
+            gridView.setAdapter(rankAdapter);
         }
 
     }

@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:orientation="vertical" android:layout_width="match_parent"
+    android:background="@drawable/background_product"
     android:layout_height="match_parent">
 
     <FrameLayout
@@ -103,14 +104,44 @@
         android:orientation="horizontal">
 
         <TextView
+            android:id="@+id/tv_price_morning"
+            android:gravity="start"
+            android:textColor="@color/morning_text"
+            android:textSize="@dimen/text_size_small"
+            android:textStyle="bold"
+            android:layout_marginRight="@dimen/margin_default"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content" />
 
+        <View
+            android:background="@color/LightGrey"
+            android:layout_width="1dp"
+            android:layout_marginRight="@dimen/margin_default"
+            android:layout_height="match_parent"/>
+
         <TextView
+            android:id="@+id/tv_price_lunch"
+            android:gravity="start"
+            android:textColor="@color/lunch_text"
+            android:textSize="@dimen/text_size_small"
+            android:textStyle="bold"
+            android:layout_marginRight="@dimen/margin_default"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content" />
 
+        <View
+            android:background="@color/LightGrey"
+            android:layout_width="1dp"
+            android:layout_marginRight="@dimen/margin_default"
+            android:layout_height="match_parent"/>
+
         <TextView
+            android:id="@+id/tv_price_dinner"
+            android:gravity="start"
+            android:textColor="@color/dinner_text"
+            android:textSize="@dimen/text_size_small"
+            android:textStyle="bold"
+            android:layout_marginRight="@dimen/margin_default"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content" />
 
