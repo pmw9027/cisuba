@@ -1,5 +1,6 @@
 package com.eastblue.cisuba.Fragment;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -8,9 +9,11 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AbsListView;
+import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.Toast;
 
+import com.eastblue.cisuba.Activity.ProductDetailActivity;
 import com.eastblue.cisuba.Adapter.NearAdapter;
 import com.eastblue.cisuba.Model.ProductModel;
 import com.eastblue.cisuba.Network.Product;
@@ -51,6 +54,14 @@ public class LocationFragment extends Fragment {
     }
 
     void init() {
+
+        lvNear.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                ProductModel productModel = (ProductModel) nearAdapter.getItem(position);
+                startActivity(new Intent(getActivity(), ProductDetailActivity.class).putExtra("id", productModel.id));
+            }
+        });
 
         lvNear.setOnScrollListener(new AbsListView.OnScrollListener() {
             @Override

@@ -1,11 +1,14 @@
 package com.eastblue.cisuba.Network;
 
 import com.eastblue.cisuba.Model.ProductModel;
+import com.squareup.okhttp.Call;
 
 import java.util.List;
 
 import retrofit.Callback;
 import retrofit.http.GET;
+import retrofit.http.Part;
+import retrofit.http.Path;
 import retrofit.http.Query;
 
 
@@ -29,5 +32,11 @@ public interface Product {
             @Query("area") String area,
             @Query("size") String size,
             Callback<List<ProductModel>> callback
+    );
+
+    @GET("/item_partner/{pk}")
+    void getPartnerItem(
+            @Path("pk") String pk,
+            Callback<ProductModel> callback
     );
 }

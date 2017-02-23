@@ -36,11 +36,11 @@ public class ProfileFragment extends Fragment {
 
     @OnClick(R.id.lin_notice)
     void openNotice() {
-        startActivity(new Intent(getActivity(), NoticeActivity.class).setFlags(Intent.FLAG_ACTIVITY_NEW_TASK));
+        startActivity(new Intent(getActivity(), NoticeActivity.class).setFlags(Intent.FLAG_ACTIVITY_NEW_TASK).putExtra("TYPE", "NOTICE"));
     }
 
     @OnClick(R.id.lin_faq)
     void openFaq() {
-        startActivity(new Intent(getActivity(), NoticeActivity.class).setFlags(Intent.FLAG_ACTIVITY_NEW_TASK));
+        startActivity(new Intent(getActivity(), NoticeActivity.class).setFlags(Intent.FLAG_ACTIVITY_NEW_TASK).putExtra("TYPE", "NOTICE"));
     }
 }

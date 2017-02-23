@@ -16,7 +16,7 @@
             android:name="com.kakao.sdk.AppKey"
             android:value="@string/kakao_app_key" />
 
-        <activity android:name=".Activity.IntroActivity" />
+        <activity android:name=".Activity.IntroActivity"></activity>
         <activity android:name=".Activity.MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -26,9 +26,11 @@
         </activity>
         <activity android:name=".Activity.LoginActivity" />
         <activity android:name=".Activity.TestActivity" />
-        <activity android:name=".Activity.ProductDetailActivity" />
-        <activity android:name=".Activity.RequestPartnerActivity" />
-        <activity android:name=".Activity.NoticeActivity"></activity>
+        <activity android:name=".Activity.ProductDetailActivity"></activity>
+        <activity android:name=".Activity.RequestPartnerActivity"></activity>
+        <activity android:name=".Activity.NoticeActivity" />
+        <activity android:name=".Activity.LawAdviceActivity">
+        </activity>
     </application>
 
 </manifest>

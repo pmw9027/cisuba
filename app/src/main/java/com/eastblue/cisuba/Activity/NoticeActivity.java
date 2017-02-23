@@ -26,6 +26,16 @@ public class NoticeActivity extends AppCompatActivity {
 
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+
+        init();
+    }
+
+    void init() {
+        if(getIntent().getStringExtra("TYPE").equals("FAQ")) {
+            onFaq();
+        } else {
+            onNotice();
+        }
     }
 
     @OnClick(R.id.btn_notice)

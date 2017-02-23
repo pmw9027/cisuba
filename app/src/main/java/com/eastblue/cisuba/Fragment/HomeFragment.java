@@ -10,6 +10,7 @@ import android.widget.GridView;
 
 import com.daimajia.slider.library.SliderLayout;
 import com.daimajia.slider.library.SliderTypes.BaseSliderView;
+import com.daimajia.slider.library.SliderTypes.DefaultSliderView;
 import com.daimajia.slider.library.SliderTypes.TextSliderView;
 import com.eastblue.cisuba.Adapter.RankAdapter;
 import com.eastblue.cisuba.Model.ProductModel;
@@ -53,12 +54,14 @@ public class HomeFragment extends Fragment {
 
         HashMap<String,Integer> file_maps = new HashMap<String, Integer>();
         file_maps.put("BANNER", R.drawable.banner_1);
+        file_maps.put("BANNER2", R.drawable.banner2);
+
         for(String name : file_maps.keySet()){
-            TextSliderView textSliderView = new TextSliderView(getActivity());
+            DefaultSliderView textSliderView = new DefaultSliderView(getActivity());
             // initialize a SliderLayout
             textSliderView
-                    .description(name)
                     .image(file_maps.get(name))
+                    .description("")
                     .setScaleType(BaseSliderView.ScaleType.Fit);
 
             //add your extra information
@@ -68,12 +71,13 @@ public class HomeFragment extends Fragment {
 
             mBannerSlider.addSlider(textSliderView);
 
-            rankAdapter = new RankAdapter(getActivity());
-            gridView.setAdapter(rankAdapter);
 
-            getTopProduct();
+
         }
 
+        rankAdapter = new RankAdapter(getActivity());
+        gridView.setAdapter(rankAdapter);
+        getTopProduct();
     }
 
     void getTopProduct() {

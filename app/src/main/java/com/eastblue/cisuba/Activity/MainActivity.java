@@ -1,5 +1,6 @@
 package com.eastblue.cisuba.Activity;
 
+import android.content.Intent;
 import android.content.res.Configuration;
 import android.support.annotation.Nullable;
 import android.support.design.widget.TabLayout;
@@ -12,6 +13,7 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
+import android.widget.LinearLayout;
 
 import com.daimajia.slider.library.SliderLayout;
 import com.daimajia.slider.library.SliderTypes.BaseSliderView;
@@ -23,6 +25,7 @@ import java.util.HashMap;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import butterknife.OnClick;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -87,4 +90,18 @@ public class MainActivity extends AppCompatActivity {
         dtToggle.syncState();
     }
 
+    @OnClick(R.id.lin_notice)
+    public void goNotice() {
+        startActivity(new Intent(this, NoticeActivity.class).putExtra("TYPE", "NOTICE"));
+    }
+
+    @OnClick(R.id.lin_faq)
+    public void goFaq() {
+        startActivity(new Intent(this, NoticeActivity.class).putExtra("TYPE", "FAQ"));
+    }
+
+    @OnClick(R.id.btn_request_partner)
+    public void goRequestPartner() {
+        startActivity(new Intent(this, RequestPartnerActivity.class));
+    }
 }
