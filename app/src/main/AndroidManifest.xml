@@ -5,6 +5,11 @@
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
 
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION"/>
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION"/>
+    <uses-permission android:name="android.permission.ACCESS_WIFI_STATE"/>
+    <uses-permission android:name="android.permission.CHANGE_WIFI_STATE"/>
+
     <application
         android:name=".CisubaApplication"
         android:allowBackup="true"
@@ -16,16 +21,19 @@
             android:name="com.kakao.sdk.AppKey"
             android:value="@string/kakao_app_key" />
 
-        <activity android:name=".Activity.IntroActivity"></activity>
-        <activity android:name=".Activity.MainActivity">
+        <activity android:name=".Activity.IntroActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <activity android:name=".Activity.MainActivity">
+
+        </activity>
         <activity android:name=".Activity.LoginActivity" />
-        <activity android:name=".Activity.TestActivity" />
+        <activity android:name=".Activity.TestActivity" >
+        </activity>
         <activity android:name=".Activity.ProductDetailActivity"></activity>
         <activity android:name=".Activity.RequestPartnerActivity"></activity>
         <activity android:name=".Activity.NoticeActivity" />

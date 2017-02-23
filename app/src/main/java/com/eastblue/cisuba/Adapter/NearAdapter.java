@@ -1,6 +1,8 @@
 package com.eastblue.cisuba.Adapter;
 
 import android.content.Context;
+import android.location.Location;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -25,6 +27,7 @@ public class NearAdapter extends BaseAdapter {
 
     private ArrayList<ProductModel> mList;
     private Context mContext;
+    private Location mLocation;
 
     private static final int VIEW_COUNT = 2;
     private static final int VIEW_TYPE_FREE = 0;
@@ -33,10 +36,17 @@ public class NearAdapter extends BaseAdapter {
     public NearAdapter(Context context) {
         mContext = context;
         mList = new ArrayList<>();
+        mLocation = null;
     }
 
     public void setArray(ArrayList<ProductModel> array) {
         mList = array;
+    }
+
+    public void setLocation(double lat, double lng) {
+        mLocation = new Location("MY GEO");
+        mLocation.setLatitude(lat);
+        mLocation.setLongitude(lng);
     }
 
     public void addItem(ProductModel item) {
@@ -137,6 +147,25 @@ public class NearAdapter extends BaseAdapter {
             tvPriceMorning.setText("조조 " + Integer.parseInt(item.morningPrice) + "원");
             tvPriceLunch.setText("평일 " + Integer.parseInt(item.lunchPrice) + "원");
             tvPriceDinner.setText("야간 " + Integer.parseInt(item.dinnerPrice) + "원");
+
+            // Calc the KM
+            if(mLocation != null) {
+                Log.d("cat", "cat");
+                if(item.lat != null && item.lng != null) {
+                    Location target = new Location("TARGET");
+                    target.setLatitude(Double.parseDouble(item.lat));
+                    target.setLongitude(Double.parseDouble(item.lng));
+
+                    int distance = (int) mLocation.distanceTo(target);
+
+                    int km = 0;
+                    if(distance >= 1000) {
+                         km = distance / 1000;
+                    }
+                    int meter = distance % 1000 / 3;
+                    tvKm.setText(km + "." + meter + " Km");
+                }
+            }
 
             Glide.with(mContext).load(NetworkManager.SERVER_URL + item.mainThumbnail).centerCrop().into(imvImage);
         }

@@ -39,4 +39,15 @@ public interface Product {
             @Path("pk") String pk,
             Callback<ProductModel> callback
     );
+
+    @GET("/near_partner_list")
+    void nearProduct(
+            @Query("page") int page,
+            @Query("size") int size,
+            @Query("area") int area,
+            @Query("filter") int filter,
+            @Query("lat") String lat,
+            @Query("lng") String lng,
+            Callback<List<ProductModel>> callback
+    );
 }

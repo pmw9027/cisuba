@@ -235,10 +235,18 @@
             </LinearLayout>
 
             <FrameLayout
+                android:id="@+id/frame_map"
                 android:layout_marginTop="@dimen/margin_default"
                 android:layout_width="match_parent"
                 android:background="@color/Red"
-                android:layout_height="150dp"></FrameLayout>
+                android:layout_height="150dp">
+
+                <com.nhn.android.maps.NMapView
+                    android:layout_width="fill_parent"
+                    android:layout_height="fill_parent"
+                    android:id="@+id/mapView"/>
+
+            </FrameLayout>
 
             <LinearLayout
                 android:layout_width="match_parent"
