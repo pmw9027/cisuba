@@ -28,6 +28,7 @@ import com.eastblue.cisuba.Model.ProductModel;
 import com.eastblue.cisuba.Network.Product;
 import com.eastblue.cisuba.R;
 import com.eastblue.cisuba.Util.HttpUtil;
+import com.eastblue.cisuba.Util.PermissionUtil;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -56,6 +57,10 @@ public class LocationFragment extends Fragment {
     int loadSize = 5;
     Boolean firstLoading = true;
     Boolean lastItemVisibleFlag = false;
+    Boolean isGPSLoad = false;
+
+    double mLat;
+    double mLng;
 
     // GPS
     boolean isGetLocation = false;
@@ -80,7 +85,9 @@ public class LocationFragment extends Fragment {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 ProductModel productModel = (ProductModel) nearAdapter.getItem(position);
-                startActivity(new Intent(getActivity(), ProductDetailActivity.class).putExtra("id", productModel.id));
+                if(!productModel.isFreePartner) {
+                    startActivity(new Intent(getActivity(), ProductDetailActivity.class).putExtra("id", productModel.id));
+                }
             }
         });
 
@@ -94,7 +101,7 @@ public class LocationFragment extends Fragment {
             public void onScrollStateChanged(AbsListView view, int scrollState) {
                 if (scrollState == AbsListView.OnScrollListener.SCROLL_STATE_IDLE && lastItemVisibleFlag) {
                     if (!firstLoading) {
-                        getProduct(currentPage, loadSize, 1, 2);
+                        nearProduct(currentPage, loadSize, 1, 4, mLat, mLng);
                     }
                 }
             }
@@ -102,15 +109,63 @@ public class LocationFragment extends Fragment {
 
         nearAdapter = new NearAdapter(getActivity());
         lvNear.setAdapter(nearAdapter);
+
         initGPS();
     }
 
     void initGPS() {
+
         locationManager = (LocationManager) getActivity().getSystemService(Context.LOCATION_SERVICE);
-        locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 2000, 10, locationListener);
+
+        if(PermissionUtil.State.isGPSon) {
+            if(locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER)) {
+                registerLocationUpdates();
+            } else {
+                //Toast.makeText(getActivity(), "GPS 가 꺼져있습니다.", Toast.LENGTH_SHORT).show();
+           }
+        } else {
+            Toast.makeText(getActivity(), "GPS 권한을 체크해주세요.", Toast.LENGTH_SHORT).show();
+        }
+    }
+
+    private void registerLocationUpdates() {
+        locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER,
+                1000000, 100, mLocationListener);
+
+        if(locationManager != null) {
+            location = locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
+            if (location != null) {
+                // 위도 경도 저장
+                double lat = location.getLatitude();
+                double lng = location.getLongitude();
+
+                mLat = lat;
+                mLng = lng;
+
+                nearAdapter.setLocation(lat, lng);
+                nearProduct(currentPage, loadSize, 1, 4, lat, lng);
+            } else {
+
+                locationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER,
+                        1000, 1, mLocationListener);
+
+                location = locationManager.getLastKnownLocation(LocationManager.NETWORK_PROVIDER);
+                if(location != null) {
+                    double lat = location.getLatitude();
+                    double lng = location.getLongitude();
+
+                    mLat = lat;
+                    mLng = lng;
+
+                    nearAdapter.setLocation(lat, lng);
+                    nearProduct(currentPage, loadSize, 1, 4, lat, lng);
+                }
+            }
+        }
     }
 
     void getProduct(int page, int size, int area, int filter) {
+
         HttpUtil.api(Product.class).getProduct(page, size, area, filter, new Callback<List<ProductModel>>() {
             @Override
             public void success(List<ProductModel> productModels, Response response) {
@@ -135,6 +190,9 @@ public class LocationFragment extends Fragment {
     }
 
     void nearProduct(int page, int size, int area, int filter, double lat, double lng) {
+
+        Log.d("nearProduct", page + " " + size);
+
         HttpUtil.api(Product.class).nearProduct(page, size, area, filter, String.valueOf(lat), String.valueOf(lng), new Callback<List<ProductModel>>() {
             @Override
             public void success(List<ProductModel> productModels, Response response) {
@@ -161,20 +219,23 @@ public class LocationFragment extends Fragment {
         });
     }
 
-    LocationListener locationListener = new LocationListener() {
+    LocationListener mLocationListener = new LocationListener() {
         @Override
         public void onLocationChanged(Location location) {
+            /*
             double lat = location.getLatitude();
             double lng = location.getLongitude();
 
-            try {
-                tvMyLocation.setText(GpsUtil.geoToAddress(getActivity(), lat, lng));
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
+                try {
+                    tvMyLocation.setText(GpsUtil.geoToAddress(getActivity(), lat, lng));
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
 
-            nearAdapter.setLocation(lat, lng);
-            nearProduct(0, 10, 1, 3, lat, lng);
+                nearAdapter.setLocation(lat, lng);
+                nearProduct(currentPage, loadSize, 1, 4, lat, lng);
+
+                isGPSLoad = true;*/
         }
 
         @Override

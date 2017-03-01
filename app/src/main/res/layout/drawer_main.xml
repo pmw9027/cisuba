@@ -26,14 +26,14 @@
                     android:layout_width="match_parent"
                     android:layout_height="match_parent">
 
-                    <ImageView
-                        android:background="@drawable/profile_pic_sample_login"
+                    <de.hdodenhof.circleimageview.CircleImageView
+                        android:src="@drawable/ic_launcher"
                         android:id="@+id/imv_profile"
                         android:layout_width="64dp"
                         android:layout_height="64dp" />
 
                     <TextView
-                        android:text="로그인 기능 준비중"
+                        android:text="로그인기능 준비중"
                         android:textColor="@color/White"
                         android:textStyle="bold"
                         android:layout_marginTop="@dimen/margin_default"

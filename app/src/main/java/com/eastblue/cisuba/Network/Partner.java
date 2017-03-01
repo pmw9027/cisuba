@@ -1,5 +1,7 @@
 package com.eastblue.cisuba.Network;
 
+import com.eastblue.cisuba.Model.CodeModel;
+
 import retrofit.Callback;
 import retrofit.client.Response;
 import retrofit.http.Field;
@@ -22,4 +24,13 @@ public interface Partner {
             Callback<Response> callback
     );
 
+    @FormUrlEncoded
+    @POST("/advice/add_rawAdvice")
+    void add_rawAdvice(
+            @Field("type") String type,
+            @Field("name") String name,
+            @Field("content") String content,
+            @Field("phone") String phone,
+            Callback<CodeModel> callback
+    );
 }

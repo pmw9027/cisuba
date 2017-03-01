@@ -26,17 +26,17 @@
                 android:layout_height="wrap_content"
                 android:orientation="vertical">
 
-                <ImageView
+                <de.hdodenhof.circleimageview.CircleImageView
                     android:layout_marginTop="@dimen/margin_large"
                     android:id="@+id/imv_profile"
                     android:layout_gravity="center_horizontal"
                     android:layout_width="64dp"
                     android:layout_height="64dp"
-                    android:background="@drawable/profile_pic_sample_login"/>
+                    android:src="@drawable/ic_launcher"/>
 
                 <TextView
                     android:id="@+id/tv_name"
-                    android:text="박주찬"
+                    android:text="로그인기능 준비중"
                     android:textColor="@color/White"
                     android:textStyle="bold"
                     android:layout_marginTop="@dimen/margin_default"

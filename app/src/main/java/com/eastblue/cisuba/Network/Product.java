@@ -1,5 +1,6 @@
 package com.eastblue.cisuba.Network;
 
+import com.eastblue.cisuba.Model.BannerModel;
 import com.eastblue.cisuba.Model.ProductModel;
 import com.squareup.okhttp.Call;
 
@@ -49,5 +50,26 @@ public interface Product {
             @Query("lat") String lat,
             @Query("lng") String lng,
             Callback<List<ProductModel>> callback
+    );
+
+    @GET("/search_partner")
+    void searchPartner(
+            @Query("page") int page,
+            @Query("size") int size,
+            @Query("name") String name,
+            Callback<List<ProductModel>> callback
+    );
+
+    @GET("/get_partner_type_list")
+    void getPartnerTypeFilter(
+            @Query("page") int page,
+            @Query("size") int size,
+            @Query("type") int type,
+            Callback<List<ProductModel>> callback
+    );
+
+    @GET("/get_main_banner")
+    void getMainBanner(
+        Callback<List<BannerModel>> callback
     );
 }

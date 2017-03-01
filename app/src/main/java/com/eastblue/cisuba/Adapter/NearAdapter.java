@@ -91,15 +91,17 @@ public class NearAdapter extends BaseAdapter {
             }
 
         } else {
-
-            if(getItemViewType(position) == VIEW_TYPE_CHARGE) {
+            if (getItemViewType(position) == VIEW_TYPE_CHARGE) {
                 chargeViewBinder = (ChargeViewBinder) convertView.getTag();
-                chargeViewBinder.bindObject(mList.get(position));
-            }
-            else if(getItemViewType(position) == VIEW_TYPE_FREE) {
+            } else if (getItemViewType(position) == VIEW_TYPE_FREE) {
                 freeViewBinder = (FreeViewBinder) convertView.getTag();
-                freeViewBinder.bindObject(mList.get(position));
             }
+        }
+
+        if (getItemViewType(position) == VIEW_TYPE_CHARGE) {
+            chargeViewBinder.bindObject(mList.get(position));
+        } else if (getItemViewType(position) == VIEW_TYPE_FREE) {
+            freeViewBinder.bindObject(mList.get(position));
         }
 
         return convertView;
@@ -172,6 +174,7 @@ public class NearAdapter extends BaseAdapter {
     }
 
     private class FreeViewBinder {
+        private TextView tvKm;
         private TextView tvName;
         private TextView tvAddress;
         private TextView tvPriceMorning;
@@ -179,6 +182,7 @@ public class NearAdapter extends BaseAdapter {
         private TextView tvPriceDinner;
 
         public FreeViewBinder(View v) {
+            tvKm = (TextView) v.findViewById(R.id.tv_km);
             tvName = (TextView) v.findViewById(R.id.tv_name);
             tvAddress = (TextView) v.findViewById(R.id.tv_address);
             tvPriceMorning = (TextView) v.findViewById(R.id.tv_price_morning);
@@ -192,6 +196,47 @@ public class NearAdapter extends BaseAdapter {
             tvPriceMorning.setText("조조 " + Integer.parseInt(item.morningPrice) + "원");
             tvPriceLunch.setText("평일 " + Integer.parseInt(item.lunchPrice) + "원");
             tvPriceDinner.setText("야간 " + Integer.parseInt(item.dinnerPrice) + "원");
+
+            if(mLocation != null) {
+                Log.d("cat", "cat");
+                if(item.lat != null && item.lng != null) {
+
+                    Location target = new Location("TARGET");
+                    target.setLatitude(Double.parseDouble(item.lat));
+                    target.setLongitude(Double.parseDouble(item.lng));
+
+                    int distance = (int) mLocation.distanceTo(target);
+
+                    int km = 0;
+                    if(distance >= 1000) {
+                        km = distance / 1000;
+                    }
+                    int meter = distance % 1000;
+                    if(meter > 0) {
+                        meter = meter / 100;
+                    }
+                    String distance_str = String.format("%d.%01d Km", km, meter);
+                    tvKm.setText(distance_str);
+                }
+            } else {
+                tvKm.setVisibility(View.GONE);
+            }
         }
+    }
+
+    public float distance (float lat_a, float lng_a, float lat_b, float lng_b )
+    {
+        double earthRadius = 3958.75;
+        double latDiff = Math.toRadians(lat_b-lat_a);
+        double lngDiff = Math.toRadians(lng_b-lng_a);
+        double a = Math.sin(latDiff /2) * Math.sin(latDiff /2) +
+                Math.cos(Math.toRadians(lat_a)) * Math.cos(Math.toRadians(lat_b)) *
+                        Math.sin(lngDiff /2) * Math.sin(lngDiff /2);
+        double c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a));
+        double distance = earthRadius * c;
+
+        int meterConversion = 1609;
+
+        return new Float(distance * meterConversion).floatValue();
     }
 }

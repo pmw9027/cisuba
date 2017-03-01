@@ -2,6 +2,7 @@ package com.eastblue.cisuba.String;
 
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.Objects;
 import java.util.Set;
@@ -25,7 +26,7 @@ public class LocationCode {
 
     private LocationCode() {
 
-        locationMap = new HashMap<String, Integer>();
+        locationMap = new LinkedHashMap<String, Integer>();
         locationMap.put("전체", 0);
         locationMap.put("서울", 1);
         locationMap.put("부산", 2);

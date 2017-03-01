@@ -44,6 +44,7 @@
             android:orientation="horizontal">
 
             <Button
+                android:id="@+id/btn_type_0"
                 android:text="형사"
                 android:textColor="@color/lunch_text"
                 android:textSize="@dimen/text_size_small"
@@ -55,9 +56,11 @@
                 android:layout_height="wrap_content" />
 
             <Button
+                android:id="@+id/btn_type_1"
                 android:text="민사"
                 android:textSize="@dimen/text_size_small"
                 android:background="@color/White"
+                android:textColor="@color/Black"
                 android:padding="@dimen/padding_default"
                 android:gravity="center"
                 android:layout_width="0dp"
@@ -65,9 +68,11 @@
                 android:layout_height="wrap_content" />
 
             <Button
+                android:id="@+id/btn_type_2"
                 android:text="기사(상속,이혼)"
                 android:textSize="@dimen/text_size_small"
                 android:background="@color/White"
+                android:textColor="@color/Black"
                 android:padding="@dimen/padding_default"
                 android:gravity="center"
                 android:layout_width="0dp"
@@ -86,7 +91,9 @@
             android:orientation="horizontal">
 
             <Button
+                android:id="@+id/btn_type_3"
                 android:text="교통/손해"
+                android:textColor="@color/Black"
                 android:textSize="@dimen/text_size_small"
                 android:background="@color/White"
                 android:padding="@dimen/padding_default"
@@ -96,9 +103,11 @@
                 android:layout_height="wrap_content" />
 
             <Button
+                android:id="@+id/btn_type_4"
                 android:text="개인회생/파산"
                 android:textSize="@dimen/text_size_small"
                 android:background="@color/White"
+                android:textColor="@color/Black"
                 android:padding="@dimen/padding_default"
                 android:gravity="center"
                 android:layout_width="0dp"
@@ -145,6 +154,7 @@
                     android:background="@drawable/gp_man"/>
 
                 <TextView
+                    android:id="@+id/tv_info"
                     android:textColor="@color/Black"
                     android:textStyle="bold"
                     android:text="씨서바 [형사]분야 무료 상담하기"
@@ -161,6 +171,7 @@
                 android:orientation="horizontal">
 
                 <EditText
+                    android:id="@+id/et_name"
                     android:layout_marginRight="@dimen/margin_default"
                     android:hint="성함"
                     android:textSize="@dimen/text_size_default"
@@ -170,6 +181,7 @@
                     android:layout_weight="1"/>
 
                 <EditText
+                    android:id="@+id/et_phone"
                     android:hint="연락처"
                     android:textSize="@dimen/text_size_default"
                     android:background="@drawable/edittext_default_radius"
@@ -180,6 +192,7 @@
             </LinearLayout>
 
             <EditText
+                android:id="@+id/et_content"
                 android:gravity="start"
                 android:textSize="@dimen/text_size_default"
                 android:hint="법률 관련 상담 내용을 입력해주세요"
@@ -199,6 +212,7 @@
             android:orientation="horizontal">
 
             <Button
+                android:id="@+id/btn_call"
                 android:layout_marginRight="@dimen/margin_default"
                 android:background="@color/product_color"
                 android:textColor="@color/White"
@@ -209,6 +223,7 @@
                 android:layout_height="match_parent" />
 
             <Button
+                android:id="@+id/btn_send"
                 android:text="보내기"
                 android:textColor="@color/White"
                 android:textStyle="bold"

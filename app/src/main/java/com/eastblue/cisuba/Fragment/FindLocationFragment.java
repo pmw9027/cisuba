@@ -47,8 +47,11 @@ public class FindLocationFragment extends Fragment{
 
     NearAdapter nearAdapter;
 
+    int selectArea = 1; // DEFAULT 0
+
     int currentPage = 0;
     int loadSize = 5;
+    int loadType = 3;
     Boolean firstLoading = true;
     Boolean lastItemVisibleFlag = false;
 
@@ -62,13 +65,16 @@ public class FindLocationFragment extends Fragment{
     }
 
     void init(View v) {
+
         initTab();
 
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 ProductModel productModel = (ProductModel) nearAdapter.getItem(position);
-                startActivity(new Intent(getActivity(), ProductDetailActivity.class).putExtra("id", productModel.id));
+                if(!productModel.isFreePartner) {
+                    startActivity(new Intent(getActivity(), ProductDetailActivity.class).putExtra("id", productModel.id));
+                }
             }
         });
 
@@ -81,7 +87,7 @@ public class FindLocationFragment extends Fragment{
             public void onScrollStateChanged(AbsListView view, int scrollState) {
                 if(scrollState == AbsListView.OnScrollListener.SCROLL_STATE_IDLE && lastItemVisibleFlag) {
                     if(!firstLoading) {
-                        getProduct(currentPage, loadSize, 1, 2);
+                        getProduct(currentPage, loadSize, selectArea, loadType);
                     }
                 }
             }
@@ -89,6 +95,8 @@ public class FindLocationFragment extends Fragment{
 
         nearAdapter = new NearAdapter(getActivity());
         listView.setAdapter(nearAdapter);
+
+        getProduct(currentPage, loadSize, selectArea, loadType);
     }
 
     void initTab() {
@@ -118,6 +126,8 @@ public class FindLocationFragment extends Fragment{
                 }
 
                 currentPage++;
+
+                Log.d("nearAdapter", "called");
                 nearAdapter.notifyDataSetChanged();
             }
 
@@ -132,6 +142,15 @@ public class FindLocationFragment extends Fragment{
         @Override
         public void onClick(View v) {
 
+            Button clickBtn = (Button) v;
+
+            if(clickBtn.getText().equals("전체")) {
+                loadType = 3;
+            } else {
+                loadType = 2;
+            }
+
+            firstLoading = true;
             currentPage = 0;
             nearAdapter.removeAll();
             nearAdapter.notifyDataSetChanged();
@@ -140,7 +159,15 @@ public class FindLocationFragment extends Fragment{
                 tabButtons[i].setTextColor(getResources().getColor(R.color.Black));
             }
             ((Button) v).setTextColor(getResources().getColor(R.color.product_color));
-            getProduct(currentPage, loadSize, LocationCode.getInstance().getMap().get(((Button) v).getText()), 2);
+            selectArea = LocationCode.getInstance().getMap().get(((Button) v).getText());
+
+            if(selectArea == 0) {
+                getProduct(currentPage, loadSize, selectArea, 3);
+                loadType = 3;
+            } else {
+                getProduct(currentPage, loadSize, LocationCode.getInstance().getMap().get(((Button) v).getText()), 2);
+                loadType = 2;
+            }
         }
     };
 
@@ -148,7 +175,13 @@ public class FindLocationFragment extends Fragment{
         Button button = new Button(getActivity());
         button.setText(text);
         button.setTextSize(TypedValue.COMPLEX_UNIT_SP, 12);
-        button.setTextColor(getResources().getColor(R.color.Black));
+
+        if(text.equals("전체")) {
+            button.setTextColor(getResources().getColor(R.color.product_color));
+        } else {
+            button.setTextColor(getResources().getColor(R.color.Black));
+        }
+
         button.setBackgroundColor(getResources().getColor(R.color.White));
         button.setOnClickListener(onTabClickListener);
         return button;

@@ -28,6 +28,6 @@ public class GpsUtil {
         String postalCode = addresses.get(0).getPostalCode();
         String knownName = addresses.get(0).getFeatureName();
 
-        return address;
+        return country;
     }
 }

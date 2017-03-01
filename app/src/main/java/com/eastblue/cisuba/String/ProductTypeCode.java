@@ -1,6 +1,7 @@
 package com.eastblue.cisuba.String;
 
 import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.Map;
 
 /**
@@ -21,7 +22,7 @@ public class ProductTypeCode {
     }
 
     private ProductTypeCode() {
-        productMap = new HashMap<String, Integer>();
+        productMap = new LinkedHashMap<>();
         productMap.put("목욕탕", 0);
         productMap.put("사우나", 1);
         productMap.put("찜질방", 2);

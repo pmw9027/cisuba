@@ -32,6 +32,7 @@ dependencies {
     // KAKAO
     compile group: project.KAKAO_SDK_GROUP, name: 'kakaotalk', version: project.KAKAO_SDK_VERSION
     compile group: project.KAKAO_SDK_GROUP, name: 'usermgmt', version: project.KAKAO_SDK_VERSION
+    compile group: 'com.kakao.sdk', name: 'kakaolink', version: project.KAKAO_SDK_VERSION
     // Http Library
     // View Binder
     compile 'com.android.support:appcompat-v7:24.2.1'
@@ -46,6 +47,7 @@ dependencies {
     compile 'com.android.support:design:25.1.0'
     compile 'com.android.support:support-v4:25.1.0'
     compile 'com.naver.maps.open:naver-map-api:2.1.2@aar'
+    compile 'de.hdodenhof:circleimageview:2.1.0'
     testCompile 'junit:junit:4.12'
     annotationProcessor 'com.jakewharton:butterknife-compiler:8.4.0'
 }

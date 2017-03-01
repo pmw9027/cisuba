@@ -15,10 +15,20 @@ import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
+import android.widget.ImageView;
 
+import com.bumptech.glide.Glide;
 import com.eastblue.cisuba.R;
+import com.eastblue.cisuba.Util.PermissionUtil;
+import com.squareup.picasso.Picasso;
+
+import butterknife.BindView;
+import butterknife.ButterKnife;
 
 public class IntroActivity extends AppCompatActivity {
+
+    @BindView(R.id.imv_splash)
+    ImageView imvSplash;
 
     private static final int DELAY = 2000;
 
@@ -42,6 +52,8 @@ public class IntroActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_intro);
+        ButterKnife.bind(this);
+        Picasso.with(this).load(R.drawable.splash).fit().into(imvSplash);
 
         if (!checkPermission()) {
             ActivityCompat.requestPermissions( this,
@@ -69,6 +81,8 @@ public class IntroActivity extends AppCompatActivity {
 
             if (permissionCheck != PackageManager.PERMISSION_GRANTED)  return false;
         }
+
+        PermissionUtil.State.isGPSon = true;
         return true;
     }
 

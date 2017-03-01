@@ -1,5 +1,6 @@
 package com.eastblue.cisuba.Fragment;
 
+import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -9,16 +10,20 @@ import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.GridView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
+import android.widget.ScrollView;
 import android.widget.TextView;
 
 import com.daimajia.slider.library.SliderLayout;
 import com.daimajia.slider.library.SliderTypes.BaseSliderView;
 import com.daimajia.slider.library.SliderTypes.DefaultSliderView;
 import com.daimajia.slider.library.SliderTypes.TextSliderView;
+import com.eastblue.cisuba.Activity.LawAdviceActivity;
+import com.eastblue.cisuba.Activity.ProductDetailActivity;
 import com.eastblue.cisuba.Adapter.NearAdapter;
 import com.eastblue.cisuba.Adapter.RankAdapter;
 import com.eastblue.cisuba.Model.ProductModel;
@@ -30,6 +35,7 @@ import com.eastblue.cisuba.Util.HttpUtil;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -47,6 +53,7 @@ public class HomeFragment extends Fragment {
     @BindView(R.id.grv_count_4) GridView gridView;
     @BindView(R.id.lv_items) ListView lvItems;
     @BindView(R.id.lin_tab) LinearLayout linTab;
+    @BindView(R.id.home_scrollview) ScrollView scrollView;
 
     Button tabButtonArray[];
     View tabSelectorArray[];
@@ -85,9 +92,40 @@ public class HomeFragment extends Fragment {
             textSliderView.bundle(new Bundle());
             textSliderView.getBundle()
                     .putString("extra",name);
+            textSliderView.setOnSliderClickListener(new BaseSliderView.OnSliderClickListener() {
+                @Override
+                public void onSliderClick(BaseSliderView slider) {
+                    if(slider.getBundle().getString("extra").equals("BANNER2")) {
+                        Intent intent = new Intent(getActivity(), LawAdviceActivity.class);
+                        startActivity(intent);
+                    }
+                }
+            });
 
             mBannerSlider.addSlider(textSliderView);
+
+            scrollView.pageScroll(View.FOCUS_UP);
         }
+
+        gridView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                ProductModel productModel = (ProductModel) rankAdapter.getItem(position);
+                if(!productModel.isFreePartner) {
+                    startActivity(new Intent(getActivity(), ProductDetailActivity.class).putExtra("id", productModel.id));
+                }
+            }
+        });
+
+        lvItems.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                ProductModel productModel = (ProductModel) nearAdapter.getItem(position);
+                if(!productModel.isFreePartner) {
+                    startActivity(new Intent(getActivity(), ProductDetailActivity.class).putExtra("id", productModel.id));
+                }
+            }
+        });
 
         rankAdapter = new RankAdapter(getActivity());
         nearAdapter = new NearAdapter(getActivity());
@@ -95,6 +133,7 @@ public class HomeFragment extends Fragment {
         lvItems.setAdapter(nearAdapter);
 
         getTopProduct();
+        getPartnerFilter(0, 10, 1);
     }
 
     void getTopProduct() {
@@ -103,6 +142,30 @@ public class HomeFragment extends Fragment {
             public void success(List<ProductModel> productModels, Response response) {
                 rankAdapter.setArray((ArrayList<ProductModel>) productModels);
                 rankAdapter.notifyDataSetChanged();
+                scrollView.fullScroll(ScrollView.FOCUS_UP);
+            }
+
+            @Override
+            public void failure(RetrofitError error) {
+                error.printStackTrace();
+            }
+        });
+    }
+
+    void getPartnerFilter(int page, int size, int type) {
+
+        Log.d("type", type + "");
+
+        HttpUtil.api(Product.class).getPartnerTypeFilter(page, size, type, new Callback<List<ProductModel>>() {
+            @Override
+            public void success(List<ProductModel> productModels, Response response) {
+                nearAdapter.removeAll();
+                for(int i=0; i<productModels.size(); i++) {
+                    nearAdapter.setArray((ArrayList<ProductModel>) productModels);
+                }
+                nearAdapter.notifyDataSetInvalidated();
+                setListViewHeightBasedOnChildren(lvItems);
+                scrollView.fullScroll(ScrollView.FOCUS_UP);
             }
 
             @Override
@@ -115,8 +178,10 @@ public class HomeFragment extends Fragment {
     void recommendTabInit() {
         tabButtonArray = new Button[ProductTypeCode.getInstance().getMap().size()];
         tabSelectorArray = new View[ProductTypeCode.getInstance().getMap().size()];
-        for(int i=0; i< ProductTypeCode.getInstance().getMap().size(); i++) {
-            LinearLayout tabItem = addTabItem(ProductTypeCode.getInstance().getProduct(String.valueOf(i)), i);
+
+        HashMap<String, Integer> productMap = ProductTypeCode.getInstance().getMap();
+        for (Map.Entry<String, Integer> entry : productMap.entrySet()) {
+            LinearLayout tabItem = addTabItem(entry.getKey(), entry.getValue());
             linTab.addView(tabItem);
         }
     }
@@ -132,6 +197,10 @@ public class HomeFragment extends Fragment {
         tabBtn.setBackgroundColor(Color.parseColor("#ebebebeb"));
         tabBtn.setTextSize(TypedValue.COMPLEX_UNIT_SP, 12);
         tabBtn.setTag(position);
+
+        if(position == 1) {
+            tabBtn.setTextColor(getResources().getColor(R.color.product_color));
+        }
 
         View bottomSelector = new View(getActivity());
         int size = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 5, getResources().getDisplayMetrics());
@@ -164,6 +233,26 @@ public class HomeFragment extends Fragment {
 
             tabButtonArray[itemPosition].setTextColor(getResources().getColor(R.color.product_color));
             tabSelectorArray[itemPosition].setBackgroundColor(getResources().getColor(R.color.product_color));
+
+            getPartnerFilter(0, 10, itemPosition);
         }
     };
+
+    public void setListViewHeightBasedOnChildren(ListView listView) {
+
+        int totalHeight = 0;
+
+        int desiredWidth = View.MeasureSpec.makeMeasureSpec(listView.getWidth(), View.MeasureSpec.AT_MOST);
+        for (int i = 0; i < nearAdapter.getCount(); i++) {
+            View listItem = nearAdapter.getView(i, null, listView);
+            listItem.measure(desiredWidth, View.MeasureSpec.UNSPECIFIED);
+            totalHeight += listItem.getMeasuredHeight();
+        }
+        ViewGroup.LayoutParams params = listView.getLayoutParams();
+
+        params.height = totalHeight + 300;
+        listView.setLayoutParams(params);
+
+        listView.requestLayout();
+    }
 }

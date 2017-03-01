@@ -77,7 +77,9 @@ public class RankAdapter extends BaseAdapter {
         }
 
         public void bindObject(ProductModel item) {
-            tvName.setText(item.partnerName);
+            //f(!item.isFreePartner) {
+                tvName.setText(item.partnerName);
+            //}
             Glide.with(mContext).load(NetworkManager.SERVER_URL + item.mainThumbnail).centerCrop().into(imvImage);
         }
     }

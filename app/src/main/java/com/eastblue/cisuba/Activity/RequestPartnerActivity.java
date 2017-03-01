@@ -53,7 +53,7 @@ public class RequestPartnerActivity extends AppCompatActivity {
                     new Callback<Response>() {
                         @Override
                         public void success(Response response, Response response2) {
-
+                            finish();
                         }
 
                         @Override

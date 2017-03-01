@@ -1,5 +1,6 @@
 package com.eastblue.cisuba.Activity;
 
+import android.content.Context;
 import android.content.Intent;
 import android.content.res.Configuration;
 import android.support.annotation.Nullable;
@@ -9,23 +10,40 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.widget.SearchView;
 import android.support.v7.widget.Toolbar;
+import android.text.TextUtils;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.widget.LinearLayout;
 
+import android.app.SearchManager;
+
 import com.daimajia.slider.library.SliderLayout;
 import com.daimajia.slider.library.SliderTypes.BaseSliderView;
 import com.daimajia.slider.library.SliderTypes.TextSliderView;
 import com.eastblue.cisuba.Adapter.TabPagerAdapter;
+import com.eastblue.cisuba.Dialog.MainPopUpDialog;
+import com.eastblue.cisuba.Manager.NetworkManager;
+import com.eastblue.cisuba.Model.BannerModel;
+import com.eastblue.cisuba.Network.Product;
 import com.eastblue.cisuba.R;
+import com.eastblue.cisuba.Util.HttpUtil;
+import com.kakao.kakaolink.AppActionBuilder;
+import com.kakao.kakaolink.KakaoLink;
+import com.kakao.kakaolink.KakaoTalkLinkMessageBuilder;
+import com.kakao.util.KakaoParameterException;
 
 import java.util.HashMap;
+import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
+import retrofit.Callback;
+import retrofit.RetrofitError;
+import retrofit.client.Response;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -65,6 +83,30 @@ public class MainActivity extends AppCompatActivity {
         }
 
         mTabLayout.getTabAt(0).select();
+
+        showBanner();
+
+    }
+
+    void showBanner() {
+        HttpUtil.api(Product.class).getMainBanner(new Callback<List<BannerModel>>() {
+            @Override
+            public void success(List<BannerModel> bannerModels, Response response) {
+                if(bannerModels.size() == 1) {
+                    Bundle bundle = new Bundle();
+                    bundle.putString("image", NetworkManager.SERVER_URL + bannerModels.get(0).mainThumbnail);
+
+                    MainPopUpDialog mainPopUpDialog = new MainPopUpDialog();
+                    mainPopUpDialog.setArguments(bundle);
+                    mainPopUpDialog.show(getSupportFragmentManager(), "MAIN POPUP");
+                }
+            }
+
+            @Override
+            public void failure(RetrofitError error) {
+                error.printStackTrace();
+            }
+        });
     }
 
     @Override
@@ -80,7 +122,32 @@ public class MainActivity extends AppCompatActivity {
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.toolbar_menu, menu);
+        getMenuInflater().inflate(R.menu.toolbar_search, menu);
+
+        SearchManager searchManager =
+                (SearchManager) getSystemService(Context.SEARCH_SERVICE);
+        SearchView searchView =
+                (SearchView) menu.findItem(R.id.menu_search).getActionView();
+        searchView.setSearchableInfo(
+                searchManager.getSearchableInfo(getComponentName()));
+
+        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+            @Override
+            public boolean onQueryTextSubmit(String query) {
+                if(!TextUtils.isEmpty(query)) {
+                    Intent intent = new Intent(MainActivity.this, ProductSearchActivity.class);
+                    intent.putExtra("name", query);
+                    startActivity(intent);
+                }
+                return false;
+            }
+
+            @Override
+            public boolean onQueryTextChange(String newText) {
+                return false;
+            }
+        });
+
         return super.onCreateOptionsMenu(menu);
     }
 
@@ -103,5 +170,21 @@ public class MainActivity extends AppCompatActivity {
     @OnClick(R.id.btn_request_partner)
     public void goRequestPartner() {
         startActivity(new Intent(this, RequestPartnerActivity.class));
+    }
+
+    @OnClick(R.id.btn_invite_kakao)
+    public void inviteKakao() {
+        //http://cisuba.net:8000/uploads/kakao/kakao_banner.jpg
+        final KakaoLink kakaoLink;
+        try {
+            kakaoLink = KakaoLink.getKakaoLink(this);
+            final KakaoTalkLinkMessageBuilder kakaoTalkLinkMessageBuilder = kakaoLink.createKakaoTalkLinkMessageBuilder();
+            kakaoTalkLinkMessageBuilder.addText(getResources().getString(R.string.share_message));
+            kakaoTalkLinkMessageBuilder.addImage("http://cisuba.net/uploads/kakao/kakao_banner.jpg", 1000, 1000);
+            kakaoTalkLinkMessageBuilder.addAppButton("앱으로 이동", new AppActionBuilder().setUrl("https://play.google.com/store/apps/details?id=com.eastblue.cisuba&hl=ko").build());
+            kakaoLink.sendMessage(kakaoTalkLinkMessageBuilder, this);
+        } catch (KakaoParameterException e) {
+            e.printStackTrace();
+        }
     }
 }
