@@ -14,15 +14,37 @@
             android:layout_width="match_parent"
             android:layout_height="200dp" />
 
-        <TextView
-            android:text="지역별 TOP 4"
-            android:textStyle="bold"
-            android:textColor="@color/Black"
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/margin_default"
-            android:layout_marginLeft="@dimen/margin_default"
-            android:layout_marginBottom="@dimen/margin_default"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content" />
+            android:layout_marginBottom="@dimen/margin_small"
+            android:orientation="horizontal"
+            android:padding="@dimen/padding_default">
+
+            <ImageView
+                android:layout_width="17dp"
+                android:layout_height="17dp"
+                android:layout_marginRight="@dimen/margin_default"
+                android:layout_gravity="center|start"
+                android:background="@drawable/gp1"/>
+
+            <TextView
+                android:text="지역별 TOP 4"
+                android:textStyle="bold"
+                android:textColor="@color/Black"
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:gravity="top"
+                android:layout_height="wrap_content" />
+
+            <Spinner
+                android:background="@color/background"
+                android:id="@+id/spn_top"
+                android:layout_width="100dp"
+                android:layout_height="30dp"></Spinner>
+
+        </LinearLayout>
 
         <GridView
             android:id="@+id/grv_count_4"
@@ -47,14 +69,31 @@
             android:layout_height="wrap_content"
             android:orientation="vertical">
 
-            <TextView
-                android:text="씨서바 추천"
-                android:textStyle="bold"
-                android:textColor="@color/Black"
-                android:layout_marginLeft="@dimen/margin_default"
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/margin_small"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content" />
+                android:layout_marginBottom="@dimen/margin_small"
+                android:orientation="horizontal"
+                android:padding="@dimen/padding_default">
+
+                <ImageView
+                    android:layout_width="17dp"
+                    android:layout_height="17dp"
+                    android:layout_marginRight="@dimen/margin_default"
+                    android:layout_gravity="center|start"
+                    android:background="@drawable/gp2"/>
+
+                <TextView
+                    android:text="씨서바 추천"
+                    android:textStyle="bold"
+                    android:textColor="@color/Black"
+                    android:layout_width="0dp"
+                    android:layout_weight="1"
+                    android:gravity="top"
+                    android:layout_height="wrap_content" />
+
+            </LinearLayout>
 
             <HorizontalScrollView
                 android:padding="@dimen/padding_default"

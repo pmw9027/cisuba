@@ -36,7 +36,7 @@
             <android.support.design.widget.TabLayout
                 android:id="@+id/rcvr_tl_tabs"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="65dp"
                 android:elevation="0dp"
                 android:minHeight="?attr/actionBarSize"
                 android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"/>

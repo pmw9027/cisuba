@@ -129,10 +129,11 @@ public class LocationFragment extends Fragment {
             Log.d(TAG, "checkPermission");
             if(isGpsOn) {
                 Log.d(TAG + ":GPS", "GPS");
-                locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 1000, 1, gpsListener);
+                locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 100, 1, gpsListener);
             }
             if(isNetworkOn) {
-                locationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 1000, 1, networkListener);
+                Log.d(TAG + ":NETWORK", "NETWORK");
+                locationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 100, 1, networkListener);
             }
         }
         else {
