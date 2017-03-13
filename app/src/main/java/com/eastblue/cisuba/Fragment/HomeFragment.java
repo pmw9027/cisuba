@@ -11,11 +11,13 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.GridView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.ScrollView;
+import android.widget.Spinner;
 import android.widget.TextView;
 
 import com.daimajia.slider.library.SliderLayout;
@@ -29,6 +31,7 @@ import com.eastblue.cisuba.Adapter.RankAdapter;
 import com.eastblue.cisuba.Model.ProductModel;
 import com.eastblue.cisuba.Network.Product;
 import com.eastblue.cisuba.R;
+import com.eastblue.cisuba.String.LocationCode;
 import com.eastblue.cisuba.String.ProductTypeCode;
 import com.eastblue.cisuba.Util.HttpUtil;
 
@@ -54,6 +57,7 @@ public class HomeFragment extends Fragment {
     @BindView(R.id.lv_items) ListView lvItems;
     @BindView(R.id.lin_tab) LinearLayout linTab;
     @BindView(R.id.home_scrollview) ScrollView scrollView;
+    @BindView(R.id.spn_top) Spinner topSpinner;
 
     Button tabButtonArray[];
     View tabSelectorArray[];
@@ -73,6 +77,16 @@ public class HomeFragment extends Fragment {
     private void init() {
 
         recommendTabInit();
+
+        // spinner
+        ArrayList<String> topStringList = new ArrayList<>();
+        for(Map.Entry<String, Integer> elem : LocationCode.getInstance().getMap().entrySet() ) {
+            topStringList.add(elem.getKey());
+        }
+        ArrayAdapter<String> spinnerAdapter = new ArrayAdapter<String>(getActivity(), R.layout.top_spinner, topStringList);
+        spinnerAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        topSpinner.setAdapter(spinnerAdapter);
+        // -----------
 
         mBannerSlider.stopAutoCycle();
 
@@ -165,7 +179,7 @@ public class HomeFragment extends Fragment {
                 }
                 nearAdapter.notifyDataSetInvalidated();
                 setListViewHeightBasedOnChildren(lvItems);
-                scrollView.fullScroll(ScrollView.FOCUS_UP);
+                //scrollView.fullScroll(ScrollView.FOCUS_UP);
             }
 
             @Override

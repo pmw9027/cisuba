@@ -69,7 +69,7 @@
 
             <Button
                 android:id="@+id/btn_type_2"
-                android:text="기사(상속,이혼)"
+                android:text="가사(상속,이혼)"
                 android:textSize="@dimen/text_size_small"
                 android:background="@color/White"
                 android:textColor="@color/Black"

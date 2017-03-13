@@ -6,12 +6,12 @@
     android:background="?attr/selectableItemBackground"
     android:gravity="center"
     android:orientation="vertical"
-    android:paddingTop="4dp">
+    android:paddingBottom="4dp">
 
     <ImageView
         android:id="@+id/icon"
         android:layout_width="70dp"
-        android:layout_height="50dp"
+        android:layout_height="60dp"
         android:scaleType="fitXY"/>
 
 </LinearLayout>
