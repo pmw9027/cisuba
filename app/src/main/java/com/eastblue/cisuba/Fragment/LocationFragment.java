@@ -46,6 +46,8 @@ import retrofit.client.Response;
 
 public class LocationFragment extends Fragment {
 
+    private static final String TAG = LocationFragment.class.getSimpleName();
+
     @BindView(R.id.lv_near)
     ListView lvNear;
 
@@ -117,6 +119,27 @@ public class LocationFragment extends Fragment {
 
         locationManager = (LocationManager) getActivity().getSystemService(Context.LOCATION_SERVICE);
 
+        Boolean isGpsOn, isNetworkOn;
+        isGpsOn = locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER);
+        isNetworkOn = locationManager.isProviderEnabled(LocationManager.NETWORK_PROVIDER);
+
+        Log.d(TAG + ":CHECK", "check");
+
+        if(checkPermission()) {
+            Log.d(TAG, "checkPermission");
+            if(isGpsOn) {
+                Log.d(TAG + ":GPS", "GPS");
+                locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 1000, 1, gpsListener);
+            }
+            if(isNetworkOn) {
+                locationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 1000, 1, networkListener);
+            }
+        }
+        else {
+            Toast.makeText(getActivity(), "GPS 권한이 없습니다.", Toast.LENGTH_LONG).show();
+        }
+
+        /*
         if(PermissionUtil.State.isGPSon) {
             if(locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER)) {
                 registerLocationUpdates();
@@ -125,9 +148,10 @@ public class LocationFragment extends Fragment {
            }
         } else {
             Toast.makeText(getActivity(), "GPS 권한을 체크해주세요.", Toast.LENGTH_SHORT).show();
-        }
+        }*/
     }
 
+    /*
     private void registerLocationUpdates() {
         locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER,
                 1000000, 100, mLocationListener);
@@ -162,32 +186,7 @@ public class LocationFragment extends Fragment {
                 }
             }
         }
-    }
-
-    void getProduct(int page, int size, int area, int filter) {
-
-        HttpUtil.api(Product.class).getProduct(page, size, area, filter, new Callback<List<ProductModel>>() {
-            @Override
-            public void success(List<ProductModel> productModels, Response response) {
-                if(firstLoading) {
-                    nearAdapter.setArray((ArrayList<ProductModel>) productModels);
-                    firstLoading = false;
-                } else {
-                    for (int i = 0; i < productModels.size(); i++) {
-                        nearAdapter.addItem(productModels.get(i));
-                    }
-                }
-
-                currentPage++;
-                nearAdapter.notifyDataSetChanged();
-            }
-
-            @Override
-            public void failure(RetrofitError error) {
-                error.printStackTrace();
-            }
-        });
-    }
+    } */
 
     void nearProduct(int page, int size, int area, int filter, double lat, double lng) {
 
@@ -253,4 +252,87 @@ public class LocationFragment extends Fragment {
 
         }
     };
+
+    LocationListener gpsListener = new LocationListener() {
+        @Override
+        public void onLocationChanged(Location location) {
+            Log.d(TAG + ":GPS", "lat : " + location.getLatitude() + " lng : " + location.getLongitude());
+            locationManager.removeUpdates(gpsListener);
+            locationManager.removeUpdates(networkListener);
+
+            if(!isGetLocation) {
+                isGetLocation = true;
+
+                double lat = location.getLatitude();
+                double lng = location.getLongitude();
+
+                nearAdapter.setLocation(lat, lng);
+                nearProduct(currentPage, loadSize, 1, 4, lat, lng);
+            }
+        }
+
+        @Override
+        public void onStatusChanged(String provider, int status, Bundle extras) {
+
+        }
+
+        @Override
+        public void onProviderEnabled(String provider) {
+
+        }
+
+        @Override
+        public void onProviderDisabled(String provider) {
+
+        }
+    };
+
+    LocationListener networkListener = new LocationListener() {
+        @Override
+        public void onLocationChanged(Location location) {
+            Log.d(TAG + ":NETWORK", "lat : " + location.getLatitude() + " lng : " + location.getLongitude());
+            locationManager.removeUpdates(gpsListener);
+            locationManager.removeUpdates(networkListener);
+
+            if(!isGetLocation) {
+                isGetLocation = true;
+
+                double lat = location.getLatitude();
+                double lng = location.getLongitude();
+
+                nearAdapter.setLocation(lat, lng);
+                nearProduct(currentPage, loadSize, 1, 4, lat, lng);
+            }
+        }
+
+        @Override
+        public void onStatusChanged(String provider, int status, Bundle extras) {
+
+        }
+
+        @Override
+        public void onProviderEnabled(String provider) {
+
+        }
+
+        @Override
+        public void onProviderDisabled(String provider) {
+
+        }
+    };
+
+    Boolean checkPermission() {
+        if (ActivityCompat.checkSelfPermission(getActivity(), Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(getActivity(), Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+            // TODO: Consider calling
+            //    ActivityCompat#requestPermissions
+            // here to request the missing permissions, and then overriding
+            //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
+            //                                          int[] grantResults)
+            // to handle the case where the user grants the permission. See the documentation
+            // for ActivityCompat#requestPermissions for more details.
+            return false;
+        }
+
+        return true;
+    }
 }
