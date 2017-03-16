@@ -1,0 +1,4 @@
+<selector xmlns:android="http://schemas.android.com/apk/res/android">
+    <item android:background="@color/colorTabPressed" android:drawable="@color/colorTabPressed" android:state_selected="true"/>
+    <item android:drawable="@drawable/tab2_background_radius"/> <!-- default -->
+</selector>

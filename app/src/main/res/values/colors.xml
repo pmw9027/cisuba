@@ -4,6 +4,9 @@
     <color name="colorPrimaryDark">#303F9F</color>
     <color name="colorAccent">#FF4081</color>
 
+    <color name="colorTab">#ed1846</color>
+    <color name="colorTabPressed">#c1002a</color>
+
     <color name="background">#fff3f3f3</color>
 
     <color name="product_color">#17A7C3</color>

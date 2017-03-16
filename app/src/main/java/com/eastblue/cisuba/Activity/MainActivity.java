@@ -19,6 +19,7 @@ import android.view.MenuItem;
 import android.widget.LinearLayout;
 
 import android.app.SearchManager;
+import android.widget.Toast;
 
 import com.daimajia.slider.library.SliderLayout;
 import com.daimajia.slider.library.SliderTypes.BaseSliderView;
@@ -57,6 +58,8 @@ public class MainActivity extends AppCompatActivity {
     //@BindView(R.id.slider) SliderLayout mBannerSlider;
 
     ActionBarDrawerToggle dtToggle;
+
+    private long backKeyPressedTime = 0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -112,6 +115,18 @@ public class MainActivity extends AppCompatActivity {
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    public void onBackPressed() {
+        if (System.currentTimeMillis() > backKeyPressedTime + 2000) {
+            backKeyPressedTime = System.currentTimeMillis();
+            Toast.makeText(this, "뒤로 버튼을 한번만 더 누르면 종료됩니다.", Toast.LENGTH_SHORT).show();
+            return;
+        }
+        if (System.currentTimeMillis() <= backKeyPressedTime + 2000) {
+            finish();
+        }
     }
 
     @Override

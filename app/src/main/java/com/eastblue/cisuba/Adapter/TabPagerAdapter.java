@@ -44,7 +44,12 @@ public class TabPagerAdapter extends FragmentPagerAdapter {
     }
 
     public View getTabView(int position) {
-        View v = LayoutInflater.from(mContext).inflate(R.layout.item_tab, null);
+        View v= null;
+        if(position == FIND_FRAGMENT) {
+            v = LayoutInflater.from(mContext).inflate(R.layout.item_tab_center, null);
+        } else {
+            v = LayoutInflater.from(mContext).inflate(R.layout.item_tab, null);
+        }
         v.findViewById(R.id.icon).setBackgroundResource(mTabIcon[position]);
         return v;
     }
