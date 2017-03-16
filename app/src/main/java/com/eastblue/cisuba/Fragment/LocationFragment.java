@@ -1,6 +1,7 @@
 package com.eastblue.cisuba.Fragment;
 
 import android.Manifest;
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
@@ -18,6 +19,7 @@ import android.view.ViewGroup;
 import android.widget.AbsListView;
 import android.widget.AdapterView;
 import android.widget.ListView;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -36,6 +38,8 @@ import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import io.nlopez.smartlocation.OnLocationUpdatedListener;
+import io.nlopez.smartlocation.SmartLocation;
 import retrofit.Callback;
 import retrofit.RetrofitError;
 import retrofit.client.Response;
@@ -48,9 +52,12 @@ public class LocationFragment extends Fragment {
 
     private static final String TAG = LocationFragment.class.getSimpleName();
 
+    View rootView = null;
+
     @BindView(R.id.lv_near)
     ListView lvNear;
 
+    @BindView(R.id.pb_bar) ProgressBar progressBar;
     @BindView(R.id.tv_my_location) TextView tvMyLocation;
 
     NearAdapter nearAdapter;
@@ -75,13 +82,30 @@ public class LocationFragment extends Fragment {
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View rootView = inflater.inflate(R.layout.fragment_location, container, false);
-        ButterKnife.bind(this, rootView);
-        init();
-        return rootView;
+        if(this.rootView == null) {
+            View rootView = inflater.inflate(R.layout.fragment_location, container, false);
+            ButterKnife.bind(this, rootView);
+            this.rootView = rootView;
+            init();
+        }
+        return this.rootView;
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        Log.d("frag", "onPause");
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        Log.d("frag", "onDestroy");
     }
 
     void init() {
+
+        Log.d("frag", "init");
 
         lvNear.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
@@ -112,7 +136,43 @@ public class LocationFragment extends Fragment {
         nearAdapter = new NearAdapter(getActivity());
         lvNear.setAdapter(nearAdapter);
 
-        initGPS();
+        // GPS
+        Boolean isGpsOn = SmartLocation.with(getActivity()).location().state().isGpsAvailable();
+        Boolean isNetworkOn = SmartLocation.with(getActivity()).location().state().isNetworkAvailable();
+
+        if(isGpsOn || isNetworkOn) {
+            //loadGpsDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
+            //loadGpsDialog.setMessage("로딩중입니다...");
+            progressBar.setVisibility(View.VISIBLE);
+        }
+
+        SmartLocation.with(getActivity()).location()
+                .oneFix()
+                .start(new OnLocationUpdatedListener() {
+                    @Override
+                    public void onLocationUpdated(Location location) {
+                        if(!isGetLocation) {
+                            isGetLocation = true;
+                            progressBar.setVisibility(View.GONE);
+
+                            double lat = location.getLatitude();
+                            double lng = location.getLongitude();
+
+                            try {
+                                tvMyLocation.setText(GpsUtil.geoToAddress(getActivity(), lat, lng));
+                            } catch (IOException e) {
+                                e.printStackTrace();
+                            }
+
+                            mLat = lat;
+                            mLng = lng;
+                            nearAdapter.setLocation(lat, lng);
+                            nearProduct(currentPage, loadSize, 1, 4, lat, lng);
+                        }
+                    }
+                });
+
+        //initGPS();
     }
 
     void initGPS() {
@@ -133,7 +193,7 @@ public class LocationFragment extends Fragment {
             }
             if(isNetworkOn) {
                 Log.d(TAG + ":NETWORK", "NETWORK");
-                locationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 100, 1, networkListener);
+                locationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 1000, 1, networkListener);
             }
         }
         else {
@@ -313,12 +373,12 @@ public class LocationFragment extends Fragment {
 
         @Override
         public void onProviderEnabled(String provider) {
-
+            Log.d("Latitudessss",provider);
         }
 
         @Override
         public void onProviderDisabled(String provider) {
-
+            Log.d("Latitude",provider);
         }
     };
 

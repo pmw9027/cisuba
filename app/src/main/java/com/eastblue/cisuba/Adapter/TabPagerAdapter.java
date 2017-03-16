@@ -26,8 +26,8 @@ public class TabPagerAdapter extends FragmentPagerAdapter {
     private String[] mTabTitle = {"HOME", "NEAR", "FIND", "PROFILE", "ETC"};
     private int[] mTabIcon = {
             R.drawable.tab1_selector,
-            R.drawable.tab2_selector,
             R.drawable.tab3_selector,
+            R.drawable.tab2_selector,
             R.drawable.tab4_selector,
             R.drawable.tab5_selector
     };
@@ -56,9 +56,9 @@ public class TabPagerAdapter extends FragmentPagerAdapter {
             case HOME_FRAGMENT:
                 return new HomeFragment();
             case NEAR_FRAGMENT:
-                return new LocationFragment();
-            case FIND_FRAGMENT:
                 return new FindLocationFragment();
+            case FIND_FRAGMENT:
+                return new LocationFragment();
             case PROFILE_FRAGMENT:
                 return new ProfileFragment();
             case ETC_FRAGMENT:

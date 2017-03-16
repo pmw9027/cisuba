@@ -86,6 +86,19 @@ public class HomeFragment extends Fragment {
         ArrayAdapter<String> spinnerAdapter = new ArrayAdapter<String>(getActivity(), R.layout.top_spinner, topStringList);
         spinnerAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         topSpinner.setAdapter(spinnerAdapter);
+        topSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                String selectItem = (String) topSpinner.getItemAtPosition(position);
+                Log.d("item", selectItem);
+                getTopProduct(LocationCode.getInstance().getId(selectItem) + "");
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+
+            }
+        });
         // -----------
 
         mBannerSlider.stopAutoCycle();
@@ -146,17 +159,18 @@ public class HomeFragment extends Fragment {
         gridView.setAdapter(rankAdapter);
         lvItems.setAdapter(nearAdapter);
 
-        getTopProduct();
+        getTopProduct("1");
         getPartnerFilter(0, 10, 1);
     }
 
-    void getTopProduct() {
-        HttpUtil.api(Product.class).getTopPartner("1", "4", new Callback<List<ProductModel>>() {
+    void getTopProduct(String area) {
+        HttpUtil.api(Product.class).getTopPartner(area, "4", new Callback<List<ProductModel>>() {
             @Override
             public void success(List<ProductModel> productModels, Response response) {
+                rankAdapter.clearList();
                 rankAdapter.setArray((ArrayList<ProductModel>) productModels);
                 rankAdapter.notifyDataSetChanged();
-                scrollView.fullScroll(ScrollView.FOCUS_UP);
+                //scrollView.fullScroll(ScrollView.FOCUS_UP);
             }
 
             @Override

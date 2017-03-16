@@ -21,14 +21,16 @@
             android:name="com.kakao.sdk.AppKey"
             android:value="@string/kakao_app_key" />
 
-        <activity android:name=".Activity.IntroActivity">
+        <activity android:name=".Activity.IntroActivity"
+            android:screenOrientation="portrait">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".Activity.MainActivity" />
+        <activity android:name=".Activity.MainActivity"
+            android:screenOrientation="portrait"/>
         <activity android:name=".Activity.LoginActivity" />
         <activity android:name=".Activity.TestActivity" />
         <activity android:name=".Activity.ProductDetailActivity" />

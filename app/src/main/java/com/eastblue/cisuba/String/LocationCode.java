@@ -49,6 +49,10 @@ public class LocationCode {
         return null;
     }
 
+    public int getId(String key) {
+        return locationMap.get(key);
+    }
+
     public HashMap<String, Integer> getMap() {
         return locationMap;
     }

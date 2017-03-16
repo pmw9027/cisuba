@@ -34,6 +34,9 @@ public class RankAdapter extends BaseAdapter {
     public void setArray(ArrayList<ProductModel> array) {
         mList = array;
     }
+    public void clearList() {
+        mList.clear();
+    }
 
     @Override
     public int getCount() {
