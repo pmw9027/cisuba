@@ -76,6 +76,8 @@ public class HomeFragment extends Fragment {
 
     private void init() {
 
+        scrollView.scrollTo(0, 0);
+
         recommendTabInit();
 
         // spinner
@@ -104,8 +106,8 @@ public class HomeFragment extends Fragment {
         mBannerSlider.stopAutoCycle();
 
         HashMap<String,Integer> file_maps = new HashMap<String, Integer>();
-        file_maps.put("BANNER", R.drawable.banner_1);
-        file_maps.put("BANNER2", R.drawable.banner2);
+        file_maps.put("BANNER", R.drawable.banner2);
+        file_maps.put("BANNER2", R.drawable.banner_1);
 
         for(String name : file_maps.keySet()){
             DefaultSliderView textSliderView = new DefaultSliderView(getActivity());
@@ -171,6 +173,7 @@ public class HomeFragment extends Fragment {
                 rankAdapter.setArray((ArrayList<ProductModel>) productModels);
                 rankAdapter.notifyDataSetChanged();
                 //scrollView.fullScroll(ScrollView.FOCUS_UP);
+                scrollView.scrollTo(0, 0);
             }
 
             @Override

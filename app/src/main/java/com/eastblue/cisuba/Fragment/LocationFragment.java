@@ -141,9 +141,9 @@ public class LocationFragment extends Fragment {
         Boolean isNetworkOn = SmartLocation.with(getActivity()).location().state().isNetworkAvailable();
 
         if(isGpsOn || isNetworkOn) {
-            //loadGpsDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
-            //loadGpsDialog.setMessage("로딩중입니다...");
             progressBar.setVisibility(View.VISIBLE);
+        } else {
+            Toast.makeText(getActivity(), "위치 찾기를 켜주세요.", Toast.LENGTH_SHORT).show();
         }
 
         SmartLocation.with(getActivity()).location()

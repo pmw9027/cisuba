@@ -53,7 +53,7 @@ public class IntroActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_intro);
         ButterKnife.bind(this);
-        Picasso.with(this).load(R.drawable.splash).fit().into(imvSplash);
+        Picasso.with(this).load(R.drawable.splash_new).fit().into(imvSplash);
 
         if (!checkPermission()) {
             ActivityCompat.requestPermissions( this,
