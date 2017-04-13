@@ -36,8 +36,8 @@ public class LocationCode {
         locationMap.put("전라남도", 6);
         locationMap.put("충청북도", 7);
         locationMap.put("충청남도", 8);
-        locationMap.put("경상남도", 9);
-        locationMap.put("경상북도", 10);
+        locationMap.put("경상북도", 9);
+        locationMap.put("경상남도", 10);
     }
 
     public String getLocation(String id) {

@@ -1,8 +1,8 @@
 <component name="libraryTable">
   <library name="library-3.3.1">
     <CLASSES>
-      <root url="file://$PROJECT_DIR$/app/build/intermediates/exploded-aar/io.nlopez.smartlocation/library/3.3.1/res" />
-      <root url="jar://$PROJECT_DIR$/app/build/intermediates/exploded-aar/io.nlopez.smartlocation/library/3.3.1/jars/classes.jar!/" />
+      <root url="file://$USER_HOME$/.android/build-cache/63e9bb733d25231cb57b691b6a9b52d3957e1bdc/output/res" />
+      <root url="jar://$USER_HOME$/.android/build-cache/63e9bb733d25231cb57b691b6a9b52d3957e1bdc/output/jars/classes.jar!/" />
     </CLASSES>
     <JAVADOC />
     <SOURCES />

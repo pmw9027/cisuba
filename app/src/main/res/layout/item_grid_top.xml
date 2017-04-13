@@ -16,26 +16,21 @@
         <LinearLayout
             android:background="@drawable/gridient"
             android:alpha="70"
+            android:gravity="bottom"
             android:layout_width="match_parent"
             android:layout_height="55dp"
             android:layout_gravity="bottom"
             android:orientation="vertical">
 
             <TextView
-                android:layout_marginLeft="@dimen/margin_default"
-                android:textColor="@color/White"
-                android:textStyle="bold"
-                android:layout_marginBottom="@dimen/margin_small"
-                android:layout_gravity="bottom|start"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content" />
-
-            <TextView
+                android:text="dfdfd"
+                android:maxLines="1"
+                android:paddingBottom="@dimen/padding_small"
                 android:layout_marginLeft="@dimen/margin_default"
                 android:id="@+id/tv_name"
                 android:textColor="@color/White"
                 android:textStyle="bold"
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content" />
 
         </LinearLayout>

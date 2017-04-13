@@ -35,8 +35,8 @@
                 android:textColor="@color/Black"
                 android:layout_width="0dp"
                 android:layout_weight="1"
-                android:gravity="top"
-                android:layout_height="wrap_content" />
+                android:gravity="center|start"
+                android:layout_height="match_parent" />
 
             <Spinner
                 android:background="@color/background"
@@ -50,7 +50,7 @@
             android:id="@+id/grv_count_4"
             android:padding="@dimen/padding_default"
             android:layout_width="match_parent"
-            android:layout_height="310dp"
+            android:layout_height="320dp"
             android:numColumns="2"
             android:scrollbars="none"
             android:verticalSpacing="5dp"
@@ -95,19 +95,41 @@
 
             </LinearLayout>
 
-            <HorizontalScrollView
-                android:padding="@dimen/padding_default"
+            <LinearLayout
+                android:background="@color/tabColor"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content">
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:orientation="horizontal">
 
-                <LinearLayout
-                    android:id="@+id/lin_tab"
+                <ImageView
+                    android:layout_margin="2dp"
                     android:background="#ebebebeb"
-                    android:layout_width="match_parent"
-                    android:layout_height="40dp"
-                    android:orientation="horizontal"/>
+                    android:src="@drawable/rsz_btn_arrow"
+                    android:layout_width="20dp"
+                    android:layout_height="20dp" />
 
-            </HorizontalScrollView>
+                <HorizontalScrollView
+                    android:layout_width="0dp"
+                    android:layout_weight="1"
+                    android:layout_height="wrap_content">
+
+                    <LinearLayout
+                        android:id="@+id/lin_tab"
+                        android:layout_width="match_parent"
+                        android:layout_height="40dp"
+                        android:orientation="horizontal"/>
+
+                </HorizontalScrollView>
+
+                <ImageView
+                    android:layout_margin="2dp"
+                    android:src="@drawable/btn_arrow"
+                    android:layout_width="20dp"
+                    android:layout_height="20dp" />
+
+            </LinearLayout>
+
 
             <ListView
                 android:dividerHeight="@dimen/margin_default"

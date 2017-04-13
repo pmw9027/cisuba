@@ -2,6 +2,7 @@ package com.eastblue.cisuba.Activity;
 
 import android.content.Intent;
 import android.graphics.Rect;
+import android.net.Uri;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
@@ -140,9 +141,23 @@ public class ProductDetailActivity extends AppCompatActivity {
                     Intent mapActivity = new Intent(ProductDetailActivity.this, MapDetailActivity.class);
                     mapActivity.putExtra("lat", lat);
                     mapActivity.putExtra("lng", lng);
+
+                    if(mapActivity.getBooleanExtra("gps", false)) {
+                        mapActivity.putExtra("myLat", getIntent().getDoubleExtra("lat", 0));
+                        mapActivity.putExtra("myLng", getIntent().getDoubleExtra("lng", 0));
+                    }
+
                     mapActivity.putExtra("partnerName", partnerName);
                     startActivity(mapActivity);
                 }
+            }
+        });
+
+        tvPhone.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(Intent.ACTION_DIAL, Uri.parse("tel:"+tvPhone.getText()));
+                startActivity(intent);
             }
         });
 

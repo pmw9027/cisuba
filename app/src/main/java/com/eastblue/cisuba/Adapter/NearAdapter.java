@@ -7,6 +7,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
+import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -167,6 +168,8 @@ public class NearAdapter extends BaseAdapter {
                     int meter = distance % 1000 / 3;
                     tvKm.setText(km + "." + meter + " Km");
                 }
+            } else {
+                tvKm.setVisibility(View.INVISIBLE);
             }
 
             Glide.with(mContext).load(NetworkManager.SERVER_URL + item.mainThumbnail).centerCrop().into(imvImage);
@@ -192,13 +195,13 @@ public class NearAdapter extends BaseAdapter {
 
         public void bindObject(ProductModel item) {
             tvName.setText("["+item.highlightAddress + "] " +item.partnerName);
-            tvAddress.setText(item.shortAddress);
+            tvAddress.setText(item.detailAddress);
             tvPriceMorning.setText("조조 " + Integer.parseInt(item.morningPrice) + "원");
             tvPriceLunch.setText("평일 " + Integer.parseInt(item.lunchPrice) + "원");
             tvPriceDinner.setText("야간 " + Integer.parseInt(item.dinnerPrice) + "원");
 
             if(mLocation != null) {
-                Log.d("cat", "cat");
+
                 if(item.lat != null && item.lng != null) {
 
                     Location target = new Location("TARGET");
@@ -219,6 +222,7 @@ public class NearAdapter extends BaseAdapter {
                     tvKm.setText(distance_str);
                 }
             } else {
+                Log.d("null", "null");
                 tvKm.setVisibility(View.GONE);
             }
         }

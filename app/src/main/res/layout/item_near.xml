@@ -21,21 +21,30 @@
 
             <LinearLayout
                 android:paddingRight="@dimen/padding_default"
-                android:paddingTop="@dimen/padding_default"
-                android:paddingLeft="@dimen/padding_medium"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="horizontal">
 
-                <TextView
-                    android:id="@+id/tv_km"
-                    android:textSize="@dimen/text_size_default"
-                    android:textColor="@color/White"
-                    android:layout_weight="1"
+                <FrameLayout
+                    android:id="@+id/frame_km"
                     android:layout_width="0dp"
-                    android:layout_height="wrap_content" />
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1">
+
+                    <TextView
+                        android:padding="@dimen/padding_default"
+                        android:background="#33000000"
+                        android:id="@+id/tv_km"
+                        android:textSize="@dimen/text_size_default"
+                        android:textColor="@color/White"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content" />
+
+                </FrameLayout>
 
                 <LinearLayout
+                    android:layout_marginTop="@dimen/padding_default"
+                    android:layout_marginLeft="@dimen/padding_medium"
                     android:paddingLeft="@dimen/padding_medium"
                     android:paddingRight="@dimen/padding_medium"
                     android:background="@drawable/shape_radius_discount"

@@ -1,5 +1,6 @@
 package com.eastblue.cisuba.Activity;
 
+import android.graphics.drawable.Drawable;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
@@ -33,6 +34,8 @@ public class MapDetailActivity extends AppCompatActivity {
     private String productName = "박주찬 찜질방";
     private double lat = 37.521223;
     private double lng = 127.0151286;
+    private double myLat = 37.538484;
+    private double myLng = 127.082294;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -49,6 +52,7 @@ public class MapDetailActivity extends AppCompatActivity {
         mMapContext.onCreate();
         mMapView.setClientId(CLIENT_ID);// 클라이언트 아이디 설정
         mMapView.setClickable(true); // 맵 클릭 가능하게
+        mMapView.setScalingFactor(1.5f);
         mMapContext.setupMapView(mMapView);
 
         mMapViewerResourceProvider = new NMapViewerResourceProvider(this); // 리소스 프로바이더
@@ -58,6 +62,8 @@ public class MapDetailActivity extends AppCompatActivity {
         productName = getIntent().getStringExtra("productName");
         lat = getIntent().getDoubleExtra("lat", 0);
         lng = getIntent().getDoubleExtra("lng", 0);
+        myLat = getIntent().getDoubleExtra("myLat", 0);
+        myLng = getIntent().getDoubleExtra("myLng", 0);
 
         // 마커박는 작업
         int markerId = NMapPOIflagType.PIN;
@@ -65,6 +71,13 @@ public class MapDetailActivity extends AppCompatActivity {
         NMapPOIdata poiData = new NMapPOIdata(2, mMapViewerResourceProvider);
         poiData.beginPOIdata(2);
         poiData.addPOIitem(lng, lat, productName, markerId, 0);
+
+        if(myLat != 0) {
+            Drawable myPin = getResources().getDrawable(R.drawable.my_pin);
+            myPin.setBounds(0, 0, 50, 70);
+            poiData.addPOIitem(myLng, myLat, productName, myPin, 0);
+        }
+
         poiData.endPOIdata();
 
         NMapPOIdataOverlay poiDataOverlay = mOverlayManager.createPOIdataOverlay(poiData, null);

@@ -3,6 +3,7 @@ package com.eastblue.cisuba.Activity;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.text.TextUtils;
+import android.view.MenuItem;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.Toast;
@@ -63,5 +64,14 @@ public class RequestPartnerActivity extends AppCompatActivity {
                     });
         }
 
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        if(item.getItemId() == android.R.id.home) {
+            finish();
+        }
+
+        return true;
     }
 }

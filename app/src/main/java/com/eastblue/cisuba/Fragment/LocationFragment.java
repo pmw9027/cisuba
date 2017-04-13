@@ -112,7 +112,10 @@ public class LocationFragment extends Fragment {
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 ProductModel productModel = (ProductModel) nearAdapter.getItem(position);
                 if(!productModel.isFreePartner) {
-                    startActivity(new Intent(getActivity(), ProductDetailActivity.class).putExtra("id", productModel.id));
+                    startActivity(new Intent(getActivity(), ProductDetailActivity.class).putExtra("id", productModel.id)
+                    .putExtra("gps", true)
+                    .putExtra("lat", mLat)
+                    .putExtra("lng", mLng));
                 }
             }
         });
@@ -146,6 +149,8 @@ public class LocationFragment extends Fragment {
             Toast.makeText(getActivity(), "위치 찾기를 켜주세요.", Toast.LENGTH_SHORT).show();
         }
 
+        //testGPS();
+
         SmartLocation.with(getActivity()).location()
                 .oneFix()
                 .start(new OnLocationUpdatedListener() {
@@ -173,6 +178,25 @@ public class LocationFragment extends Fragment {
                 });
 
         //initGPS();
+    }
+
+    void testGPS() {
+        isGetLocation = true;
+        progressBar.setVisibility(View.GONE);
+
+        double lat = 37.538484;
+        double lng = 127.082294;
+
+        try {
+            tvMyLocation.setText(GpsUtil.geoToAddress(getActivity(), lat, lng));
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        mLat = lat;
+        mLng = lng;
+        nearAdapter.setLocation(lat, lng);
+        nearProduct(currentPage, loadSize, 1, 4, lat, lng);
     }
 
     void initGPS() {

@@ -1,8 +1,8 @@
 <component name="libraryTable">
   <library name="naver-map-api-2.1.2">
     <CLASSES>
-      <root url="file://$PROJECT_DIR$/app/build/intermediates/exploded-aar/com.naver.maps.open/naver-map-api/2.1.2/res" />
-      <root url="jar://$PROJECT_DIR$/app/build/intermediates/exploded-aar/com.naver.maps.open/naver-map-api/2.1.2/jars/classes.jar!/" />
+      <root url="file://$USER_HOME$/.android/build-cache/a29d55d75cdfe4b64ff047a28fc0d2ee154ec810/output/res" />
+      <root url="jar://$USER_HOME$/.android/build-cache/a29d55d75cdfe4b64ff047a28fc0d2ee154ec810/output/jars/classes.jar!/" />
     </CLASSES>
     <JAVADOC />
     <SOURCES />

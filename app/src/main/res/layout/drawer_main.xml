@@ -122,7 +122,7 @@
                     android:layout_height="60dp" />
 
                 <ImageView
-                    android:src="@drawable/callcenter"
+                    android:src="@drawable/callcenters"
                     android:layout_gravity="center"
                     android:layout_width="100dp"
                     android:layout_height="100dp" />

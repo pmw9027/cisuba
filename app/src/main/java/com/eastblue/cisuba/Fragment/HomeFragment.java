@@ -124,7 +124,7 @@ public class HomeFragment extends Fragment {
             textSliderView.setOnSliderClickListener(new BaseSliderView.OnSliderClickListener() {
                 @Override
                 public void onSliderClick(BaseSliderView slider) {
-                    if(slider.getBundle().getString("extra").equals("BANNER2")) {
+                    if(slider.getBundle().getString("extra").equals("BANNER")) {
                         Intent intent = new Intent(getActivity(), LawAdviceActivity.class);
                         startActivity(intent);
                     }
@@ -225,7 +225,7 @@ public class HomeFragment extends Fragment {
         Button tabBtn = new Button(getActivity());
         tabBtn.setOnClickListener(tabItemClickListener);
         tabBtn.setText(item);
-        tabBtn.setBackgroundColor(Color.parseColor("#ebebebeb"));
+        tabBtn.setBackgroundColor(getResources().getColor(R.color.tabColor));
         tabBtn.setTextSize(TypedValue.COMPLEX_UNIT_SP, 12);
         tabBtn.setTag(position);
 

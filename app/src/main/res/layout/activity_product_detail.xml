@@ -44,7 +44,7 @@
                         android:textColor="@color/White"
                         android:text=""
                         android:gravity="center"
-                        android:textSize="@dimen/text_size_small"
+                        android:textSize="15sp"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent" />
 
@@ -100,13 +100,16 @@
                         android:layout_height="wrap_content"
                         android:id="@+id/tv_name" />
 
-                    <LinearLayout
-                        android:id="@+id/lin_tag"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:orientation="horizontal">
+                </LinearLayout>
 
-                    </LinearLayout>
+                <LinearLayout
+                    android:layout_marginTop="@dimen/margin_default"
+                    android:layout_marginBottom="@dimen/margin_large"
+                    android:id="@+id/lin_tag"
+                    android:gravity="center"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal">
 
                 </LinearLayout>
 
@@ -140,7 +143,7 @@
                         android:text="서울특별시 강남구 개포동"
                         android:textStyle="bold"
                         android:textColor="@color/Gray"
-                        android:textSize="@dimen/text_size_small"
+                        android:textSize="@dimen/text_size_bsmall"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content" />
 
@@ -166,7 +169,7 @@
                         android:text="00:00 ~ 00:00"
                         android:textStyle="bold"
                         android:textColor="@color/Gray"
-                        android:textSize="@dimen/text_size_small"
+                        android:textSize="@dimen/text_size_bsmall"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content" />
 
@@ -192,7 +195,7 @@
                         android:text="02) 515-5124"
                         android:textStyle="bold"
                         android:textColor="@color/Gray"
-                        android:textSize="@dimen/text_size_small"
+                        android:textSize="@dimen/text_size_bsmall"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content" />
 

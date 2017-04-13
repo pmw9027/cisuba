@@ -113,6 +113,9 @@ public class FindLocationFragment extends Fragment{
     }
 
     void getProduct(int page, int size, int area, int filter) {
+
+        Log.d("area", area + "");
+
         HttpUtil.api(Product.class).getProduct(page, size, area, filter, new Callback<List<ProductModel>>() {
             @Override
             public void success(List<ProductModel> productModels, Response response) {

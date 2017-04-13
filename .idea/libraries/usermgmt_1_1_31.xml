@@ -1,8 +1,8 @@
 <component name="libraryTable">
   <library name="usermgmt-1.1.31">
     <CLASSES>
-      <root url="file://$PROJECT_DIR$/app/build/intermediates/exploded-aar/com.kakao.sdk/usermgmt/1.1.31/res" />
-      <root url="jar://$PROJECT_DIR$/app/build/intermediates/exploded-aar/com.kakao.sdk/usermgmt/1.1.31/jars/classes.jar!/" />
+      <root url="jar://$USER_HOME$/.android/build-cache/7502f7c2a6903db5747b13fc6e7ebd85c19915f0/output/jars/classes.jar!/" />
+      <root url="file://$USER_HOME$/.android/build-cache/7502f7c2a6903db5747b13fc6e7ebd85c19915f0/output/res" />
     </CLASSES>
     <JAVADOC />
     <SOURCES>

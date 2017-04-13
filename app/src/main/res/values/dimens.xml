@@ -45,6 +45,7 @@
     <!-- text size -->
     <dimen name="text_size_minimum">8sp</dimen>
     <dimen name="text_size_small">12sp</dimen>
+    <dimen name="text_size_bsmall">14sp</dimen>
     <dimen name="text_size_default">16sp</dimen>
     <dimen name="text_size_medium">20sp</dimen>
     <dimen name="text_size_large">24sp</dimen>

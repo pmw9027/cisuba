@@ -1,8 +1,8 @@
 <component name="libraryTable">
   <library name="network-1.1.31">
     <CLASSES>
-      <root url="jar://$PROJECT_DIR$/app/build/intermediates/exploded-aar/com.kakao.sdk/network/1.1.31/jars/classes.jar!/" />
-      <root url="file://$PROJECT_DIR$/app/build/intermediates/exploded-aar/com.kakao.sdk/network/1.1.31/res" />
+      <root url="jar://$USER_HOME$/.android/build-cache/a2fa4bb66e355722e27c270026d112d790498c27/output/jars/classes.jar!/" />
+      <root url="file://$USER_HOME$/.android/build-cache/a2fa4bb66e355722e27c270026d112d790498c27/output/res" />
     </CLASSES>
     <JAVADOC />
     <SOURCES>
