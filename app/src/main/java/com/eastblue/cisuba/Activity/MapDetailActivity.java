@@ -1,8 +1,8 @@
 package com.eastblue.cisuba.Activity;
 
 import android.graphics.drawable.Drawable;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
 
@@ -21,8 +21,10 @@ import butterknife.ButterKnife;
 
 public class MapDetailActivity extends AppCompatActivity {
 
-    @BindView(R.id.toolbar) Toolbar mToolbar;
-    @BindView(R.id.mapView) NMapView mMapView;
+    @BindView(R.id.toolbar)
+    Toolbar mToolbar;
+    @BindView(R.id.mapView)
+    NMapView mMapView;
     NMapContext mMapContext;
     NMapViewerResourceProvider mMapViewerResourceProvider;
     NMapOverlayManager mOverlayManager;
@@ -43,21 +45,6 @@ public class MapDetailActivity extends AppCompatActivity {
         setContentView(R.layout.activity_map_detail);
         ButterKnife.bind(this);
 
-        mToolbar.setTitle("지도 상세보기");
-
-        setSupportActionBar(mToolbar);
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-
-        mMapContext =  new NMapContext(this);
-        mMapContext.onCreate();
-        mMapView.setClientId(CLIENT_ID);// 클라이언트 아이디 설정
-        mMapView.setClickable(true); // 맵 클릭 가능하게
-        mMapView.setScalingFactor(1.5f);
-        mMapContext.setupMapView(mMapView);
-
-        mMapViewerResourceProvider = new NMapViewerResourceProvider(this); // 리소스 프로바이더
-        mOverlayManager = new NMapOverlayManager(this, mMapView, mMapViewerResourceProvider); // 오버레이 매니저
-
         // 찜질방 위치 지정
         productName = getIntent().getStringExtra("productName");
         lat = getIntent().getDoubleExtra("lat", 0);
@@ -65,40 +52,60 @@ public class MapDetailActivity extends AppCompatActivity {
         myLat = getIntent().getDoubleExtra("myLat", 0);
         myLng = getIntent().getDoubleExtra("myLng", 0);
 
+        mToolbar.setTitle("지도 상세보기");
+
+        setSupportActionBar(mToolbar);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+
+        mMapContext = new NMapContext(this);
+        mMapContext.onCreate();
+        mMapContext.setupMapView(mMapView);
+
+        mMapView.setClientId(CLIENT_ID);// 클라이언트 아이디 설정
+
+        mMapViewerResourceProvider = new NMapViewerResourceProvider(this); // 리소스 프로바이더
+        mOverlayManager = new NMapOverlayManager(this, mMapView, mMapViewerResourceProvider); // 오버레이 매니저
+
         // 마커박는 작업
         int markerId = NMapPOIflagType.PIN;
 
         NMapPOIdata poiData = new NMapPOIdata(2, mMapViewerResourceProvider);
-        poiData.beginPOIdata(2);
+        poiData.beginPOIdata(1);
         poiData.addPOIitem(lng, lat, productName, markerId, 0);
 
-        if(myLat != 0) {
-            Drawable myPin = getResources().getDrawable(R.drawable.my_pin);
-            myPin.setBounds(0, 0, 50, 70);
-            poiData.addPOIitem(myLng, myLat, productName, myPin, 0);
-        }
+//        if (myLat != 0) {
+//            Drawable myPin = getResources().getDrawable(R.drawable.my_pin);
+//            myPin.setBounds(0, 0, 50, 70);
+//            poiData.addPOIitem(myLng, myLat, productName, myPin, 0);
+//        }
 
         poiData.endPOIdata();
 
         NMapPOIdataOverlay poiDataOverlay = mOverlayManager.createPOIdataOverlay(poiData, null);
         poiDataOverlay.showAllPOIdata(0);
-    }
 
+        mMapView.getMapController().setMapCenter(lng,lat,11);
+        mMapView.setClickable(true); // 맵 클릭 가능하게
+        mMapView.setScalingFactor(2.5f);
+    }
     @Override
-    public void onStart(){
+    public void onStart() {
         super.onStart();
         mMapContext.onStart();
     }
+
     @Override
     public void onResume() {
         super.onResume();
         mMapContext.onResume();
     }
+
     @Override
     public void onPause() {
         super.onPause();
         mMapContext.onPause();
     }
+
     @Override
     public void onStop() {
         mMapContext.onStop();
@@ -113,9 +120,11 @@ public class MapDetailActivity extends AppCompatActivity {
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        if(item.getItemId() == android.R.id.home) {
+        if (item.getItemId() == android.R.id.home) {
             finish();
         }
         return super.onOptionsItemSelected(item);
     }
+
+
 }

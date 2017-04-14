@@ -101,11 +101,11 @@ public class ProductDetailActivity extends AppCompatActivity {
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
-        mMapView.setClientId(CLIENT_ID);
-        mMapView.setClickable(true);
         mMapContext = new NMapContext(this);
         mMapContext.onCreate();
         mMapContext.setupMapView(mMapView);
+        mMapView.setClientId(CLIENT_ID);
+        mMapView.setClickable(true);
         mMapViewerResourceProvider = new NMapViewerResourceProvider(this);
         mOverlayManager = new NMapOverlayManager(this, mMapView, mMapViewerResourceProvider);
 
@@ -162,6 +162,8 @@ public class ProductDetailActivity extends AppCompatActivity {
         });
 
         getItem(getIntent().getStringExtra("id"));
+
+        mMapView.setScalingFactor(2.5f);
     }
 
     void initScroll(List<ProductImageModel> imgArray) {
@@ -248,13 +250,15 @@ public class ProductDetailActivity extends AppCompatActivity {
     void setMarker(double lat, double lng, String name) {
         int markerId = NMapPOIflagType.PIN;
 
-        NMapPOIdata poiData = new NMapPOIdata(2, mMapViewerResourceProvider);
-        poiData.beginPOIdata(2);
+        NMapPOIdata poiData = new NMapPOIdata(1, mMapViewerResourceProvider);
+        poiData.beginPOIdata(1);
         poiData.addPOIitem(lng, lat, name, markerId, 0);
         poiData.endPOIdata();
 
         NMapPOIdataOverlay poiDataOverlay = mOverlayManager.createPOIdataOverlay(poiData, null);
         poiDataOverlay.showAllPOIdata(0);
+
+        mMapView.getMapController().setMapCenter(lng,lat,11);
     }
 
     @Override
@@ -273,6 +277,13 @@ public class ProductDetailActivity extends AppCompatActivity {
     protected void onDestroy() {
         super.onDestroy();
         mMapContext.onDestroy();
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        mMapView.getMapController().setMapCenter(lng,lat,11);
+        mMapContext.onResume();
     }
 
     @Override
