@@ -103,7 +103,6 @@ public class HomeFragment extends Fragment {
         });
         // -----------
 
-        mBannerSlider.stopAutoCycle();
 
         HashMap<String,Integer> file_maps = new HashMap<String, Integer>();
         file_maps.put("BANNER", R.drawable.banner2);
@@ -132,8 +131,9 @@ public class HomeFragment extends Fragment {
             });
 
             mBannerSlider.addSlider(textSliderView);
-
+            mBannerSlider.setDuration(3000);
             scrollView.pageScroll(View.FOCUS_UP);
+
         }
 
         gridView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
