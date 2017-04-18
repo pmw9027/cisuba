@@ -13,11 +13,13 @@ import android.support.annotation.Nullable;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AbsListView;
 import android.widget.AdapterView;
+import android.widget.FrameLayout;
 import android.widget.ListView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
@@ -26,6 +28,8 @@ import android.widget.Toast;
 import com.eastblue.cisuba.Activity.ProductDetailActivity;
 import com.eastblue.cisuba.Adapter.NearAdapter;
 import com.eastblue.cisuba.Gps.GpsUtil;
+import com.eastblue.cisuba.Map.NMapPOIflagType;
+import com.eastblue.cisuba.Map.NMapViewerResourceProvider;
 import com.eastblue.cisuba.Model.ProductModel;
 import com.eastblue.cisuba.Network.Product;
 import com.eastblue.cisuba.R;
@@ -44,6 +48,15 @@ import retrofit.Callback;
 import retrofit.RetrofitError;
 import retrofit.client.Response;
 
+import com.nhn.android.maps.NMapContext;
+import com.nhn.android.maps.NMapView;
+import com.nhn.android.maps.overlay.NMapPOIdata;
+import com.nhn.android.mapviewer.overlay.NMapOverlayManager;
+import com.nhn.android.mapviewer.overlay.NMapPOIdataOverlay;
+import com.nirhart.parallaxscroll.views.ParallaxListView;
+
+import static android.R.attr.width;
+
 /**
  * Created by PJC on 2017-02-07.
  */
@@ -55,10 +68,17 @@ public class LocationFragment extends Fragment {
     View rootView = null;
 
     @BindView(R.id.lv_near)
-    ListView lvNear;
+    ParallaxListView lvNear;
 
     @BindView(R.id.pb_bar) ProgressBar progressBar;
     @BindView(R.id.tv_my_location) TextView tvMyLocation;
+
+    NMapView mMapView;
+    NMapContext mMapContext;
+    NMapOverlayManager mOverlayManager;
+    NMapViewerResourceProvider mMapViewerResourceProvider;
+
+    final String CLIENT_ID = "N_PMI_hG0G1FAFhg8alc";
 
     NearAdapter nearAdapter;
 
@@ -87,6 +107,9 @@ public class LocationFragment extends Fragment {
             ButterKnife.bind(this, rootView);
             this.rootView = rootView;
             init();
+
+
+            lvNear.addParallaxedHeaderView(mMapView);
         }
         return this.rootView;
     }
@@ -104,7 +127,24 @@ public class LocationFragment extends Fragment {
     }
 
     void init() {
+        FrameLayout frameLayout = new FrameLayout(getActivity());
+        mMapView = new NMapView(getActivity());
 
+        mMapContext = new NMapContext(getActivity());
+        mMapContext.onCreate();
+        mMapContext.setupMapView(mMapView);
+        mMapView.setLayoutParams(new NMapView.LayoutParams(NMapView.LayoutParams.MATCH_PARENT, 800));
+        mMapView.setClientId(CLIENT_ID);
+        // initialize map view
+        mMapView.setClickable(true);
+        mMapView.setEnabled(true);
+        mMapView.setFocusable(true);
+        mMapView.setFocusableInTouchMode(true);
+        mMapView.requestFocus();
+        mMapViewerResourceProvider = new NMapViewerResourceProvider(getActivity());
+        mOverlayManager = new NMapOverlayManager(getActivity(), mMapView, mMapViewerResourceProvider);
+        mMapView.setScalingFactor(2.0f,false);
+        mMapContext.onStart();
         Log.d("frag", "init");
 
         lvNear.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -165,6 +205,7 @@ public class LocationFragment extends Fragment {
 
                             try {
                                 tvMyLocation.setText(GpsUtil.geoToAddress(getActivity(), lat, lng));
+                                setMarker(lat, lng, "");
                             } catch (IOException e) {
                                 e.printStackTrace();
                             }
@@ -419,5 +460,18 @@ public class LocationFragment extends Fragment {
         }
 
         return true;
+    }
+    void setMarker(double lat, double lng, String name) {
+        int markerId = NMapPOIflagType.PIN;
+
+        NMapPOIdata poiData = new NMapPOIdata(1, mMapViewerResourceProvider);
+        poiData.beginPOIdata(1);
+        poiData.addPOIitem(lng, lat, name, markerId, 0);
+        poiData.endPOIdata();
+
+        NMapPOIdataOverlay poiDataOverlay = mOverlayManager.createPOIdataOverlay(poiData, null);
+        poiDataOverlay.showAllPOIdata(0);
+
+        mMapView.getMapController().setMapCenter(lng,lat,11);
     }
 }
