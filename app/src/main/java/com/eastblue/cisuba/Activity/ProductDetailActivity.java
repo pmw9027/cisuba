@@ -58,7 +58,6 @@ public class ProductDetailActivity extends AppCompatActivity {
     @BindView(R.id.toolbar) Toolbar toolbar;
     @BindView(R.id.mapView) NMapView mMapView;
     @BindView(R.id.slider) SliderLayout sliderLayout;
-
     @BindView(R.id.frame_map) FrameLayout frameMap;
     @BindView(R.id.lin_tag) LinearLayout linTag;
     @BindView(R.id.tv_name) TextView tvName;
@@ -66,7 +65,7 @@ public class ProductDetailActivity extends AppCompatActivity {
     @BindView(R.id.tv_address) TextView tvAddress;
     @BindView(R.id.tv_time) TextView tvTime;
     @BindView(R.id.tv_phone) TextView tvPhone;
-    @BindView(R.id.tv_use_about) TextView tvUseAbout;
+   // @BindView(R.id.tv_use_about) TextView tvUseAbout;
     @BindView(R.id.tv_price_morning) TextView tvPriceMorning;
     @BindView(R.id.tv_price_lunch) TextView tvPriceLunch;
     @BindView(R.id.tv_price_dinner) TextView tvPriceDinner;
@@ -105,53 +104,9 @@ public class ProductDetailActivity extends AppCompatActivity {
         mMapContext.onCreate();
         mMapContext.setupMapView(mMapView);
         mMapView.setClientId(CLIENT_ID);
-        mMapView.setClickable(true);
+        mMapView.setClickable(false);
         mMapViewerResourceProvider = new NMapViewerResourceProvider(this);
         mOverlayManager = new NMapOverlayManager(this, mMapView, mMapViewerResourceProvider);
-
-        mMapView.setOnMapViewTouchEventListener(new NMapView.OnMapViewTouchEventListener() {
-            @Override
-            public void onLongPress(NMapView nMapView, MotionEvent motionEvent) {
-
-            }
-
-            @Override
-            public void onLongPressCanceled(NMapView nMapView) {
-
-            }
-
-            @Override
-            public void onTouchDown(NMapView nMapView, MotionEvent motionEvent) {
-
-            }
-
-            @Override
-            public void onTouchUp(NMapView nMapView, MotionEvent motionEvent) {
-
-            }
-
-            @Override
-            public void onScroll(NMapView nMapView, MotionEvent motionEvent, MotionEvent motionEvent1) {
-
-            }
-
-            @Override
-            public void onSingleTapUp(NMapView nMapView, MotionEvent motionEvent) {
-                if(isRecv) {
-                    Intent mapActivity = new Intent(ProductDetailActivity.this, MapDetailActivity.class);
-                    mapActivity.putExtra("lat", lat);
-                    mapActivity.putExtra("lng", lng);
-
-                    if(mapActivity.getBooleanExtra("gps", false)) {
-                        mapActivity.putExtra("myLat", getIntent().getDoubleExtra("lat", 0));
-                        mapActivity.putExtra("myLng", getIntent().getDoubleExtra("lng", 0));
-                    }
-
-                    mapActivity.putExtra("partnerName", partnerName);
-                    startActivity(mapActivity);
-                }
-            }
-        });
 
         tvPhone.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -163,7 +118,24 @@ public class ProductDetailActivity extends AppCompatActivity {
 
         getItem(getIntent().getStringExtra("id"));
 
-        mMapView.setScalingFactor(2.5f);
+        mMapView.setScalingFactor(2.0f,false);
+    }
+
+    @OnClick(R.id.frame_map)
+    public void openMapDetail() {
+        if(isRecv) {
+            Intent mapActivity = new Intent(ProductDetailActivity.this, MapDetailActivity.class);
+            mapActivity.putExtra("lat", lat);
+            mapActivity.putExtra("lng", lng);
+
+            if(mapActivity.getBooleanExtra("gps", false)) {
+                mapActivity.putExtra("myLat", getIntent().getDoubleExtra("lat", 0));
+                mapActivity.putExtra("myLng", getIntent().getDoubleExtra("lng", 0));
+            }
+
+            mapActivity.putExtra("partnerName", partnerName);
+            startActivity(mapActivity);
+        }
     }
 
     void initScroll(List<ProductImageModel> imgArray) {
@@ -214,7 +186,7 @@ public class ProductDetailActivity extends AppCompatActivity {
                 tvPriceDiscount.setText(productModel.discount + " 원 할인");
 
                 tvPhone.setText(productModel.phone);
-                tvUseAbout.setText(productModel.useAbout);
+                //tvUseAbout.setText(productModel.useAbout);
                 if(productModel.startStime != null && productModel.startEtime != null) {
                     String startTime = productModel.startStime.split(":")[0] + ":" + productModel.startStime.split(":")[1];
                     String endTime = productModel.startEtime.split(":")[0]+ ":" +  productModel.startEtime.split(":")[1];
@@ -283,7 +255,6 @@ public class ProductDetailActivity extends AppCompatActivity {
     protected void onResume() {
         super.onResume();
         mMapView.getMapController().setMapCenter(lng,lat,11);
-        mMapContext.onResume();
     }
 
     @Override
