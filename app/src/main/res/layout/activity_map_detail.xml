@@ -15,10 +15,65 @@
         app:layout_collapseMode="pin"
         app:popupTheme="@style/ThemeOverlay.AppCompat" />
 
-    <com.nhn.android.maps.NMapView
+    <FrameLayout
         android:layout_width="match_parent"
-        android:layout_height="0dp"
+        android:layout_height="match_parent">
+
+        <com.nhn.android.maps.NMapView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
         android:layout_weight="1"
         android:id="@+id/mapView"/>
+
+        <ProgressBar
+            android:id="@+id/map_progressBar"
+            style="@android:style/Widget.DeviceDefault.Light.ProgressBar.Small"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:padding="150dp"
+            android:visibility="visible" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:gravity="top"
+            android:orientation="horizontal">
+
+            <Button
+                android:id="@+id/btn_mylocation"
+                android:layout_width="wrap_content"
+                android:layout_height="54dp"
+                android:text="내위치" />
+
+            <Button
+                android:id="@+id/btn_product"
+                android:layout_width="wrap_content"
+                android:layout_height="54dp"
+                android:text="업소위치" />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:baselineAligned="false"
+            android:gravity="bottom"
+            android:orientation="horizontal">
+
+            <Button
+                android:id="@+id/btn_route"
+                android:layout_width="wrap_content"
+                android:layout_height="54dp"
+                android:text="도보" />
+
+            <Button
+                android:id="@+id/btn_navi"
+                android:layout_width="wrap_content"
+                android:layout_height="54dp"
+                android:text="네비" />
+        </LinearLayout>
+
+    </FrameLayout>
+
 
 </LinearLayout>
