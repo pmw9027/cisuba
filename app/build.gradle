@@ -49,6 +49,10 @@ dependencies {
     compile 'com.naver.maps.open:naver-map-api:2.1.2@aar'
     compile 'de.hdodenhof:circleimageview:2.1.0'
     compile 'io.nlopez.smartlocation:library:3.3.1'
+    compile 'com.journeyapps:zxing-android-embedded:3.5.0'
+    compile 'com.github.nirhart:parallaxscroll:1.0'
+    compile group: 'com.kakao.sdk', name: 'kakaonavi', version: project.KAKAO_SDK_VERSION
+
     testCompile 'junit:junit:4.12'
     annotationProcessor 'com.jakewharton:butterknife-compiler:8.4.0'
 }

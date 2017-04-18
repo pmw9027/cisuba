@@ -10,6 +10,7 @@ import android.view.ViewGroup;
 
 import com.eastblue.cisuba.Activity.NoticeActivity;
 import com.eastblue.cisuba.Activity.RequestPartnerActivity;
+import com.eastblue.cisuba.Activity.TicketActivity;
 import com.eastblue.cisuba.R;
 import com.kakao.kakaolink.KakaoLink;
 import com.kakao.kakaolink.KakaoTalkLinkMessageBuilder;
@@ -37,15 +38,23 @@ public class ProfileFragment extends Fragment {
         startActivity(new Intent(getActivity(), RequestPartnerActivity.class).setFlags(Intent.FLAG_ACTIVITY_NEW_TASK));
     }
 
+//    @OnClick(R.id.lin_ticket)
+//    void openTicket() {
+//        System.out.println("ticket~~~~~~~~~");
+//        startActivity(new Intent(getActivity(), TicketActivity.class));
+//    }
+
     @OnClick(R.id.lin_notice)
     void openNotice() {
         startActivity(new Intent(getActivity(), NoticeActivity.class).setFlags(Intent.FLAG_ACTIVITY_NEW_TASK).putExtra("TYPE", "NOTICE"));
     }
 
+
     @OnClick(R.id.lin_faq)
     void openFaq() {
         startActivity(new Intent(getActivity(), NoticeActivity.class).setFlags(Intent.FLAG_ACTIVITY_NEW_TASK).putExtra("TYPE", "NOTICE"));
     }
+
 
     @OnClick(R.id.btn_invite_kakao)
     void inviteKakao() {
