@@ -9,6 +9,16 @@
     <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
     <uses-permission android:name="android.permission.CHANGE_WIFI_STATE" />
 
+    <uses-feature android:name="android.hardware.camera" />
+
+    <uses-permission android:name="android.permission.CAMERA" />
+    <uses-permission android:name="android.permission.FLASHLIGHT" />
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.INTERNET" />
+
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
+
     <application
         android:name=".CisubaApplication"
         android:allowBackup="true"
@@ -21,7 +31,8 @@
             android:name="com.kakao.sdk.AppKey"
             android:value="@string/kakao_app_key" />
 
-        <activity android:name=".Activity.IntroActivity"
+        <activity
+            android:name=".Activity.IntroActivity"
             android:screenOrientation="portrait">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -29,8 +40,9 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".Activity.MainActivity"
-            android:screenOrientation="portrait"/>
+        <activity
+            android:name=".Activity.MainActivity"
+            android:screenOrientation="portrait" />
         <activity android:name=".Activity.LoginActivity" />
         <activity android:name=".Activity.TestActivity" />
         <activity android:name=".Activity.ProductDetailActivity" />
@@ -38,8 +50,22 @@
         <activity android:name=".Activity.NoticeActivity" />
         <activity android:name=".Activity.LawAdviceActivity" />
         <activity android:name=".Activity.ProductSearchActivity" />
-        <activity android:name=".Activity.MapDetailActivity">
+        <activity android:name=".Activity.MapDetailActivity" />
+        <activity android:name=".Activity.TicketActivity" />
+        <activity
+            android:name=".Activity.QRcodeActivity"
+            android:clearTaskOnLaunch="true"
+            android:configChanges="orientation|keyboardHidden"
+            android:screenOrientation="landscape"
+            android:stateNotNeeded="true"
+            android:theme="@style/zxing_CaptureTheme"
+            android:windowSoftInputMode="stateAlwaysHidden">
+            <intent-filter>
+                <action android:name="com.google.zxing.client.android.SCAN" />
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
         </activity>
+
     </application>
 
 </manifest>
