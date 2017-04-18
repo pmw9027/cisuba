@@ -177,6 +177,10 @@ public class MainActivity extends AppCompatActivity {
         startActivity(new Intent(this, NoticeActivity.class).putExtra("TYPE", "NOTICE"));
     }
 
+    @OnClick(R.id.lin_ticket)
+    public void goTicket() {
+        startActivity(new Intent(this, TicketActivity.class));
+    }
     @OnClick(R.id.lin_faq)
     public void goFaq() {
         startActivity(new Intent(this, NoticeActivity.class).putExtra("TYPE", "FAQ"));
