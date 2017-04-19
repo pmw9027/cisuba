@@ -342,6 +342,7 @@ public class LoginActivity extends AppCompatActivity {// implements View.OnClick
                     System.out.println("login success");
                     //Intent intent = new Intent(LoginActivity.this, MainActivity.class);
                     //startActivity(intent);
+                    requestMe();
                     finish();
                 }
             });
