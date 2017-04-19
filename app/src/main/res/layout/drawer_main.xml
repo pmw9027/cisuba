@@ -28,13 +28,14 @@
 
                     <de.hdodenhof.circleimageview.CircleImageView
                         android:src="@drawable/ic_launcher"
-                        android:id="@+id/imv_profile"
+                        android:id="@+id/drawer_profile"
                         android:layout_width="64dp"
                         android:layout_height="64dp" />
 
                     <TextView
                         android:text="로그인기능 준비중"
                         android:textColor="@color/White"
+                        android:id="@+id/drawer_nick"
                         android:textStyle="bold"
                         android:layout_marginTop="@dimen/margin_default"
                         android:layout_width="wrap_content"
@@ -66,31 +67,6 @@
                     android:background="@drawable/ic_more"
                     android:layout_width="32dp"
                     android:layout_height="32dp" />
-
-            </LinearLayout>
-
-            <LinearLayout
-                android:id="@+id/lin_ticket"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:background="@color/White"
-                android:orientation="horizontal"
-                android:padding="@dimen/padding_medium">
-
-                <TextView
-                    android:layout_width="0dp"
-                    android:layout_height="match_parent"
-                    android:layout_weight="1"
-                    android:gravity="center|start"
-                    android:paddingLeft="@dimen/padding_default"
-                    android:text="이용권"
-                    android:textColor="@color/Black"
-                    android:textStyle="bold" />
-
-                <ImageButton
-                    android:layout_width="32dp"
-                    android:layout_height="32dp"
-                    android:background="@drawable/ic_more" />
 
             </LinearLayout>
 

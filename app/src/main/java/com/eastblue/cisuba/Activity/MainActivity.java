@@ -3,6 +3,8 @@ package com.eastblue.cisuba.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.res.Configuration;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.support.annotation.Nullable;
 import android.support.design.widget.TabLayout;
 import android.support.v4.view.ViewPager;
@@ -19,6 +21,7 @@ import android.view.MenuItem;
 import android.widget.LinearLayout;
 
 import android.app.SearchManager;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.daimajia.slider.library.SliderLayout;
@@ -26,6 +29,7 @@ import com.daimajia.slider.library.SliderTypes.BaseSliderView;
 import com.daimajia.slider.library.SliderTypes.TextSliderView;
 import com.eastblue.cisuba.Adapter.TabPagerAdapter;
 import com.eastblue.cisuba.Dialog.MainPopUpDialog;
+import com.eastblue.cisuba.Fragment.ProfileFragment;
 import com.eastblue.cisuba.Manager.NetworkManager;
 import com.eastblue.cisuba.Model.BannerModel;
 import com.eastblue.cisuba.Network.Product;
@@ -36,22 +40,30 @@ import com.kakao.kakaolink.KakaoLink;
 import com.kakao.kakaolink.KakaoTalkLinkMessageBuilder;
 import com.kakao.util.KakaoParameterException;
 
+import java.io.InputStream;
+import java.net.HttpURLConnection;
+import java.net.URL;
 import java.util.HashMap;
 import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
+import de.hdodenhof.circleimageview.CircleImageView;
 import retrofit.Callback;
 import retrofit.RetrofitError;
 import retrofit.client.Response;
 
 public class MainActivity extends AppCompatActivity {
 
-    @BindView(R.id.toolbar) Toolbar mToolbar;
-    @BindView(R.id.drawer_layout) DrawerLayout mDrawerLayout;
-    @BindView(R.id.rcvr_tl_tabs) TabLayout mTabLayout;
-    @BindView(R.id.vp_pager) ViewPager mViewPager;
+    @BindView(R.id.toolbar)
+    Toolbar mToolbar;
+    @BindView(R.id.drawer_layout)
+    DrawerLayout mDrawerLayout;
+    @BindView(R.id.rcvr_tl_tabs)
+    TabLayout mTabLayout;
+    @BindView(R.id.vp_pager)
+    ViewPager mViewPager;
 
     TabPagerAdapter mTabAdapter;
 
@@ -61,13 +73,56 @@ public class MainActivity extends AppCompatActivity {
 
     private long backKeyPressedTime = 0;
 
+    public static TextView nickname;
+    public static CircleImageView profileimage;
+    static Bitmap bitmap;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         ButterKnife.bind(this);
         init();
+
+        nickname = (TextView) findViewById(R.id.drawer_nick);
+        profileimage = (CircleImageView) findViewById(R.id.drawer_profile);
+
     }
+
+    @Override
+    protected void onResume() {
+        if (LoginActivity.mOAuthLoginModule != null) {
+            if (LoginActivity.mOAuthLoginModule.getState(this).toString().equals("OK")) {
+                ProfileFragment.nickname.setText(LoginActivity.nickname);
+                MainActivity.nickname.setText(LoginActivity.nickname);
+                System.out.println("resume -- " + LoginActivity.nickname);
+
+                new Thread(new Runnable() {
+                    @Override
+                    public void run() {
+                        try {
+                            bitmap = getBitmap(LoginActivity.profile_image);
+                        } catch (Exception e) {
+
+                        } finally {
+                            if (bitmap != null) {
+                                runOnUiThread(new Runnable() {
+                                    @Override
+                                    public void run() {
+                                        ProfileFragment.profileimage.setImageBitmap(bitmap);
+                                        MainActivity.profileimage.setImageBitmap(bitmap);
+                                    }
+                                });
+                            }
+                        }
+                    }
+                }).start();
+            }
+        }
+        //requestMe();
+        super.onResume();
+    }
+
 
     void init() {
 
@@ -80,7 +135,7 @@ public class MainActivity extends AppCompatActivity {
         mViewPager.setAdapter(mTabAdapter);
         mTabLayout.setupWithViewPager(mViewPager);
 
-        for(int i=0; i<mTabLayout.getTabCount(); i++) {
+        for (int i = 0; i < mTabLayout.getTabCount(); i++) {
             TabLayout.Tab tab = mTabLayout.getTabAt(i);
             tab.setCustomView(mTabAdapter.getTabView(i));
         }
@@ -95,7 +150,7 @@ public class MainActivity extends AppCompatActivity {
         HttpUtil.api(Product.class).getMainBanner(new Callback<List<BannerModel>>() {
             @Override
             public void success(List<BannerModel> bannerModels, Response response) {
-                if(bannerModels.size() == 1) {
+                if (bannerModels.size() == 1) {
                     Bundle bundle = new Bundle();
                     bundle.putString("image", NetworkManager.SERVER_URL + bannerModels.get(0).mainThumbnail);
 
@@ -149,7 +204,7 @@ public class MainActivity extends AppCompatActivity {
         searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
             public boolean onQueryTextSubmit(String query) {
-                if(!TextUtils.isEmpty(query)) {
+                if (!TextUtils.isEmpty(query)) {
                     Intent intent = new Intent(MainActivity.this, ProductSearchActivity.class);
                     intent.putExtra("name", query);
                     startActivity(intent);
@@ -177,10 +232,7 @@ public class MainActivity extends AppCompatActivity {
         startActivity(new Intent(this, NoticeActivity.class).putExtra("TYPE", "NOTICE"));
     }
 
-    @OnClick(R.id.lin_ticket)
-    public void goTicket() {
-        startActivity(new Intent(this, TicketActivity.class));
-    }
+
     @OnClick(R.id.lin_faq)
     public void goFaq() {
         startActivity(new Intent(this, NoticeActivity.class).putExtra("TYPE", "FAQ"));
@@ -204,6 +256,36 @@ public class MainActivity extends AppCompatActivity {
             kakaoLink.sendMessage(kakaoTalkLinkMessageBuilder, this);
         } catch (KakaoParameterException e) {
             e.printStackTrace();
+        }
+    }
+
+    @OnClick(R.id.drawer_profile)
+    public void openLogin() {
+        startActivity(new Intent(this, LoginActivity.class));
+    }
+
+    private Bitmap getBitmap(String url) {
+        URL imgUrl = null;
+        HttpURLConnection connection = null;
+        InputStream is = null;
+
+        Bitmap retBitmap = null;
+
+        try {
+            imgUrl = new URL(url);
+            connection = (HttpURLConnection)imgUrl.openConnection();
+            connection.setDoInput(true);
+            connection.connect();
+            is = connection.getInputStream();
+            retBitmap = BitmapFactory.decodeStream(is);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return null;
+        } finally {
+            if(connection != null) {
+                connection.disconnect();
+            }
+            return retBitmap;
         }
     }
 }

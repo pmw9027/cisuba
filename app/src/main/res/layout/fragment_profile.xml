@@ -16,6 +16,7 @@
 
 
             <ImageButton
+                android:id="@+id/btn_logout"
                 android:background="@drawable/ic_logout"
                 android:layout_gravity="end"
                 android:layout_width="32dp"
@@ -132,7 +133,7 @@
             android:layout_gravity="center"
             android:layout_width="100dp"
             android:layout_height="100dp" />
-        
+
     </LinearLayout>
 
 </LinearLayout>

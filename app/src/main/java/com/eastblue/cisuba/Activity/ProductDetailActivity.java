@@ -261,12 +261,6 @@ public class ProductDetailActivity extends AppCompatActivity {
     }
 
     @Override
-    protected void onPause() {
-        super.onPause();
-        mMapContext.onPause();
-    }
-
-    @Override
     protected void onStart() {
         super.onStart();
         mMapContext.onStart();
