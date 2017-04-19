@@ -5,16 +5,19 @@ import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.graphics.Rect;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
 import android.os.Bundle;
+import android.provider.Settings;
 import android.support.annotation.Nullable;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AbsListView;
@@ -25,6 +28,7 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.eastblue.cisuba.Activity.MapDetailActivity;
 import com.eastblue.cisuba.Activity.ProductDetailActivity;
 import com.eastblue.cisuba.Adapter.NearAdapter;
 import com.eastblue.cisuba.Gps.GpsUtil;
@@ -48,9 +52,18 @@ import retrofit.Callback;
 import retrofit.RetrofitError;
 import retrofit.client.Response;
 
+import com.nhn.android.maps.NMapCompassManager;
 import com.nhn.android.maps.NMapContext;
+import com.nhn.android.maps.NMapController;
+import com.nhn.android.maps.NMapItemizedOverlay;
+import com.nhn.android.maps.NMapLocationManager;
+import com.nhn.android.maps.NMapOverlay;
+import com.nhn.android.maps.NMapOverlayItem;
 import com.nhn.android.maps.NMapView;
+import com.nhn.android.maps.maplib.NGeoPoint;
 import com.nhn.android.maps.overlay.NMapPOIdata;
+import com.nhn.android.mapviewer.overlay.NMapCalloutOverlay;
+import com.nhn.android.mapviewer.overlay.NMapMyLocationOverlay;
 import com.nhn.android.mapviewer.overlay.NMapOverlayManager;
 import com.nhn.android.mapviewer.overlay.NMapPOIdataOverlay;
 import com.nirhart.parallaxscroll.views.ParallaxListView;
@@ -70,14 +83,23 @@ public class LocationFragment extends Fragment {
     @BindView(R.id.lv_near)
     ParallaxListView lvNear;
 
-    @BindView(R.id.pb_bar) ProgressBar progressBar;
-    @BindView(R.id.tv_my_location) TextView tvMyLocation;
+    @BindView(R.id.pb_bar)
+    ProgressBar progressBar;
+    @BindView(R.id.tv_my_location)
+    TextView tvMyLocation;
 
     NMapView mMapView;
     NMapContext mMapContext;
     NMapOverlayManager mOverlayManager;
     NMapViewerResourceProvider mMapViewerResourceProvider;
-
+    NMapLocationManager mMapLocationManager;
+    NMapCompassManager mMapCompassManager;
+    NMapMyLocationOverlay mMyLocationOverlay;
+    NMapController mMapController;
+    NMapPOIdataOverlay poiDataOverlay;
+    NMapPOIdata poiData;
+    boolean isSelectPOI = false;
+    NGeoPoint myLocation;
     final String CLIENT_ID = "N_PMI_hG0G1FAFhg8alc";
 
     NearAdapter nearAdapter;
@@ -102,7 +124,7 @@ public class LocationFragment extends Fragment {
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        if(this.rootView == null) {
+        if (this.rootView == null) {
             View rootView = inflater.inflate(R.layout.fragment_location, container, false);
             ButterKnife.bind(this, rootView);
             this.rootView = rootView;
@@ -110,24 +132,13 @@ public class LocationFragment extends Fragment {
 
 
             lvNear.addParallaxedHeaderView(mMapView);
+
         }
         return this.rootView;
     }
 
-    @Override
-    public void onPause() {
-        super.onPause();
-        Log.d("frag", "onPause");
-    }
-
-    @Override
-    public void onDestroy() {
-        super.onDestroy();
-        Log.d("frag", "onDestroy");
-    }
 
     void init() {
-        FrameLayout frameLayout = new FrameLayout(getActivity());
         mMapView = new NMapView(getActivity());
 
         mMapContext = new NMapContext(getActivity());
@@ -141,21 +152,48 @@ public class LocationFragment extends Fragment {
         mMapView.setFocusable(true);
         mMapView.setFocusableInTouchMode(true);
         mMapView.requestFocus();
+        mMapView.setOnMapViewTouchEventListener(onMapViewTouchEventListener);
         mMapViewerResourceProvider = new NMapViewerResourceProvider(getActivity());
         mOverlayManager = new NMapOverlayManager(getActivity(), mMapView, mMapViewerResourceProvider);
-        mMapView.setScalingFactor(2.0f,false);
+        mMapView.setScalingFactor(2.0f, false);
         mMapContext.onStart();
+
+        // location manager
+        mMapLocationManager = new NMapLocationManager(this.getActivity());
+        mMapLocationManager.setOnLocationChangeListener(onMyLocationChangeListener);
+
+        // compass manager
+        mMapCompassManager = new NMapCompassManager(this.getActivity());
+
+        // create my location overlay
+        mMyLocationOverlay = mOverlayManager.createMyLocationOverlay(mMapLocationManager, mMapCompassManager);
+
+        // use map controller to zoom in/out, pan and set map center, zoom level etc.
+        mMapController = mMapView.getMapController();
+
+
+        boolean isMyLocationEnabled = mMapLocationManager.enableMyLocation(true);
+        if (!isMyLocationEnabled) {
+            Toast.makeText(getActivity(), "Please enable a My Location source in system settings",
+                    Toast.LENGTH_LONG).show();
+
+            Intent goToSettings = new Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS);
+            startActivity(goToSettings);
+
+            return;
+        }
+
         Log.d("frag", "init");
 
         lvNear.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 ProductModel productModel = (ProductModel) nearAdapter.getItem(position);
-                if(!productModel.isFreePartner) {
+                if (!productModel.isFreePartner) {
                     startActivity(new Intent(getActivity(), ProductDetailActivity.class).putExtra("id", productModel.id)
-                    .putExtra("gps", true)
-                    .putExtra("lat", mLat)
-                    .putExtra("lng", mLng));
+                            .putExtra("gps", true)
+                            .putExtra("lat", mLat)
+                            .putExtra("lng", mLng));
                 }
             }
         });
@@ -183,7 +221,7 @@ public class LocationFragment extends Fragment {
         Boolean isGpsOn = SmartLocation.with(getActivity()).location().state().isGpsAvailable();
         Boolean isNetworkOn = SmartLocation.with(getActivity()).location().state().isNetworkAvailable();
 
-        if(isGpsOn || isNetworkOn) {
+        if (isGpsOn || isNetworkOn) {
             progressBar.setVisibility(View.VISIBLE);
         } else {
             Toast.makeText(getActivity(), "위치 찾기를 켜주세요.", Toast.LENGTH_SHORT).show();
@@ -196,7 +234,7 @@ public class LocationFragment extends Fragment {
                 .start(new OnLocationUpdatedListener() {
                     @Override
                     public void onLocationUpdated(Location location) {
-                        if(!isGetLocation) {
+                        if (!isGetLocation) {
                             isGetLocation = true;
                             progressBar.setVisibility(View.GONE);
 
@@ -205,7 +243,7 @@ public class LocationFragment extends Fragment {
 
                             try {
                                 tvMyLocation.setText(GpsUtil.geoToAddress(getActivity(), lat, lng));
-                                setMarker(lat, lng, "");
+                                //setMarker(lat, lng, "");
                             } catch (IOException e) {
                                 e.printStackTrace();
                             }
@@ -250,18 +288,17 @@ public class LocationFragment extends Fragment {
 
         Log.d(TAG + ":CHECK", "check");
 
-        if(checkPermission()) {
+        if (checkPermission()) {
             Log.d(TAG, "checkPermission");
-            if(isGpsOn) {
+            if (isGpsOn) {
                 Log.d(TAG + ":GPS", "GPS");
                 locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 100, 1, gpsListener);
             }
-            if(isNetworkOn) {
+            if (isNetworkOn) {
                 Log.d(TAG + ":NETWORK", "NETWORK");
                 locationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 1000, 1, networkListener);
             }
-        }
-        else {
+        } else {
             Toast.makeText(getActivity(), "GPS 권한이 없습니다.", Toast.LENGTH_LONG).show();
         }
 
@@ -321,17 +358,70 @@ public class LocationFragment extends Fragment {
         HttpUtil.api(Product.class).nearProduct(page, size, area, filter, String.valueOf(lat), String.valueOf(lng), new Callback<List<ProductModel>>() {
             @Override
             public void success(List<ProductModel> productModels, Response response) {
+                int markerId = NMapPOIflagType.SPOT;
+
 
                 Log.d("size", productModels.size() + "");
 
-                if(firstLoading) {
+                poiData = new NMapPOIdata(productModels.size(), mMapViewerResourceProvider);
+
+                poiData.beginPOIdata(productModels.size());
+                if (firstLoading) {
                     nearAdapter.setArray((ArrayList<ProductModel>) productModels);
+                    for (int i = 0; i < productModels.size(); i++) {
+                        double lat = Double.parseDouble(productModels.get(i).lat);
+                        double lng = Double.parseDouble(productModels.get(i).lng);
+                        String name = productModels.get(i).partnerName;
+                        poiData.addPOIitem(lng, lat, name, markerId, 0);
+                    }
                     firstLoading = false;
                 } else {
                     for (int i = 0; i < productModels.size(); i++) {
                         nearAdapter.addItem(productModels.get(i));
+
+                        double lat = Double.parseDouble(productModels.get(i).lat);
+                        double lng = Double.parseDouble(productModels.get(i).lng);
+                        String name = productModels.get(i).partnerName;
+                        poiData.addPOIitem(lng, lat, name, markerId, 0);
                     }
                 }
+
+                poiData.endPOIdata();
+                poiDataOverlay = mOverlayManager.createPOIdataOverlay(poiData, null);
+                mOverlayManager.setOnCalloutOverlayViewListener(new NMapOverlayManager.OnCalloutOverlayViewListener() {
+                    @Override
+                    public View onCreateCalloutOverlayView(NMapOverlay nMapOverlay, NMapOverlayItem nMapOverlayItem, Rect rect) {
+                        try {
+                            String productName = nMapOverlayItem.getTitle();
+                            ProductModel selectProduct = (ProductModel) nearAdapter.getItem(productName);
+
+                            if (!isSelectPOI) {
+                                nearAdapter.add(0, selectProduct);
+                                isSelectPOI = true;
+                            } else {
+                                nearAdapter.setItem(0, selectProduct);
+                            }
+
+                        } catch (NullPointerException e) {
+
+                        }
+                        return null;
+                    }
+                });
+//                poiDataOverlay.setOnFocusChangeListener(new NMapItemizedOverlay.OnFocusChangeListener() {
+//                    @Override
+//                    public void onFocusChanged(NMapItemizedOverlay nMapItemizedOverlay, NMapOverlayItem nMapOverlayItem) {
+//                        try {
+//                            String productName = nMapOverlayItem.getTitle();
+//                            ProductModel selectProduct = (ProductModel) nearAdapter.getItem(productName);
+//                            nearAdapter.add(0, selectProduct);
+//                        } catch (NullPointerException e) {
+//
+//                        }
+//
+//                    }
+//                });
+                poiDataOverlay.showAllPOIdata(0);
 
                 currentPage++;
                 nearAdapter.notifyDataSetChanged();
@@ -386,7 +476,7 @@ public class LocationFragment extends Fragment {
             locationManager.removeUpdates(gpsListener);
             locationManager.removeUpdates(networkListener);
 
-            if(!isGetLocation) {
+            if (!isGetLocation) {
                 isGetLocation = true;
 
                 double lat = location.getLatitude();
@@ -420,7 +510,7 @@ public class LocationFragment extends Fragment {
             locationManager.removeUpdates(gpsListener);
             locationManager.removeUpdates(networkListener);
 
-            if(!isGetLocation) {
+            if (!isGetLocation) {
                 isGetLocation = true;
 
                 double lat = location.getLatitude();
@@ -438,12 +528,12 @@ public class LocationFragment extends Fragment {
 
         @Override
         public void onProviderEnabled(String provider) {
-            Log.d("Latitudessss",provider);
+            Log.d("Latitudessss", provider);
         }
 
         @Override
         public void onProviderDisabled(String provider) {
-            Log.d("Latitude",provider);
+            Log.d("Latitude", provider);
         }
     };
 
@@ -461,17 +551,144 @@ public class LocationFragment extends Fragment {
 
         return true;
     }
+
     void setMarker(double lat, double lng, String name) {
         int markerId = NMapPOIflagType.PIN;
 
-        NMapPOIdata poiData = new NMapPOIdata(1, mMapViewerResourceProvider);
+
         poiData.beginPOIdata(1);
         poiData.addPOIitem(lng, lat, name, markerId, 0);
         poiData.endPOIdata();
 
-        NMapPOIdataOverlay poiDataOverlay = mOverlayManager.createPOIdataOverlay(poiData, null);
-        poiDataOverlay.showAllPOIdata(0);
+        poiDataOverlay = mOverlayManager.createPOIdataOverlay(poiData, null);
 
-        mMapView.getMapController().setMapCenter(lng,lat,11);
+//
+//        mMapView.getMapController().setMapCenter(lng, lat, 11);
+    }
+
+    private final NMapView.OnMapViewTouchEventListener onMapViewTouchEventListener = new NMapView.OnMapViewTouchEventListener() {
+
+        @Override
+        public void onTouchDown(NMapView nMapView, MotionEvent motionEvent) {
+        }
+
+        @Override
+        public void onTouchUp(NMapView nMapView, MotionEvent motionEvent) {
+        }
+
+        @Override
+        public void onLongPress(NMapView nMapView, MotionEvent motionEvent) {
+        }
+
+        @Override
+        public void onLongPressCanceled(NMapView nMapView) {
+        }
+
+        @Override
+        public void onSingleTapUp(NMapView nMapView, MotionEvent motionEvent) {
+        }
+
+        @Override
+        public void onScroll(NMapView mapView, MotionEvent e1, MotionEvent e2) {
+            mapView.getParent().requestDisallowInterceptTouchEvent(true);
+        }
+    };
+
+    /* MyLocation Listener */
+    private final NMapLocationManager.OnLocationChangeListener onMyLocationChangeListener = new NMapLocationManager.OnLocationChangeListener() {
+
+        @Override
+        public boolean onLocationChanged(NMapLocationManager locationManager, NGeoPoint _myLocation) {
+
+            if (mMapController != null) {
+
+                mMapController.animateTo(_myLocation);
+                myLocation = _myLocation;
+
+                progressBar.setVisibility(View.INVISIBLE);
+            }
+
+            return true;
+        }
+
+        @Override
+        public void onLocationUpdateTimeout(NMapLocationManager locationManager) {
+
+            // stop location updating
+            //			Runnable runnable = new Runnable() {
+            //				public void run() {
+            //					stopMyLocation();
+            //				}
+            //			};
+            //			runnable.run();
+
+            Toast.makeText(getActivity(), "Your current location is temporarily unavailable.", Toast.LENGTH_LONG).show();
+            progressBar.setVisibility(View.INVISIBLE);
+        }
+
+        @Override
+        public void onLocationUnavailableArea(NMapLocationManager locationManager, NGeoPoint myLocation) {
+
+            Toast.makeText(getActivity(), "Your current location is unavailable area.", Toast.LENGTH_LONG).show();
+            progressBar.setVisibility(View.INVISIBLE);
+
+            stopMyLocation();
+        }
+
+    };
+
+    private void stopMyLocation() {
+        if (mMyLocationOverlay != null) {
+            mMapLocationManager.disableMyLocation();
+
+            if (mMapView.isAutoRotateEnabled()) {
+                mMyLocationOverlay.setCompassHeadingVisible(false);
+
+                mMapCompassManager.disableCompass();
+
+                mMapView.setAutoRotateEnabled(false, false);
+
+            }
+        }
+        progressBar.setVisibility(View.INVISIBLE);
+    }
+
+    @Override
+    public void onStart() {
+        super.onStart();
+        mMapContext.onStart();
+        Log.d("frag", "onStart");
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        mMapContext.onResume();
+        if (myLocation != null) {
+            mMapController.animateTo(myLocation);
+            poiDataOverlay.showAllPOIdata(0);
+        }
+        Log.d("frag", "onResume");
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        mMapContext.onPause();
+        Log.d("frag", "onPause");
+    }
+
+    @Override
+    public void onStop() {
+        super.onStop();
+        mMapContext.onStop();
+        Log.d("frag", "onStop");
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        mMapContext.onDestroy();
+        Log.d("frag", "onDestroy");
     }
 }

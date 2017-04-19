@@ -49,10 +49,19 @@ public class NearAdapter extends BaseAdapter {
         mLocation.setLatitude(lat);
         mLocation.setLongitude(lng);
     }
-
+    public void setItem(int index, ProductModel item) {
+        mList.set(index,item);
+        notifyDataSetChanged();
+    }
     public void addItem(ProductModel item) {
         mList.add(item);
     }
+    public void add(int index, ProductModel item)
+    {
+        mList.add(index, item);
+        notifyDataSetChanged();
+    }
+
 
     public void removeAll() {
         mList.clear();;
@@ -66,6 +75,15 @@ public class NearAdapter extends BaseAdapter {
     @Override
     public Object getItem(int position) {
         return mList.get(position);
+    }
+
+    public Object getItem(String title) {
+        for (int i = 0; i < mList.size(); i++) {
+            if (mList.get(i).partnerName.contains(title)) {
+                return mList.get(i);
+            }
+        }
+        return null;
     }
 
     @Override
