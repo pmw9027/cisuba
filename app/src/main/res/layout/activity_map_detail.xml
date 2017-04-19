@@ -8,12 +8,10 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     tools:context="com.eastblue.cisuba.Activity.MapDetailActivity">
 
-    <android.support.v7.widget.Toolbar
-        android:id="@+id/toolbar"
+    <include
+        layout="@layout/toolbar_map"
         android:layout_width="match_parent"
-        android:layout_height="?attr/actionBarSize"
-        app:layout_collapseMode="pin"
-        app:popupTheme="@style/ThemeOverlay.AppCompat" />
+        android:layout_height="wrap_content"/>
 
     <FrameLayout
         android:layout_width="match_parent"
@@ -36,42 +34,29 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:gravity="top"
+            android:gravity="top|right"
             android:orientation="horizontal">
 
-            <Button
+            <ImageButton
                 android:id="@+id/btn_mylocation"
-                android:layout_width="wrap_content"
-                android:layout_height="54dp"
+                android:layout_width="50dp"
+                android:layout_height="50dp"
+                android:layout_marginTop="5dp"
+                android:background="@drawable/btn_mylocation"
+                android:scaleType="centerInside"
                 android:text="내위치" />
 
-            <Button
+            <ImageButton
                 android:id="@+id/btn_product"
-                android:layout_width="wrap_content"
-                android:layout_height="54dp"
+                android:layout_width="50dp"
+                android:layout_height="50dp"
+                android:layout_margin="5dp"
+                android:background="@drawable/btn_pin"
+                android:elevation="0dp"
                 android:text="업소위치" />
 
         </LinearLayout>
 
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:baselineAligned="false"
-            android:gravity="bottom"
-            android:orientation="horizontal">
-
-            <Button
-                android:id="@+id/btn_route"
-                android:layout_width="wrap_content"
-                android:layout_height="54dp"
-                android:text="도보" />
-
-            <Button
-                android:id="@+id/btn_navi"
-                android:layout_width="wrap_content"
-                android:layout_height="54dp"
-                android:text="네비" />
-        </LinearLayout>
 
     </FrameLayout>
 

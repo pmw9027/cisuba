@@ -214,7 +214,7 @@
 
                 <LinearLayout
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
+                    android:layout_height="40dp"
                     android:layout_marginTop="10dp"
                     android:background="@drawable/background_product_cost"
                     android:gravity="center"
@@ -272,18 +272,65 @@
 
             <FrameLayout
                 android:id="@+id/frame_map"
-                android:layout_marginTop="@dimen/margin_default"
                 android:layout_width="match_parent"
-                android:background="@color/Red"
-                android:layout_height="150dp">
+                android:layout_height="150dp"
+                android:layout_marginTop="@dimen/margin_default"
+                android:background="@color/Red">
 
                 <com.nhn.android.maps.NMapView
-                    android:layout_width="fill_parent"
-                    android:layout_height="fill_parent"
-                    android:id="@+id/mapView"/>
+                android:layout_width="fill_parent"
+                android:layout_height="fill_parent"
+                android:id="@+id/mapView"/>
 
             </FrameLayout>
 
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginBottom="6dp"
+                android:layout_marginTop="10dp"
+                android:baselineAligned="false"
+                android:gravity="bottom"
+                android:orientation="horizontal">
+
+                <Button
+                    android:id="@+id/btn_route"
+                    android:layout_width="wrap_content"
+                    android:layout_height="54dp"
+                    android:layout_marginRight="3dp"
+                    android:layout_weight="0.5"
+                    android:background="@drawable/product_detail_map_btn"
+                    android:drawableLeft="@drawable/btn_walk"
+                    android:paddingLeft="20dp"
+                    android:text="도보"
+                    android:textColor="@color/White"
+                    android:textSize="16sp"
+                    android:textStyle="bold" />
+
+                <Button
+                    android:id="@+id/btn_navi"
+                    android:layout_width="wrap_content"
+                    android:layout_height="54dp"
+                    android:layout_marginLeft="3dp"
+                    android:layout_weight="0.5"
+                    android:background="@drawable/product_detail_map_btn"
+                    android:drawableLeft="@drawable/btn_navi"
+                    android:paddingLeft="20dp"
+                    android:text="네비"
+                    android:textColor="@color/White"
+                    android:textSize="16sp"
+                    android:textStyle="bold" />
+            </LinearLayout>
+
+            <Button
+                android:id="@+id/btn_pay"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@drawable/product_detail_pay_btn"
+                android:text="결제하기"
+                android:textColor="@color/White"
+                android:textSize="16sp"
+                android:textStyle="bold" />
             <!--<LinearLayout-->
                 <!--android:layout_width="match_parent"-->
                 <!--android:layout_height="wrap_content"-->

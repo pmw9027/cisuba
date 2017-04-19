@@ -31,6 +31,13 @@ import com.eastblue.cisuba.Model.ProductModel;
 import com.eastblue.cisuba.Network.Product;
 import com.eastblue.cisuba.R;
 import com.eastblue.cisuba.Util.HttpUtil;
+import com.kakao.kakaonavi.KakaoNaviParams;
+import com.kakao.kakaonavi.KakaoNaviService;
+import com.kakao.kakaonavi.Location;
+import com.kakao.kakaonavi.NaviOptions;
+import com.kakao.kakaonavi.options.CoordType;
+import com.kakao.kakaonavi.options.RpOption;
+import com.kakao.kakaonavi.options.VehicleType;
 import com.nhn.android.maps.NMapContext;
 import com.nhn.android.maps.NMapOverlay;
 import com.nhn.android.maps.NMapOverlayItem;
@@ -83,6 +90,8 @@ public class ProductDetailActivity extends AppCompatActivity {
     private double lng;
 
     final String CLIENT_ID = "N_PMI_hG0G1FAFhg8alc";
+
+    Location destination;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -193,7 +202,9 @@ public class ProductDetailActivity extends AppCompatActivity {
                     tvTime.setText(startTime + "~" + endTime);
                 }
 
-                setMarker(Double.parseDouble(productModel.lat), Double.parseDouble(productModel.lng), productModel.partnerName);
+                setMarker(lat, lng, partnerName);
+                destination = Location.newBuilder(partnerName, lng, lat).build();
+
                 initScroll(productModel.imageList);
 
                 for(int i=0; i<productModel.tagList.size(); i++) {
@@ -231,6 +242,28 @@ public class ProductDetailActivity extends AppCompatActivity {
         poiDataOverlay.showAllPOIdata(0);
 
         mMapView.getMapController().setMapCenter(lng,lat,11);
+    }
+
+    @OnClick(R.id.btn_route)
+    public void openMapApps() {
+
+        mMapView.executeNaverMap();
+
+    }
+
+    @OnClick(R.id.btn_navi)
+    public void openKakaoNavi() {
+
+        KakaoNaviParams.Builder builder = KakaoNaviParams.newBuilder(destination)
+                .setNaviOptions(NaviOptions.newBuilder().setCoordType(CoordType.WGS84).build());
+
+        KakaoNaviService.shareDestination(ProductDetailActivity.this, builder.build());
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        mMapContext.onPause();
     }
 
     @Override

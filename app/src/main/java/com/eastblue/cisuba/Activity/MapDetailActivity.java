@@ -4,14 +4,16 @@ import android.content.Intent;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.provider.Settings;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.ProgressBar;
 import android.widget.Toast;
-
+import com.nhn.android.maps.NMapOverlay;
 import com.eastblue.cisuba.Map.NMapPOIflagType;
 import com.eastblue.cisuba.Map.NMapViewerResourceProvider;
 import com.eastblue.cisuba.R;
@@ -20,10 +22,12 @@ import com.nhn.android.maps.NMapCompassManager;
 import com.nhn.android.maps.NMapContext;
 import com.nhn.android.maps.NMapController;
 import com.nhn.android.maps.NMapLocationManager;
+import com.nhn.android.maps.NMapOverlayItem;
 import com.nhn.android.maps.NMapView;
 import com.nhn.android.maps.maplib.NGPoint;
 import com.nhn.android.maps.maplib.NGeoPoint;
 import com.nhn.android.maps.overlay.NMapPOIdata;
+import com.nhn.android.maps.overlay.NMapPOIitem;
 import com.nhn.android.mapviewer.overlay.NMapMyLocationOverlay;
 import com.nhn.android.mapviewer.overlay.NMapOverlayManager;
 import com.nhn.android.mapviewer.overlay.NMapPOIdataOverlay;
@@ -32,6 +36,8 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 
+import static com.eastblue.cisuba.Util.HttpUtil.context;
+
 public class MapDetailActivity extends AppCompatActivity {
 
     @BindView(R.id.toolbar)
@@ -39,9 +45,9 @@ public class MapDetailActivity extends AppCompatActivity {
     @BindView(R.id.mapView)
     NMapView mMapView;
     @BindView(R.id.btn_mylocation)
-    Button btn_mylocation;
+    ImageButton btn_mylocation;
     @BindView(R.id.btn_product)
-    Button btn_product;
+    ImageButton btn_product;
     @BindView(R.id.map_progressBar)
     ProgressBar progressBar;
 
@@ -55,6 +61,7 @@ public class MapDetailActivity extends AppCompatActivity {
     NMapPOIdataOverlay poiDataOverlay;
     NMapController mMapController;
     NGeoPoint productPoint;
+    NMapOverlayItem mMapOverlayItem;
     Boolean focusMyLocation = false;
 
     private final String CLIENT_ID = "N_PMI_hG0G1FAFhg8alc";
@@ -82,7 +89,6 @@ public class MapDetailActivity extends AppCompatActivity {
 
         productPoint = new NGeoPoint((int)(lng * 1E6), (int)(lat * 1e6));
 
-        mToolbar.setTitle("지도 상세보기");
 
         setSupportActionBar(mToolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
@@ -102,11 +108,10 @@ public class MapDetailActivity extends AppCompatActivity {
 
         // 마커박는 작업
         int markerId = NMapPOIflagType.PIN;
-
+//        Drawable pin = ContextCompat.getDrawable(getApplicationContext(), R.drawable.gp_pin);
         poiData = new NMapPOIdata(2, mMapViewerResourceProvider);
         poiData.beginPOIdata(1);
-        poiData.addPOIitem(lng, lat, productName, markerId, 0);
-
+        poiData.addPOIitem(lng, lat, productName,markerId, 0);
 
 //        if (myLat != 0) {
 //            Drawable myPin = getResources().getDrawable(R.drawable.my_pin);
@@ -197,12 +202,6 @@ public class MapDetailActivity extends AppCompatActivity {
 
     }
 
-    @OnClick(R.id.btn_route)
-    public void openMapApps() {
-
-        mMapView.executeNaverMap();
-
-    }
 
     /* MyLocation Listener */
     private final NMapLocationManager.OnLocationChangeListener onMyLocationChangeListener = new NMapLocationManager.OnLocationChangeListener() {

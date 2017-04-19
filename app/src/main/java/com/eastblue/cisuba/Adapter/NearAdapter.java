@@ -12,6 +12,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
+import com.eastblue.cisuba.Fragment.LocationFragment;
 import com.eastblue.cisuba.Manager.NetworkManager;
 import com.eastblue.cisuba.Model.ProductModel;
 import com.eastblue.cisuba.Network.Product;
@@ -29,10 +30,12 @@ public class NearAdapter extends BaseAdapter {
     private ArrayList<ProductModel> mList;
     private Context mContext;
     private Location mLocation;
-
+    private static int selectedIndex;
+    private static boolean isSelected;
     private static final int VIEW_COUNT = 2;
     private static final int VIEW_TYPE_FREE = 0;
     private static final int VIEW_TYPE_CHARGE = 1;
+
 
     public NearAdapter(Context context) {
         mContext = context;
@@ -49,22 +52,25 @@ public class NearAdapter extends BaseAdapter {
         mLocation.setLatitude(lat);
         mLocation.setLongitude(lng);
     }
+
     public void setItem(int index, ProductModel item) {
-        mList.set(index,item);
+        mList.set(index, item);
         notifyDataSetChanged();
     }
+
     public void addItem(ProductModel item) {
         mList.add(item);
     }
-    public void add(int index, ProductModel item)
-    {
+
+    public void add(int index, ProductModel item) {
         mList.add(index, item);
         notifyDataSetChanged();
     }
 
 
     public void removeAll() {
-        mList.clear();;
+        mList.clear();
+        ;
     }
 
     @Override
@@ -90,20 +96,25 @@ public class NearAdapter extends BaseAdapter {
     public long getItemId(int position) {
         return position;
     }
+    public static void setSelectedIndex(int selected) {
+        selectedIndex = selected;
+    }
+    public static void setSelected(boolean selected) {
+        isSelected = selected;
+    }
 
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
         ChargeViewBinder chargeViewBinder = null;
         FreeViewBinder freeViewBinder = null;
 
-        if(convertView == null) {
-
-            if(getItemViewType(position) == VIEW_TYPE_CHARGE) {
+        if (convertView == null) {
+            if (getItemViewType(position) == VIEW_TYPE_CHARGE) {
                 convertView = LayoutInflater.from(mContext).inflate(R.layout.item_near, parent, false);
                 chargeViewBinder = new ChargeViewBinder(convertView);
                 convertView.setTag(chargeViewBinder);
-            }
-            else if(getItemViewType(position) == VIEW_TYPE_FREE) {
+
+            } else if (getItemViewType(position) == VIEW_TYPE_FREE) {
                 convertView = LayoutInflater.from(mContext).inflate(R.layout.item_near_free, parent, false);
                 freeViewBinder = new FreeViewBinder(convertView);
                 convertView.setTag(freeViewBinder);
@@ -120,15 +131,22 @@ public class NearAdapter extends BaseAdapter {
         if (getItemViewType(position) == VIEW_TYPE_CHARGE) {
             chargeViewBinder.bindObject(mList.get(position));
         } else if (getItemViewType(position) == VIEW_TYPE_FREE) {
+//            if (position == selectedIndex && isSelected==true) {
+//                convertView=LayoutInflater.from(mContext).inflate(R.layout.item_near_select, parent, false);
+//                freeViewBinder = new FreeViewBinder(convertView);
+//                convertView.setTag(freeViewBinder);
+//
+//            }
             freeViewBinder.bindObject(mList.get(position));
         }
+
 
         return convertView;
     }
 
     @Override
     public int getItemViewType(int position) {
-        if(mList.get(position).isFreePartner) {
+        if (mList.get(position).isFreePartner) {
             return VIEW_TYPE_FREE;
         } else {
             return VIEW_TYPE_CHARGE;
@@ -162,7 +180,7 @@ public class NearAdapter extends BaseAdapter {
         }
 
         public void bindObject(ProductModel item) {
-            tvName.setText("["+LocationCode.getInstance().getLocation(item.gubunAdress) + "] " +item.partnerName);
+            tvName.setText("[" + LocationCode.getInstance().getLocation(item.gubunAdress) + "] " + item.partnerName);
             tvAddress.setText(item.shortAddress);
             tvDiscount.setText(item.discount + " 원 할인");
             tvPriceMorning.setText("조조 " + Integer.parseInt(item.morningPrice) + "원");
@@ -170,9 +188,9 @@ public class NearAdapter extends BaseAdapter {
             tvPriceDinner.setText("야간 " + Integer.parseInt(item.dinnerPrice) + "원");
 
             // Calc the KM
-            if(mLocation != null) {
+            if (mLocation != null) {
                 Log.d("cat", "cat");
-                if(item.lat != null && item.lng != null) {
+                if (item.lat != null && item.lng != null) {
                     Location target = new Location("TARGET");
                     target.setLatitude(Double.parseDouble(item.lat));
                     target.setLongitude(Double.parseDouble(item.lng));
@@ -180,8 +198,8 @@ public class NearAdapter extends BaseAdapter {
                     int distance = (int) mLocation.distanceTo(target);
 
                     int km = 0;
-                    if(distance >= 1000) {
-                         km = distance / 1000;
+                    if (distance >= 1000) {
+                        km = distance / 1000;
                     }
                     int meter = distance % 1000 / 3;
                     tvKm.setText(km + "." + meter + " Km");
@@ -212,15 +230,15 @@ public class NearAdapter extends BaseAdapter {
         }
 
         public void bindObject(ProductModel item) {
-            tvName.setText("["+item.highlightAddress + "] " +item.partnerName);
+            tvName.setText("[" + item.highlightAddress + "] " + item.partnerName);
             tvAddress.setText(item.detailAddress);
             tvPriceMorning.setText("조조 " + Integer.parseInt(item.morningPrice) + "원");
             tvPriceLunch.setText("평일 " + Integer.parseInt(item.lunchPrice) + "원");
             tvPriceDinner.setText("야간 " + Integer.parseInt(item.dinnerPrice) + "원");
 
-            if(mLocation != null) {
+            if (mLocation != null) {
 
-                if(item.lat != null && item.lng != null) {
+                if (item.lat != null && item.lng != null) {
 
                     Location target = new Location("TARGET");
                     target.setLatitude(Double.parseDouble(item.lat));
@@ -229,11 +247,11 @@ public class NearAdapter extends BaseAdapter {
                     int distance = (int) mLocation.distanceTo(target);
 
                     int km = 0;
-                    if(distance >= 1000) {
+                    if (distance >= 1000) {
                         km = distance / 1000;
                     }
                     int meter = distance % 1000;
-                    if(meter > 0) {
+                    if (meter > 0) {
                         meter = meter / 100;
                     }
                     String distance_str = String.format("%d.%01d Km", km, meter);
@@ -246,15 +264,14 @@ public class NearAdapter extends BaseAdapter {
         }
     }
 
-    public float distance (float lat_a, float lng_a, float lat_b, float lng_b )
-    {
+    public float distance(float lat_a, float lng_a, float lat_b, float lng_b) {
         double earthRadius = 3958.75;
-        double latDiff = Math.toRadians(lat_b-lat_a);
-        double lngDiff = Math.toRadians(lng_b-lng_a);
-        double a = Math.sin(latDiff /2) * Math.sin(latDiff /2) +
+        double latDiff = Math.toRadians(lat_b - lat_a);
+        double lngDiff = Math.toRadians(lng_b - lng_a);
+        double a = Math.sin(latDiff / 2) * Math.sin(latDiff / 2) +
                 Math.cos(Math.toRadians(lat_a)) * Math.cos(Math.toRadians(lat_b)) *
-                        Math.sin(lngDiff /2) * Math.sin(lngDiff /2);
-        double c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a));
+                        Math.sin(lngDiff / 2) * Math.sin(lngDiff / 2);
+        double c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
         double distance = earthRadius * c;
 
         int meterConversion = 1609;

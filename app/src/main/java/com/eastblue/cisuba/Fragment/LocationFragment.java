@@ -5,6 +5,7 @@ import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.graphics.Color;
 import android.graphics.Rect;
 import android.location.Location;
 import android.location.LocationListener;
@@ -107,6 +108,7 @@ public class LocationFragment extends Fragment {
     int currentPage = 0;
     int loadSize = 5;
     Boolean firstLoading = true;
+    public static Boolean firstSelect = true;
     Boolean lastItemVisibleFlag = false;
     Boolean isGPSLoad = false;
 
@@ -130,8 +132,8 @@ public class LocationFragment extends Fragment {
             this.rootView = rootView;
             init();
 
-
             lvNear.addParallaxedHeaderView(mMapView);
+
 
         }
         return this.rootView;
@@ -144,7 +146,7 @@ public class LocationFragment extends Fragment {
         mMapContext = new NMapContext(getActivity());
         mMapContext.onCreate();
         mMapContext.setupMapView(mMapView);
-        mMapView.setLayoutParams(new NMapView.LayoutParams(NMapView.LayoutParams.MATCH_PARENT, 800));
+        mMapView.setLayoutParams(new NMapView.LayoutParams(NMapView.LayoutParams.MATCH_PARENT, 1300));
         mMapView.setClientId(CLIENT_ID);
         // initialize map view
         mMapView.setClickable(true);
@@ -397,9 +399,14 @@ public class LocationFragment extends Fragment {
 
                             if (!isSelectPOI) {
                                 nearAdapter.add(0, selectProduct);
+                                nearAdapter.setSelectedIndex(0);
+                                nearAdapter.notifyDataSetChanged();
                                 isSelectPOI = true;
                             } else {
                                 nearAdapter.setItem(0, selectProduct);
+                                nearAdapter.setSelectedIndex(999);
+                                nearAdapter.notifyDataSetChanged();
+
                             }
 
                         } catch (NullPointerException e) {
