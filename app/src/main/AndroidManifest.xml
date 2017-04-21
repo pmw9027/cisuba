@@ -52,6 +52,7 @@
         <activity android:name=".Activity.ProductSearchActivity" />
         <activity android:name=".Activity.MapDetailActivity" />
         <activity android:name=".Activity.TicketActivity" />
+        <activity android:name=".Activity.JoinActivity" />
         <activity
             android:name=".Activity.QRcodeActivity"
             android:clearTaskOnLaunch="true"

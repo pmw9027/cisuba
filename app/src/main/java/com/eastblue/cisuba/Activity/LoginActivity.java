@@ -1,5 +1,6 @@
 package com.eastblue.cisuba.Activity;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
@@ -8,6 +9,7 @@ import android.graphics.Color;
 import android.os.AsyncTask;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.text.Html;
 import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
@@ -19,6 +21,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.eastblue.cisuba.Fragment.ProfileFragment;
+import com.eastblue.cisuba.Kakao.KakaoLoginControl;
 import com.eastblue.cisuba.R;
 import com.kakao.auth.ApiResponseCallback;
 import com.kakao.auth.AuthService;
@@ -33,6 +36,8 @@ import com.kakao.usermgmt.UserManagement;
 import com.kakao.usermgmt.callback.MeResponseCallback;
 import com.kakao.usermgmt.response.model.UserProfile;
 import com.kakao.util.exception.KakaoException;
+import com.kakao.util.helper.StoryProtocol;
+import com.kakao.util.helper.TalkProtocol;
 import com.kakao.util.helper.log.Logger;
 import com.nhn.android.naverlogin.OAuthLogin;
 import com.nhn.android.naverlogin.OAuthLoginHandler;
@@ -50,9 +55,11 @@ import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 
+import butterknife.ButterKnife;
 import butterknife.OnClick;
 
 import static com.nhn.android.naverlogin.OAuthLogin.mOAuthLoginHandler;
+import static java.security.AccessController.getContext;
 
 public class LoginActivity extends AppCompatActivity {// implements View.OnClickListener {
 
@@ -87,17 +94,17 @@ public class LoginActivity extends AppCompatActivity {// implements View.OnClick
     String tokenType;
 
     Bitmap bitmap;
-    ImageButton close;
+    private ImageButton close;
 
-    ViewGroup naverLoginButton;
-    TextView tvnaver;
-    ImageView ivnaver;
+    private ViewGroup naverLoginButton;
+    private TextView tvnaver;
+    private ImageView ivnaver;
 
-    ViewGroup kakaoLoginButton;
-    TextView tvkakao;
-    ImageView ivkakao;
+    private ViewGroup kakaoLoginButton;
+    private TextView tvkakao;
+    private ImageView ivkakao;
 
-    //LoginButton kakaologinButton;
+    TextView join;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -106,16 +113,13 @@ public class LoginActivity extends AppCompatActivity {// implements View.OnClick
         mContext = getApplicationContext();
 
         setContentView(R.layout.activity_login);
-
-        //findViewById(R.id.btn_kakaologin).setOnClickListener(this);
+        ButterKnife.bind(this);
 
         callback = new SessionCallback();
         Session.getCurrentSession().addCallback(callback);
         Session.getCurrentSession().checkAndImplicitOpen();
 
         //InitializeNaverAPI();
-
-        //kakaologinButton = (LoginButton)findViewById(R.id.com_kakao_login);
 
         tvnaver = (TextView) findViewById(R.id.naver_text);
         ivnaver = (ImageView) findViewById(R.id.naver_symbol);
@@ -128,7 +132,7 @@ public class LoginActivity extends AppCompatActivity {// implements View.OnClick
                     case MotionEvent.ACTION_DOWN: {
                         ivnaver.setImageResource(R.drawable.ic_naver_selected);
                         naverLoginButton.setBackgroundResource(R.drawable.box_selected);
-                        tvnaver.setTextColor(Color.CYAN);
+                        tvnaver.setTextColor(Color.parseColor("#1a9eb8"));
                         break;
                     }
                     case MotionEvent.ACTION_UP: {
@@ -142,11 +146,11 @@ public class LoginActivity extends AppCompatActivity {// implements View.OnClick
                 return false;
             }
         });
-/*
+
         tvkakao = (TextView)findViewById(R.id.kakao_text);
         ivkakao = (ImageView)findViewById(R.id.kakao_symbol);
 
-        kakaoLoginButton = (ViewGroup)findViewById(R.id.fake_kakao);
+        kakaoLoginButton = (ViewGroup)findViewById(R.id.kakaologin);
         kakaoLoginButton.setOnTouchListener(new View.OnTouchListener() {
             @Override
             public boolean onTouch(View view, MotionEvent motionEvent) {
@@ -154,7 +158,7 @@ public class LoginActivity extends AppCompatActivity {// implements View.OnClick
                     case MotionEvent.ACTION_DOWN: {
                         ivkakao.setImageResource(R.drawable.ic_kakao_selected);
                         kakaoLoginButton.setBackgroundResource(R.drawable.box_selected);
-                        tvkakao.setTextColor(Color.CYAN);
+                        tvkakao.setTextColor(Color.parseColor("#1a9eb8"));
                         break;
                     }
                     case MotionEvent.ACTION_UP: {
@@ -172,38 +176,32 @@ public class LoginActivity extends AppCompatActivity {// implements View.OnClick
         kakaoLoginButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                kakaologinButton.performClick();
-                callback = new SessionCallback();
-                Session.getCurrentSession().addCallback(callback);
-                Session.getCurrentSession().checkAndImplicitOpen();
+                new KakaoLoginControl(LoginActivity.this).call();
+                //callback = new SessionCallback();
+                //Session.getCurrentSession().addCallback(callback);
+                //Session.getCurrentSession().checkAndImplicitOpen();
 
                 requestMe();
             }
         });
-*/
+
         mOAuthLoginModule = OAuthLogin.getInstance();
         mOAuthLoginModule.init(mContext, OAUTH_CLIENT_ID, OAUTH_CLIENT_SECRET, OAUTH_CLIENT_NAME);
         initSetting();
 
-        System.out.println("naver login state : " + mOAuthLoginModule.getState(mContext).toString());
-        close = (ImageButton) findViewById(R.id.login_close);
+        /*close = (ImageButton) findViewById(R.id.login_close);
         close.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 finish();
             }
         });
+*/
+        join = (TextView)findViewById(R.id.btn_join);
+        join.setText(Html.fromHtml("<u>" + "회원가입" + "</u>"));
+
     }
 
-
-    /*
-    private void doKakaoLogin() {
-        callback = new SessionCallback();
-        Session.getCurrentSession().addCallback(callback);
-        Session.getCurrentSession().checkAndImplicitOpen();
-        Session.getCurrentSession().open(AuthType.KAKAO_TALK_EXCLUDE_NATIVE_LOGIN, this);
-    }
-    */
     @Override
     protected void onDestroy() {
         super.onDestroy();
@@ -215,26 +213,11 @@ public class LoginActivity extends AppCompatActivity {// implements View.OnClick
         finish();
     }
 
-    /*
-        private class SessionCallback implements ISessionCallback {
+    @OnClick(R.id.btn_join)
+    void toJoin() {
+        startActivity(new Intent(this, JoinActivity.class));
+    }
 
-            @Override
-            public void onSessionOpened() {
-                Log.d("login", "onSessionOpened");
-                Log.d("login", Session.getCurrentSession().getAccessToken());
-                requestAccessTokenInfo();
-            }
-
-            @Override
-            public void onSessionOpenFailed(KakaoException exception) {
-                if(exception != null) {
-                    Logger.e(exception);
-                }
-            }
-
-
-        }
-    */
     private void requestAccessTokenInfo() {
         AuthService.requestAccessTokenInfo(new ApiResponseCallback<AccessTokenInfoResponse>() {
             @Override
@@ -289,12 +272,6 @@ public class LoginActivity extends AppCompatActivity {// implements View.OnClick
 
     }
 
-    protected void redirectSignupActivity() {
-        //final Intent intent = new Intent(this, SampleSignupActivity.class);
-        //startActivity(intent);
-        finish();
-    }
-
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         //간편로그인시 호출 ,없으면 간편로그인시 로그인 성공화면으로 넘어가지 않음
@@ -340,8 +317,9 @@ public class LoginActivity extends AppCompatActivity {// implements View.OnClick
                     //사용자 ID는 보안상의 문제로 제공하지 않고 일련번호는 제공합니다.
                     Log.e("UserProfile", userProfile.toString());
                     System.out.println("login success");
-                    //Intent intent = new Intent(LoginActivity.this, MainActivity.class);
-                    //startActivity(intent);
+                    MainActivity.profileimage.setEnabled(false);
+                    ProfileFragment.profileimage.setEnabled(false);
+                    ProfileFragment.logout.setEnabled(true);
                     requestMe();
                     finish();
                 }
@@ -358,8 +336,72 @@ public class LoginActivity extends AppCompatActivity {// implements View.OnClick
         }
     }
 
+    private void requestMe() {
+        final List<String> propertyKeys = new ArrayList<String>();
+        propertyKeys.add("kaccount_email");
+        propertyKeys.add("nickname");
+        propertyKeys.add("profile_image");
+        propertyKeys.add("thumbnail_image");
 
-    //naver
+        UserManagement.requestMe(new MeResponseCallback() {
+            @Override
+            public void onFailure(ErrorResult errorResult) {
+                String message = "failed to get user info. msg=" + errorResult;
+                Logger.d(message);
+
+                //redirectLoginActivity();
+            }
+
+            @Override
+            public void onSessionClosed(ErrorResult errorResult) {
+                ProfileFragment.nickname.setText("로그인을 하세요.");
+                MainActivity.nickname.setText("로그인을 하세요.");
+                ProfileFragment.profileimage.setImageResource(R.drawable.ic_launcher);
+                MainActivity.profileimage.setImageResource(R.drawable.ic_launcher);
+                //redirectLoginActivity();
+            }
+
+            @Override
+            public void onSuccess(final UserProfile userProfile) {
+                Logger.d("UserProfile : " + userProfile);
+
+                ProfileFragment.nickname.setText(userProfile.getNickname());
+                MainActivity.nickname.setText(userProfile.getNickname());
+
+                new Thread(new Runnable() {
+                    @Override
+                    public void run() {
+                        try {
+                            bitmap = getBitmap(userProfile.getThumbnailImagePath());
+                        } catch (Exception e) {
+
+                        } finally {
+                            if (bitmap != null) {
+                                runOnUiThread(new Runnable() {
+                                    @Override
+                                    public void run() {
+                                        ProfileFragment.profileimage.setImageBitmap(bitmap);
+                                        MainActivity.profileimage.setImageBitmap(bitmap);
+                                    }
+                                });
+                            }
+                        }
+                    }
+                }).start();
+
+            }
+
+            @Override
+            public void onNotSignedUp() {
+                // showSignup();
+            }
+        }, propertyKeys, false);
+    }
+
+
+    /**
+     * Maver
+     */
     /*
     private void InitializeNaverAPI( )
     {
@@ -508,6 +550,10 @@ public class LoginActivity extends AppCompatActivity {// implements View.OnClick
                 }
             }).start();
 
+            MainActivity.profileimage.setEnabled(false);
+            ProfileFragment.profileimage.setEnabled(false);
+            ProfileFragment.logout.setEnabled(true);
+
             if (email == null) {
                 Toast.makeText(LoginActivity.this,
                         "로그인 실패하였습니다.  잠시후 다시 시도해 주세요!!", Toast.LENGTH_SHORT)
@@ -587,78 +633,7 @@ public class LoginActivity extends AppCompatActivity {// implements View.OnClick
             id = f_array[6];
             name = f_array[7];
             birthday = f_array[8];
-            System.out.println("email : " + email);
-            System.out.println("nickname : " + nickname);
-            System.out.println("enc_id : " + enc_id);
-            System.out.println("profile_image : " + profile_image);
-            System.out.println("age : " + age);
-            System.out.println("gender : " + gender);
-            System.out.println("id : " + id);
-            System.out.println("name : " + name);
-            System.out.println("birthday" + birthday);
         }
-    }
-
-    private void requestMe() {
-        final List<String> propertyKeys = new ArrayList<String>();
-        propertyKeys.add("kaccount_email");
-        propertyKeys.add("nickname");
-        propertyKeys.add("profile_image");
-        propertyKeys.add("thumbnail_image");
-
-        UserManagement.requestMe(new MeResponseCallback() {
-            @Override
-            public void onFailure(ErrorResult errorResult) {
-                String message = "failed to get user info. msg=" + errorResult;
-                Logger.d(message);
-
-                //redirectLoginActivity();
-            }
-
-            @Override
-            public void onSessionClosed(ErrorResult errorResult) {
-                ProfileFragment.nickname.setText("로그인을 하세요.");
-                MainActivity.nickname.setText("로그인을 하세요.");
-                ProfileFragment.profileimage.setImageResource(R.drawable.ic_launcher);
-                MainActivity.profileimage.setImageResource(R.drawable.ic_launcher);
-                //redirectLoginActivity();
-            }
-
-            @Override
-            public void onSuccess(final UserProfile userProfile) {
-                Logger.d("UserProfile : " + userProfile);
-
-                ProfileFragment.nickname.setText(userProfile.getNickname());
-                MainActivity.nickname.setText(userProfile.getNickname());
-
-                new Thread(new Runnable() {
-                    @Override
-                    public void run() {
-                        try {
-                            bitmap = getBitmap(userProfile.getThumbnailImagePath());
-                        } catch (Exception e) {
-
-                        } finally {
-                            if (bitmap != null) {
-                                runOnUiThread(new Runnable() {
-                                    @Override
-                                    public void run() {
-                                        ProfileFragment.profileimage.setImageBitmap(bitmap);
-                                        MainActivity.profileimage.setImageBitmap(bitmap);
-                                    }
-                                });
-                            }
-                        }
-                    }
-                }).start();
-
-            }
-
-            @Override
-            public void onNotSignedUp() {
-                // showSignup();
-            }
-        }, propertyKeys, false);
     }
 
     private Bitmap getBitmap(String url) {
