@@ -743,11 +743,14 @@ public class LocationFragment extends Fragment {
         mMapContext.onStop();
         Log.d("frag", "onStop");
     }
-
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+    }
     @Override
     public void onDestroy() {
-        super.onDestroy();
         mMapContext.onDestroy();
+        super.onDestroy();
         Log.d("frag", "onDestroy");
     }
 }

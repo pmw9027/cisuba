@@ -3,6 +3,7 @@ package com.eastblue.cisuba.Activity;
 import android.content.Intent;
 import android.graphics.Rect;
 import android.net.Uri;
+import android.os.Handler;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
@@ -39,6 +40,7 @@ import com.kakao.kakaonavi.options.CoordType;
 import com.kakao.kakaonavi.options.RpOption;
 import com.kakao.kakaonavi.options.VehicleType;
 import com.nhn.android.maps.NMapContext;
+import com.nhn.android.maps.NMapController;
 import com.nhn.android.maps.NMapOverlay;
 import com.nhn.android.maps.NMapOverlayItem;
 import com.nhn.android.maps.NMapView;
@@ -81,9 +83,9 @@ public class ProductDetailActivity extends AppCompatActivity {
     NMapContext mMapContext;
     NMapOverlayManager mOverlayManager;
     NMapViewerResourceProvider mMapViewerResourceProvider;
-
+    NMapController mMapController;
     Boolean isRecv = false;
-
+    NGeoPoint productPoint;
     // 수신된 파트너 정보
     private String partnerName;
     private double lat;
@@ -114,8 +116,15 @@ public class ProductDetailActivity extends AppCompatActivity {
         mMapContext.setupMapView(mMapView);
         mMapView.setClientId(CLIENT_ID);
         mMapView.setClickable(false);
+        mMapView.setEnabled(true);
+        mMapView.setFocusable(true);
+        mMapView.setFocusableInTouchMode(true);
+        mMapView.requestFocus();
+        mMapView.setScalingFactor(2.0f,false);
         mMapViewerResourceProvider = new NMapViewerResourceProvider(this);
         mOverlayManager = new NMapOverlayManager(this, mMapView, mMapViewerResourceProvider);
+        mMapController = mMapView.getMapController();
+
 
         tvPhone.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -127,9 +136,7 @@ public class ProductDetailActivity extends AppCompatActivity {
 
         getItem(getIntent().getStringExtra("id"));
 
-        mMapView.setScalingFactor(2.0f,false);
     }
-
     @OnClick(R.id.frame_map)
     public void openMapDetail() {
         if(isRecv) {
@@ -242,6 +249,8 @@ public class ProductDetailActivity extends AppCompatActivity {
         poiDataOverlay.showAllPOIdata(0);
 
         mMapView.getMapController().setMapCenter(lng,lat,11);
+        productPoint = new NGeoPoint((int)(lng * 1E6), (int)(lat * 1e6));
+        mMapController.animateTo(productPoint);
     }
 
     @OnClick(R.id.btn_route)
@@ -262,26 +271,25 @@ public class ProductDetailActivity extends AppCompatActivity {
 
     @Override
     protected void onStart() {
-        super.onStart();
         mMapContext.onStart();
+        super.onStart();
     }
 
     @Override
     protected void onStop() {
-        super.onStop();
         mMapContext.onStop();
+        super.onStop();
     }
 
     @Override
     protected void onDestroy() {
-        super.onDestroy();
         mMapContext.onDestroy();
+        super.onDestroy();
     }
 
     @Override
     protected void onResume() {
         super.onResume();
-        mMapView.getMapController().setMapCenter(lng,lat,11);
     }
 
     @Override

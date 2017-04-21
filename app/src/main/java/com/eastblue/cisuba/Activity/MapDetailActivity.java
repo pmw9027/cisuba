@@ -112,6 +112,8 @@ public class MapDetailActivity extends AppCompatActivity {
         poiData = new NMapPOIdata(2, mMapViewerResourceProvider);
         poiData.beginPOIdata(1);
         poiData.addPOIitem(lng, lat, productName,markerId, 0);
+        mMapView.getMapController().setMapCenter(lng,lat,11);
+        mMapController.animateTo(productPoint);
 
 //        if (myLat != 0) {
 //            Drawable myPin = getResources().getDrawable(R.drawable.my_pin);
@@ -124,7 +126,6 @@ public class MapDetailActivity extends AppCompatActivity {
         poiDataOverlay = mOverlayManager.createPOIdataOverlay(poiData, null);
         poiDataOverlay.showAllPOIdata(0);
 
-        mMapView.getMapController().setMapCenter(lng, lat, 11);
         mMapView.setClickable(true); // 맵 클릭 가능하게
         mMapView.setScalingFactor(2.0f,false);
 
@@ -247,27 +248,20 @@ public class MapDetailActivity extends AppCompatActivity {
 
     @Override
     public void onStart() {
-        super.onStart();
         progressBar.setVisibility(View.INVISIBLE);
         mMapContext.onStart();
+        super.onStart();
     }
 
     @Override
     public void onResume() {
         super.onResume();
-        mMapContext.onResume();
-    }
-
-    @Override
-    public void onPause() {
-        super.onPause();
-        mMapContext.onPause();
     }
 
     @Override
     public void onStop() {
-        mMapContext.onStop();
         stopMyLocation();
+        mMapContext.onStop();
         super.onStop();
     }
 
