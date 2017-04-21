@@ -16,17 +16,13 @@ import android.support.v7.widget.SearchView;
 import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
 import android.view.Menu;
-import android.view.MenuInflater;
 import android.view.MenuItem;
-import android.widget.LinearLayout;
+import android.widget.ImageView;
 
 import android.app.SearchManager;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.daimajia.slider.library.SliderLayout;
-import com.daimajia.slider.library.SliderTypes.BaseSliderView;
-import com.daimajia.slider.library.SliderTypes.TextSliderView;
 import com.eastblue.cisuba.Adapter.TabPagerAdapter;
 import com.eastblue.cisuba.Dialog.MainPopUpDialog;
 import com.eastblue.cisuba.Fragment.ProfileFragment;
@@ -43,7 +39,6 @@ import com.kakao.util.KakaoParameterException;
 import java.io.InputStream;
 import java.net.HttpURLConnection;
 import java.net.URL;
-import java.util.HashMap;
 import java.util.List;
 
 import butterknife.BindView;
@@ -64,6 +59,8 @@ public class MainActivity extends AppCompatActivity {
     TabLayout mTabLayout;
     @BindView(R.id.vp_pager)
     ViewPager mViewPager;
+    @BindView(R.id.tab_center)
+    ImageView tabCenter;
 
     TabPagerAdapter mTabAdapter;
 
@@ -141,6 +138,29 @@ public class MainActivity extends AppCompatActivity {
         }
 
         mTabLayout.getTabAt(0).select();
+
+        mTabLayout.setOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
+            @Override
+            public void onTabSelected(TabLayout.Tab tab) {
+                if(tab.getPosition()==2){
+                    tabCenter.setImageResource(R.drawable.tab2_round_select);
+                }
+            }
+
+            @Override
+            public void onTabUnselected(TabLayout.Tab tab) {
+                if(tab.getPosition()==2){
+                    tabCenter.setImageResource(R.drawable.tab2_round);
+                }
+
+            }
+
+            @Override
+            public void onTabReselected(TabLayout.Tab tab) {
+
+            }
+        });
+
 
         showBanner();
 

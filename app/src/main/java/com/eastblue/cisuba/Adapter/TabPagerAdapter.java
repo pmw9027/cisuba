@@ -7,6 +7,7 @@ import android.support.v4.app.FragmentPagerAdapter;
 import android.view.LayoutInflater;
 import android.view.View;
 
+import com.eastblue.cisuba.Activity.MainActivity;
 import com.eastblue.cisuba.Fragment.EtcFragment;
 import com.eastblue.cisuba.Fragment.FindLocationFragment;
 import com.eastblue.cisuba.Fragment.HomeFragment;
@@ -45,11 +46,11 @@ public class TabPagerAdapter extends FragmentPagerAdapter {
 
     public View getTabView(int position) {
         View v= null;
-        if(position == FIND_FRAGMENT) {
-            v = LayoutInflater.from(mContext).inflate(R.layout.item_tab_center, null);
-        } else {
+//        if(position == FIND_FRAGMENT) {
+//            v = LayoutInflater.from(mContext).inflate(R.layout.item_tab_center, null);
+//        } else {
             v = LayoutInflater.from(mContext).inflate(R.layout.item_tab, null);
-        }
+//        }
         v.findViewById(R.id.icon).setBackgroundResource(mTabIcon[position]);
         return v;
     }
