@@ -29,6 +29,7 @@
     <!-- margin -->
     <dimen name="margin_small">2dp</dimen>
     <dimen name="margin_default">6dp</dimen>
+    <dimen name="margin_price">10dp</dimen>
     <dimen name="margin_medium">12dp</dimen>
     <dimen name="margin_large">18dp</dimen>
     <dimen name="margin_larger">24dp</dimen>

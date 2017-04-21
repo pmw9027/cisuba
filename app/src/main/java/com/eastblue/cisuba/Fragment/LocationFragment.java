@@ -24,6 +24,8 @@ import android.view.ViewGroup;
 import android.widget.AbsListView;
 import android.widget.AdapterView;
 import android.widget.FrameLayout;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
@@ -111,7 +113,9 @@ public class LocationFragment extends Fragment {
     public static Boolean firstSelect = true;
     Boolean lastItemVisibleFlag = false;
     Boolean isGPSLoad = false;
-
+    FrameLayout frameLayout;
+    View view_select;
+    LayoutInflater vi;
     double mLat;
     double mLng;
 
@@ -131,8 +135,10 @@ public class LocationFragment extends Fragment {
             ButterKnife.bind(this, rootView);
             this.rootView = rootView;
             init();
+            frameLayout = new FrameLayout(getActivity());
+            frameLayout.addView(mMapView);
 
-            lvNear.addParallaxedHeaderView(mMapView);
+            lvNear.addParallaxedHeaderView(frameLayout);
 
 
         }
@@ -173,6 +179,8 @@ public class LocationFragment extends Fragment {
         // use map controller to zoom in/out, pan and set map center, zoom level etc.
         mMapController = mMapView.getMapController();
 
+        vi = (LayoutInflater) getContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+        view_select = vi.inflate(R.layout.item_near_select, null);
 
         boolean isMyLocationEnabled = mMapLocationManager.enableMyLocation(true);
         if (!isMyLocationEnabled) {
@@ -190,7 +198,8 @@ public class LocationFragment extends Fragment {
         lvNear.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                ProductModel productModel = (ProductModel) nearAdapter.getItem(position);
+                ProductModel productModel = (ProductModel) nearAdapter.getItem(position-1);
+                System.out.println("productModel.partnerName"+productModel.partnerName);
                 if (!productModel.isFreePartner) {
                     startActivity(new Intent(getActivity(), ProductDetailActivity.class).putExtra("id", productModel.id)
                             .putExtra("gps", true)
@@ -380,7 +389,6 @@ public class LocationFragment extends Fragment {
                 } else {
                     for (int i = 0; i < productModels.size(); i++) {
                         nearAdapter.addItem(productModels.get(i));
-
                         double lat = Double.parseDouble(productModels.get(i).lat);
                         double lng = Double.parseDouble(productModels.get(i).lng);
                         String name = productModels.get(i).partnerName;
@@ -395,16 +403,29 @@ public class LocationFragment extends Fragment {
                     public View onCreateCalloutOverlayView(NMapOverlay nMapOverlay, NMapOverlayItem nMapOverlayItem, Rect rect) {
                         try {
                             String productName = nMapOverlayItem.getTitle();
-                            ProductModel selectProduct = (ProductModel) nearAdapter.getItem(productName);
+                            final ProductModel selectProduct = (ProductModel) nearAdapter.getItem(productName);
 
+                            view_select.setOnClickListener(new View.OnClickListener() {
+                                @Override
+                                public void onClick(View view) {
+                                    if (!selectProduct.isFreePartner) {
+                                        startActivity(new Intent(getActivity(), ProductDetailActivity.class).putExtra("id", selectProduct.id)
+                                                .putExtra("gps", true)
+                                                .putExtra("lat", mLat)
+                                                .putExtra("lng", mLng));
+                                    }
+                                }
+                            });
                             if (!isSelectPOI) {
-                                nearAdapter.add(0, selectProduct);
-                                nearAdapter.setSelectedIndex(0);
+                                initSelectView(selectProduct, true);
+//                                nearAdapter.add(0, selectProduct);
+//                                nearAdapter.setSelectedIndex(0);
                                 nearAdapter.notifyDataSetChanged();
                                 isSelectPOI = true;
                             } else {
-                                nearAdapter.setItem(0, selectProduct);
-                                nearAdapter.setSelectedIndex(999);
+                                initSelectView(selectProduct, false);
+//                                nearAdapter.setItem(0, selectProduct);
+//                                nearAdapter.setSelectedIndex(999);
                                 nearAdapter.notifyDataSetChanged();
 
                             }
@@ -440,6 +461,36 @@ public class LocationFragment extends Fragment {
             }
         });
     }
+
+    private void initSelectView(final ProductModel productModel, Boolean isFirst) {
+        if (isFirst) {
+            FrameLayout.LayoutParams param;
+
+            param = new FrameLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+            param.gravity = Gravity.BOTTOM;
+
+            frameLayout.addView(view_select, param);
+
+        }
+        TextView tv_km = (TextView) view_select.findViewById(R.id.tv_km);
+        TextView tv_name = (TextView) view_select.findViewById(R.id.tv_name);
+        TextView tv_address = (TextView) view_select.findViewById(R.id.tv_address);
+        TextView tv_price_morning = (TextView) view_select.findViewById(R.id.tv_price_morning);
+        TextView tv_price_lunch = (TextView) view_select.findViewById(R.id.tv_price_lunch);
+        TextView tv_price_dinner = (TextView) view_select.findViewById(R.id.tv_price_dinner);
+
+
+//        tv_km.setText(productModel.meter);
+        tv_name.setText(productModel.partnerName);
+        tv_address.setText(productModel.detailAddress);
+        tv_price_morning.setText("조조 " + productModel.morningPrice + "원");
+        tv_price_lunch.setText("평일 " + productModel.lunchPrice + "원");
+        tv_price_dinner.setText("야간 " + productModel.dinnerPrice + "원");
+// insert into main view
+        frameLayout.invalidate();
+        view_select.invalidate();
+    }
+
 
     LocationListener mLocationListener = new LocationListener() {
         @Override
@@ -577,6 +628,7 @@ public class LocationFragment extends Fragment {
 
         @Override
         public void onTouchDown(NMapView nMapView, MotionEvent motionEvent) {
+            nMapView.getParent().requestDisallowInterceptTouchEvent(true);
         }
 
         @Override
@@ -596,8 +648,8 @@ public class LocationFragment extends Fragment {
         }
 
         @Override
-        public void onScroll(NMapView mapView, MotionEvent e1, MotionEvent e2) {
-            mapView.getParent().requestDisallowInterceptTouchEvent(true);
+        public void onScroll(NMapView nMapView, MotionEvent e1, MotionEvent e2) {
+            nMapView.getParent().requestDisallowInterceptTouchEvent(true);
         }
     };
 

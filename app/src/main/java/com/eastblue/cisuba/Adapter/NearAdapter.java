@@ -30,8 +30,6 @@ public class NearAdapter extends BaseAdapter {
     private ArrayList<ProductModel> mList;
     private Context mContext;
     private Location mLocation;
-    private static int selectedIndex;
-    private static boolean isSelected;
     private static final int VIEW_COUNT = 2;
     private static final int VIEW_TYPE_FREE = 0;
     private static final int VIEW_TYPE_CHARGE = 1;
@@ -70,7 +68,6 @@ public class NearAdapter extends BaseAdapter {
 
     public void removeAll() {
         mList.clear();
-        ;
     }
 
     @Override
@@ -95,12 +92,6 @@ public class NearAdapter extends BaseAdapter {
     @Override
     public long getItemId(int position) {
         return position;
-    }
-    public static void setSelectedIndex(int selected) {
-        selectedIndex = selected;
-    }
-    public static void setSelected(boolean selected) {
-        isSelected = selected;
     }
 
     @Override
@@ -131,12 +122,6 @@ public class NearAdapter extends BaseAdapter {
         if (getItemViewType(position) == VIEW_TYPE_CHARGE) {
             chargeViewBinder.bindObject(mList.get(position));
         } else if (getItemViewType(position) == VIEW_TYPE_FREE) {
-//            if (position == selectedIndex && isSelected==true) {
-//                convertView=LayoutInflater.from(mContext).inflate(R.layout.item_near_select, parent, false);
-//                freeViewBinder = new FreeViewBinder(convertView);
-//                convertView.setTag(freeViewBinder);
-//
-//            }
             freeViewBinder.bindObject(mList.get(position));
         }
 

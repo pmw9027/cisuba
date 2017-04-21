@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <declare-styleable name="selectProduct">
+        <attr name="km" format="string" />
+        <attr name="name" format="string" />
+        <attr name="address" format="string" />
+        <attr name="morning" format="string" />
+        <attr name="lunch" format="string" />
+        <attr name="dinner" format="string" />
+    </declare-styleable>
+</resources>

@@ -29,15 +29,6 @@
         <dex dex="/Users/Sung/Desktop/EastBlue/cisuba/app/build/intermediates/transforms/dex/debug/folders/1000/10/classes_70913f53756378bed569a4d091b1076b0adb239f/classes.dex" />
     </item>
     <item
-        is-multidex="false"
-        jar="/Users/Sung/.android/build-cache/5304ed85637e3c530fcfe0dea3a7fa7a8de56708/output/jars/classes.jar"
-        jumboMode="false"
-        optimize="true"
-        revision="25.0.0"
-        sha1="2574796fab3c6145ca6170821badd305f5e03669">
-        <dex dex="/Users/Sung/Desktop/EastBlue/cisuba/app/build/intermediates/pre-dexed/release/classes_ed4f74253d16b032659d48a148841ca974378233.jar" />
-    </item>
-    <item
         is-multidex="true"
         jar="/Users/Sung/.android/build-cache/d91c189e258ae6a9edcab505a45b301b1c299f9e/output/jars/classes.jar"
         jumboMode="true"
@@ -75,6 +66,15 @@
     </item>
     <item
         is-multidex="false"
+        jar="/Users/Sung/Desktop/EastBlue/cisuba_git/app/libs/3rdparty_login_library_android_4.1.4.jar"
+        jumboMode="false"
+        optimize="true"
+        revision="25.0.0"
+        sha1="194d914e51c00c0a5319365eea98050edf6625a9">
+        <dex dex="/Users/Sung/Desktop/EastBlue/cisuba_git/app/build/intermediates/pre-dexed/release/3rdparty_login_library_android_4.1.4_85fe528c8198719ff62d525d25a7fa9df71cbaf7.jar" />
+    </item>
+    <item
+        is-multidex="false"
         jar="/Users/Sung/Desktop/EastBlue/cisuba/app/libs/3rdparty_login_library_android_4.1.4.jar"
         jumboMode="false"
         optimize="true"
@@ -106,7 +106,7 @@
         jumboMode="true"
         optimize="true"
         revision="25.0.0"
-        sha1="b9abc0fecefc7f0f6b94fe82415ffea8c32993fa">
+        sha1="557a4590ea2f2289913ad475d7522fc949f7970c">
         <dex dex="/Users/Sung/Desktop/EastBlue/cisuba/app/build/intermediates/transforms/dex/debug/folders/1000/10000/instant-run-bootstrap_c598c1625ca027e85c81e8541688efc6fe5261dc/classes.dex" />
     </item>
     <item

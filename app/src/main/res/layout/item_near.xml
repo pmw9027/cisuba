@@ -116,52 +116,57 @@
     </FrameLayout>
 
     <LinearLayout
-        android:padding="@dimen/padding_default"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="horizontal">
+        android:gravity="center"
+        android:orientation="horizontal"
+        android:padding="@dimen/padding_default">
 
         <TextView
             android:id="@+id/tv_price_morning"
-            android:gravity="start"
-            android:textColor="@color/morning_text"
-            android:textSize="@dimen/text_size_small"
-            android:textStyle="bold"
-            android:layout_marginRight="@dimen/margin_default"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content" />
+            android:layout_height="wrap_content"
+            android:layout_weight="0.3"
+            android:gravity="start"
+            android:text="조조 0000원"
+            android:textAlignment="center"
+            android:textColor="@color/morning_text"
+            android:textSize="12sp"
+            android:textStyle="bold" />
 
         <View
-            android:background="@color/LightGrey"
             android:layout_width="1dp"
-            android:layout_marginRight="@dimen/margin_default"
-            android:layout_height="match_parent"/>
+            android:layout_height="match_parent"
+            android:background="@color/LightGrey" />
 
         <TextView
             android:id="@+id/tv_price_lunch"
-            android:gravity="start"
-            android:textColor="@color/lunch_text"
-            android:textSize="@dimen/text_size_small"
-            android:textStyle="bold"
-            android:layout_marginRight="@dimen/margin_default"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content" />
+            android:layout_height="wrap_content"
+            android:layout_weight="0.3"
+            android:gravity="start"
+            android:text="평일 0000원"
+            android:textAlignment="center"
+            android:textColor="@color/lunch_text"
+            android:textSize="12sp"
+            android:textStyle="bold" />
 
         <View
-            android:background="@color/LightGrey"
             android:layout_width="1dp"
-            android:layout_marginRight="@dimen/margin_default"
-            android:layout_height="match_parent"/>
+            android:layout_height="match_parent"
+            android:background="@color/LightGrey" />
 
         <TextView
             android:id="@+id/tv_price_dinner"
-            android:gravity="start"
-            android:textColor="@color/dinner_text"
-            android:textSize="@dimen/text_size_small"
-            android:textStyle="bold"
-            android:layout_marginRight="@dimen/margin_default"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content" />
+            android:layout_height="wrap_content"
+            android:layout_weight="0.3"
+            android:gravity="start"
+            android:text="야간 0000원"
+            android:textAlignment="center"
+            android:textColor="@color/dinner_text"
+            android:textSize="12sp"
+            android:textStyle="bold" />
 
     </LinearLayout>
 

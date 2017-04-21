@@ -1,6 +1,14 @@
 apply plugin: 'com.android.application'
 
 android {
+    signingConfigs {
+        release {
+            keyAlias 'key0'
+            keyPassword '123456'
+            storeFile file('/Users/Sung/Desktop/EastBlue/cisuba.jks')
+            storePassword '123456'
+        }
+    }
     compileSdkVersion 24
     buildToolsVersion "25.0.0"
     defaultConfig {
@@ -15,9 +23,9 @@ android {
         release {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+            signingConfig signingConfigs.release
         }
     }
-
     repositories {
         mavenCentral()
         maven { url 'http://devrepo.kakao.com:8088/nexus/content/groups/public/' }
@@ -29,12 +37,6 @@ dependencies {
     androidTestCompile('com.android.support.test.espresso:espresso-core:2.2.2', {
         exclude group: 'com.android.support', module: 'support-annotations'
     })
-    // KAKAO
-    compile group: project.KAKAO_SDK_GROUP, name: 'kakaotalk', version: project.KAKAO_SDK_VERSION
-    compile group: project.KAKAO_SDK_GROUP, name: 'usermgmt', version: project.KAKAO_SDK_VERSION
-    compile group: 'com.kakao.sdk', name: 'kakaolink', version: project.KAKAO_SDK_VERSION
-    // Http Library
-    // View Binder
     compile 'com.android.support:appcompat-v7:24.2.1'
     compile 'com.squareup.retrofit:retrofit:1.9.0'
     compile 'com.squareup.okhttp:okhttp:2.0.0'
@@ -51,8 +53,11 @@ dependencies {
     compile 'io.nlopez.smartlocation:library:3.3.1'
     compile 'com.journeyapps:zxing-android-embedded:3.5.0'
     compile 'com.github.nirhart:parallaxscroll:1.0'
-    compile group: 'com.kakao.sdk', name: 'kakaonavi', version: project.KAKAO_SDK_VERSION
     testCompile 'junit:junit:4.12'
     annotationProcessor 'com.jakewharton:butterknife-compiler:8.4.0'
     compile files('libs/3rdparty_login_library_android_4.1.4.jar')
+    compile group: 'com.kakao.sdk', name: 'kakaonavi', version: project.KAKAO_SDK_VERSION
+    compile group: project.KAKAO_SDK_GROUP, name: 'kakaotalk', version: project.KAKAO_SDK_VERSION
+    compile group: project.KAKAO_SDK_GROUP, name: 'usermgmt', version: project.KAKAO_SDK_VERSION
+    compile group: 'com.kakao.sdk', name: 'kakaolink', version: project.KAKAO_SDK_VERSION
 }
