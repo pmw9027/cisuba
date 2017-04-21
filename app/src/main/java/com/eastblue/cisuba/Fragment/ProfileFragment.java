@@ -11,6 +11,7 @@ import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageButton;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -20,6 +21,7 @@ import com.eastblue.cisuba.Activity.NoticeActivity;
 import com.eastblue.cisuba.Activity.RequestPartnerActivity;
 import com.eastblue.cisuba.R;
 import com.kakao.auth.ErrorCode;
+import com.kakao.auth.Session;
 import com.kakao.kakaolink.KakaoLink;
 import com.kakao.kakaolink.KakaoTalkLinkMessageBuilder;
 import com.kakao.network.ErrorResult;
@@ -49,7 +51,10 @@ public class ProfileFragment extends Fragment {
 
     public static TextView nickname;
     public static CircleImageView profileimage;
+    public static ImageButton logout;
     Bitmap bitmap;
+
+
 
     @Nullable
     @Override
@@ -59,13 +64,27 @@ public class ProfileFragment extends Fragment {
 
         nickname = (TextView)rootView.findViewById(R.id.tv_name);
         profileimage = (CircleImageView)rootView.findViewById(R.id.imv_profile);
-        requestMe();
-
-        //System.out.println("naver login state : "+LoginActivity.mOAuthLoginModule.getState(LoginActivity.mContext).toString());
-        if(LoginActivity.mOAuthLoginModule != null) {
-            System.out.println(LoginActivity.email);
-            System.out.println("naver login state : "+LoginActivity.mOAuthLoginModule.getState(LoginActivity.mContext).toString());
+        logout = (ImageButton)rootView.findViewById(R.id.btn_logout);
+        if(Session.getCurrentSession().isClosed()) {
+            if (LoginActivity.mOAuthLoginModule != null) {
+                if (LoginActivity.mOAuthLoginModule.getState(getActivity()).toString().equals("OK")) {
+                } else {
+                    logout.setEnabled(false);
+                }
+            } else {
+                logout.setEnabled(false);
+            }
+        } else {
+            if (LoginActivity.mOAuthLoginModule != null) {
+                if (LoginActivity.mOAuthLoginModule.getState(getActivity()).toString().equals("OK")) {
+                } else {
+                    logout.setEnabled(false);
+                }
+            } else {
+                logout.setEnabled(false);
+            }
         }
+        requestMe();
 
         return rootView;
     }
@@ -90,6 +109,8 @@ public class ProfileFragment extends Fragment {
                             @Override
                             public void onCompleteLogout() {
                                 requestMe();
+                                MainActivity.profileimage.setEnabled(true);
+                                profileimage.setEnabled(true);
                             }
                         });
 
@@ -99,6 +120,9 @@ public class ProfileFragment extends Fragment {
                             MainActivity.nickname.setText("로그인을 하세요.");
                             profileimage.setImageResource(R.drawable.ic_launcher);
                             MainActivity.profileimage.setImageResource(R.drawable.ic_launcher);
+                            MainActivity.profileimage.setEnabled(true);
+                            profileimage.setEnabled(true);
+                            logout.setEnabled(false);
                         }
 
                     }
@@ -126,6 +150,7 @@ public class ProfileFragment extends Fragment {
     @Override
     public void onResume() {
         //requestMe();
+        /*
         if(LoginActivity.mOAuthLoginModule != null) {
             if(LoginActivity.mOAuthLoginModule.getState(getActivity()).toString().equals("OK")) {
                 ProfileFragment.nickname.setText(LoginActivity.nickname);
@@ -153,7 +178,7 @@ public class ProfileFragment extends Fragment {
                     }
                 }).start();
             }
-        }
+        }*/
         super.onResume();
     }
 
