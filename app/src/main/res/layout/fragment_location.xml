@@ -59,7 +59,6 @@
                 android:layout_height="match_parent"
                 android:divider="@color/background"
                 android:dividerHeight="@dimen/margin_default"
-                android:padding="@dimen/padding_medium"
                 app:parallax_factor="1.9"
                 tools:context=".MainActivity" />
             <!--<ListView-->

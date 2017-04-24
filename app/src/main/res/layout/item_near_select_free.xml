@@ -1,52 +1,63 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:layout_marginTop="5dp"
+    android:layout_height="wrap_content"
+    android:alpha="0.8"
     android:background="@drawable/background_product"
-    android:orientation="vertical"
-    android:padding="@dimen/padding_default">
+    android:orientation="vertical">
 
-    <TextView
-        android:id="@+id/tv_km"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="@dimen/margin_default"
-        android:paddingLeft="@dimen/padding_medium"
-        android:textColor="@color/Black"
-        android:textSize="@dimen/text_size_default" />
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_weight="1"
+        android:orientation="vertical"
+        android:padding="10dp">
 
-    <TextView
-        android:id="@+id/tv_name"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="@dimen/margin_default"
-        android:paddingLeft="@dimen/padding_medium"
-        android:text="[성수] 보석사우나"
-        android:textColor="@color/Black"
-        android:textSize="@dimen/text_size_default"
-        android:textStyle="bold" />
+        <TextView
+            android:id="@+id/tv_km"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="2dp"
+            android:layout_weight="1"
+            android:text="0.6 Km"
+            android:textColor="@color/Black"
+            android:textSize="14sp" />
 
-    <TextView
-        android:id="@+id/tv_address"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="@dimen/margin_default"
-        android:paddingLeft="@dimen/padding_medium"
-        android:text="서울 특별시 중구 태평로"
-        android:textSize="@dimen/text_size_small" />
+        <TextView
+            android:id="@+id/tv_name"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="2dp"
+            android:layout_weight="1"
+            android:text="[성수] 보석사우나"
+            android:textColor="@color/Black"
+            android:textSize="14sp"
+            android:textStyle="bold" />
+
+        <TextView
+            android:id="@+id/tv_address"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="@dimen/margin_default"
+            android:layout_weight="1"
+            android:text="서울 특별시 중구 태평로"
+            android:textSize="12sp" />
+
+    </LinearLayout>
 
     <View
+        android:id="@+id/view"
         android:layout_width="match_parent"
         android:layout_height="1dp"
+        android:layout_weight="1"
         android:background="@color/LightGrey" />
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="match_parent"
         android:gravity="center"
         android:orientation="horizontal"
-        android:padding="@dimen/padding_small">
+        android:padding="6dp">
 
         <TextView
             android:id="@+id/tv_price_morning"
@@ -57,7 +68,7 @@
             android:text="조조 0000원"
             android:textAlignment="center"
             android:textColor="@color/morning_text"
-            android:textSize="12sp"
+            android:textSize="13sp"
             android:textStyle="bold" />
 
         <View
@@ -74,7 +85,7 @@
             android:text="평일 0000원"
             android:textAlignment="center"
             android:textColor="@color/lunch_text"
-            android:textSize="12sp"
+            android:textSize="13sp"
             android:textStyle="bold" />
 
         <View
@@ -91,7 +102,7 @@
             android:text="야간 0000원"
             android:textAlignment="center"
             android:textColor="@color/dinner_text"
-            android:textSize="12sp"
+            android:textSize="13sp"
             android:textStyle="bold" />
 
     </LinearLayout>
