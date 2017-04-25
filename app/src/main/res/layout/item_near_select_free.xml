@@ -11,7 +11,10 @@
         android:layout_height="match_parent"
         android:layout_weight="1"
         android:orientation="vertical"
-        android:padding="10dp">
+        android:paddingBottom="5dp"
+        android:paddingLeft="10dp"
+        android:paddingRight="10dp"
+        android:paddingTop="5dp">
 
         <TextView
             android:id="@+id/tv_km"
@@ -38,7 +41,6 @@
             android:id="@+id/tv_address"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="@dimen/margin_default"
             android:layout_weight="1"
             android:text="서울 특별시 중구 태평로"
             android:textSize="12sp" />
@@ -57,7 +59,10 @@
         android:layout_height="match_parent"
         android:gravity="center"
         android:orientation="horizontal"
-        android:padding="6dp">
+        android:paddingBottom="2dp"
+        android:paddingLeft="6dp"
+        android:paddingRight="6dp"
+        android:paddingTop="2dp">
 
         <TextView
             android:id="@+id/tv_price_morning"

@@ -5,6 +5,8 @@ import android.content.Intent;
 import android.content.res.Configuration;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.Rect;
+import android.os.Build;
 import android.support.annotation.Nullable;
 import android.support.design.widget.TabLayout;
 import android.support.v4.view.ViewPager;
@@ -17,9 +19,13 @@ import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.view.Window;
+import android.widget.FrameLayout;
 import android.widget.ImageView;
 
 import android.app.SearchManager;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -49,6 +55,8 @@ import retrofit.Callback;
 import retrofit.RetrofitError;
 import retrofit.client.Response;
 
+import static android.view.ViewGroup.LayoutParams.MATCH_PARENT;
+
 public class MainActivity extends AppCompatActivity {
 
     @BindView(R.id.toolbar)
@@ -62,6 +70,8 @@ public class MainActivity extends AppCompatActivity {
     @BindView(R.id.tab_center)
     ImageView tabCenter;
 
+    @BindView(R.id.drawer)
+    LinearLayout menu;
     TabPagerAdapter mTabAdapter;
 
     //@BindView(R.id.slider) SliderLayout mBannerSlider;
@@ -80,7 +90,6 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         ButterKnife.bind(this);
         init();
-
         nickname = (TextView) findViewById(R.id.drawer_nick);
         profileimage = (CircleImageView) findViewById(R.id.drawer_profile);
 
@@ -122,11 +131,9 @@ public class MainActivity extends AppCompatActivity {
 
 
     void init() {
-
         setSupportActionBar(mToolbar);
         dtToggle = new ActionBarDrawerToggle(this, mDrawerLayout, mToolbar, 0, R.string.app_name);
         mDrawerLayout.setDrawerListener(dtToggle);
-
         mTabLayout.setSelectedTabIndicatorHeight(0);
         mTabAdapter = new TabPagerAdapter(getSupportFragmentManager(), this);
         mViewPager.setAdapter(mTabAdapter);

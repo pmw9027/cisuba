@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical" android:layout_width="match_parent"
     android:padding="@dimen/padding_larger"
     android:gravity="center"
@@ -21,11 +22,12 @@
 
             <ImageButton
                 android:id="@+id/btn_close"
-                android:layout_margin="10dp"
+                android:layout_width="35dp"
+                android:layout_height="35dp"
                 android:layout_gravity="end"
-                android:background="@drawable/btn_close"
-                android:layout_width="32dp"
-                android:layout_height="32dp" />
+                android:layout_margin="10dp"
+                android:background="@drawable/ic_btn_close"
+                android:scaleType="fitXY" />
 
         </FrameLayout>
 

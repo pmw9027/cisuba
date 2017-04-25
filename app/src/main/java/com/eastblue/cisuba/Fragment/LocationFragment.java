@@ -13,6 +13,7 @@ import android.provider.Settings;
 import android.support.annotation.Nullable;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
+import android.text.Layout;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
@@ -28,6 +29,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
+import com.eastblue.cisuba.Activity.MainActivity;
 import com.eastblue.cisuba.Activity.ProductDetailActivity;
 import com.eastblue.cisuba.Adapter.NearAdapter;
 import com.eastblue.cisuba.Gps.GpsUtil;
@@ -66,6 +68,8 @@ import com.nhn.android.mapviewer.overlay.NMapOverlayManager;
 import com.nhn.android.mapviewer.overlay.NMapPOIdataOverlay;
 import com.nirhart.parallaxscroll.views.ParallaxListView;
 
+import static android.view.ViewGroup.LayoutParams.MATCH_PARENT;
+
 
 /**
  * Created by PJC on 2017-02-07.
@@ -84,8 +88,8 @@ public class LocationFragment extends Fragment {
 
     @BindView(R.id.pb_bar)
     ProgressBar progressBar;
-    @BindView(R.id.tv_my_location)
-    TextView tvMyLocation;
+//    @BindView(R.id.tv_my_location)
+//    TextView tvMyLocation;
 
     NMapView mMapView;
     NMapContext mMapContext;
@@ -126,6 +130,7 @@ public class LocationFragment extends Fragment {
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+        //container.setLayoutParams(new FrameLayout.LayoutParams(MATCH_PARENT, getContext().getResources().getDisplayMetrics().heightPixels- MainActivity.mToolbar.getLayoutParams().height));
         if (this.rootView == null) {
             View rootView = inflater.inflate(R.layout.fragment_location, container, false);
             ButterKnife.bind(this, rootView);
@@ -148,7 +153,7 @@ public class LocationFragment extends Fragment {
         mMapContext = new NMapContext(getActivity());
         mMapContext.onCreate();
         mMapContext.setupMapView(mMapView);
-        mMapView.setLayoutParams(new NMapView.LayoutParams(NMapView.LayoutParams.MATCH_PARENT, getContext().getResources().getDisplayMetrics().heightPixels/2));
+        mMapView.setLayoutParams(new NMapView.LayoutParams(NMapView.LayoutParams.MATCH_PARENT, (getContext().getResources().getDisplayMetrics().heightPixels/5)*3));
 
         mMapView.setClientId(CLIENT_ID);
         // initialize map view
@@ -248,12 +253,12 @@ public class LocationFragment extends Fragment {
                             double lat = location.getLatitude();
                             double lng = location.getLongitude();
 
-                            try {
-                                tvMyLocation.setText(GpsUtil.geoToAddress(getActivity(), lat, lng));
-                                //setMarker(lat, lng, "");
-                            } catch (IOException e) {
-                                e.printStackTrace();
-                            }
+//                            try {
+//                                tvMyLocation.setText(GpsUtil.geoToAddress(getActivity(), lat, lng));
+//                                //setMarker(lat, lng, "");
+//                            } catch (IOException e) {
+//                                e.printStackTrace();
+//                            }
 
                             mLat = lat;
                             mLng = lng;
@@ -272,12 +277,12 @@ public class LocationFragment extends Fragment {
 
         double lat = 37.538484;
         double lng = 127.082294;
-
-        try {
-            tvMyLocation.setText(GpsUtil.geoToAddress(getActivity(), lat, lng));
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+//
+//        try {
+//            tvMyLocation.setText(GpsUtil.geoToAddress(getActivity(), lat, lng));
+//        } catch (IOException e) {
+//            e.printStackTrace();
+//        }
 
         mLat = lat;
         mLng = lng;

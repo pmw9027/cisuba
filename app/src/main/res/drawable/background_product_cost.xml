@@ -5,9 +5,6 @@
         android:color="@color/LightGrey"
         android:width="1dp"/>
 
-    <corners
-        android:radius="3dp"/>
-
     <solid
         android:color="#ebebeb"/>
 
