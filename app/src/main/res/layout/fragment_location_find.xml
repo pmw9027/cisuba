@@ -2,7 +2,11 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:orientation="vertical" android:layout_width="match_parent"
     android:layout_height="match_parent">
-
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="56dp"
+        android:background="@color/White"
+        android:orientation="vertical"></LinearLayout>
     <LinearLayout
         android:background="@color/White"
         android:layout_width="match_parent"
@@ -41,15 +45,14 @@
         android:background="@color/LightGrey"
         android:layout_width="match_parent"
         android:layout_height="1dp"/>
-    
+
     <ListView
         android:id="@+id/lv_near"
-        android:dividerHeight="@dimen/margin_default"
-        android:divider="@color/background"
-        android:padding="@dimen/padding_medium"
-        android:layout_marginTop="@dimen/margin_default"
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_weight="1"></ListView>
+        android:layout_marginTop="@dimen/margin_default"
+        android:layout_weight="1"
+        android:divider="@color/background"
+        android:dividerHeight="@dimen/margin_medium"></ListView>
 
 </LinearLayout>

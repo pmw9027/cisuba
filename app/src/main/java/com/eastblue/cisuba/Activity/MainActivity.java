@@ -5,6 +5,8 @@ import android.content.Intent;
 import android.content.res.Configuration;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.Rect;
+import android.os.Build;
 import android.support.annotation.Nullable;
 import android.support.design.widget.TabLayout;
 import android.support.v4.view.ViewPager;
@@ -16,17 +18,17 @@ import android.support.v7.widget.SearchView;
 import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
 import android.view.Menu;
-import android.view.MenuInflater;
 import android.view.MenuItem;
-import android.widget.LinearLayout;
+import android.view.View;
+import android.view.Window;
+import android.widget.FrameLayout;
+import android.widget.ImageView;
 
 import android.app.SearchManager;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.daimajia.slider.library.SliderLayout;
-import com.daimajia.slider.library.SliderTypes.BaseSliderView;
-import com.daimajia.slider.library.SliderTypes.TextSliderView;
 import com.eastblue.cisuba.Adapter.TabPagerAdapter;
 import com.eastblue.cisuba.Dialog.MainPopUpDialog;
 import com.eastblue.cisuba.Fragment.ProfileFragment;
@@ -43,7 +45,6 @@ import com.kakao.util.KakaoParameterException;
 import java.io.InputStream;
 import java.net.HttpURLConnection;
 import java.net.URL;
-import java.util.HashMap;
 import java.util.List;
 
 import butterknife.BindView;
@@ -53,6 +54,8 @@ import de.hdodenhof.circleimageview.CircleImageView;
 import retrofit.Callback;
 import retrofit.RetrofitError;
 import retrofit.client.Response;
+
+import static android.view.ViewGroup.LayoutParams.MATCH_PARENT;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -64,7 +67,11 @@ public class MainActivity extends AppCompatActivity {
     TabLayout mTabLayout;
     @BindView(R.id.vp_pager)
     ViewPager mViewPager;
+    @BindView(R.id.tab_center)
+    ImageView tabCenter;
 
+    @BindView(R.id.drawer)
+    LinearLayout menu;
     TabPagerAdapter mTabAdapter;
 
     //@BindView(R.id.slider) SliderLayout mBannerSlider;
@@ -83,7 +90,6 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         ButterKnife.bind(this);
         init();
-
         nickname = (TextView) findViewById(R.id.drawer_nick);
         profileimage = (CircleImageView) findViewById(R.id.drawer_profile);
 
@@ -125,11 +131,9 @@ public class MainActivity extends AppCompatActivity {
 
 
     void init() {
-
         setSupportActionBar(mToolbar);
         dtToggle = new ActionBarDrawerToggle(this, mDrawerLayout, mToolbar, 0, R.string.app_name);
         mDrawerLayout.setDrawerListener(dtToggle);
-
         mTabLayout.setSelectedTabIndicatorHeight(0);
         mTabAdapter = new TabPagerAdapter(getSupportFragmentManager(), this);
         mViewPager.setAdapter(mTabAdapter);
@@ -141,6 +145,29 @@ public class MainActivity extends AppCompatActivity {
         }
 
         mTabLayout.getTabAt(0).select();
+
+        mTabLayout.setOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
+            @Override
+            public void onTabSelected(TabLayout.Tab tab) {
+                if(tab.getPosition()==2){
+                    tabCenter.setImageResource(R.drawable.tab2_round_select);
+                }
+            }
+
+            @Override
+            public void onTabUnselected(TabLayout.Tab tab) {
+                if(tab.getPosition()==2){
+                    tabCenter.setImageResource(R.drawable.tab2_round);
+                }
+
+            }
+
+            @Override
+            public void onTabReselected(TabLayout.Tab tab) {
+
+            }
+        });
+
 
         showBanner();
 

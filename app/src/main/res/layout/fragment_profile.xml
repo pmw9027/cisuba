@@ -6,6 +6,11 @@
 
     <LinearLayout
         android:layout_width="match_parent"
+        android:layout_height="56dp"
+        android:background="@color/White"
+        android:orientation="vertical"></LinearLayout>
+    <LinearLayout
+        android:layout_width="match_parent"
         android:layout_height="125dp"
         android:background="@drawable/background_mypage_top"
         android:orientation="vertical">

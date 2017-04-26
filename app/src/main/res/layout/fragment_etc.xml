@@ -6,7 +6,11 @@
     android:layout_height="match_parent"
     android:orientation="vertical"
     tools:context="com.eastblue.cisuba.Activity.NoticeActivity">
-
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="56dp"
+        android:background="@color/White"
+        android:orientation="vertical"></LinearLayout>
     <LinearLayout
         android:layout_marginTop="1dp"
         android:layout_marginBottom="@dimen/margin_default"

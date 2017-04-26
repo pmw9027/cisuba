@@ -18,14 +18,16 @@
 
             <FrameLayout
                 android:layout_width="match_parent"
-                android:layout_height="110dp"
+                android:layout_height="160dp"
                 android:background="@drawable/background_mypage_top">
 
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
+                    android:alpha="1"
                     android:gravity="center"
-                    android:orientation="vertical">
+                    android:orientation="vertical"
+                    android:paddingTop="50dp">
 
                     <de.hdodenhof.circleimageview.CircleImageView
                         android:id="@+id/drawer_profile"

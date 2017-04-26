@@ -1,11 +1,9 @@
 package com.eastblue.cisuba.Fragment;
 
 import android.Manifest;
-import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
-import android.graphics.Color;
 import android.graphics.Rect;
 import android.location.Location;
 import android.location.LocationListener;
@@ -15,6 +13,7 @@ import android.provider.Settings;
 import android.support.annotation.Nullable;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
+import android.text.Layout;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
@@ -25,23 +24,23 @@ import android.widget.AbsListView;
 import android.widget.AdapterView;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
-import android.widget.ListView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.eastblue.cisuba.Activity.MapDetailActivity;
+import com.bumptech.glide.Glide;
+import com.eastblue.cisuba.Activity.MainActivity;
 import com.eastblue.cisuba.Activity.ProductDetailActivity;
 import com.eastblue.cisuba.Adapter.NearAdapter;
 import com.eastblue.cisuba.Gps.GpsUtil;
+import com.eastblue.cisuba.Manager.NetworkManager;
 import com.eastblue.cisuba.Map.NMapPOIflagType;
 import com.eastblue.cisuba.Map.NMapViewerResourceProvider;
 import com.eastblue.cisuba.Model.ProductModel;
 import com.eastblue.cisuba.Network.Product;
 import com.eastblue.cisuba.R;
+import com.eastblue.cisuba.String.LocationCode;
 import com.eastblue.cisuba.Util.HttpUtil;
-import com.eastblue.cisuba.Util.PermissionUtil;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -58,20 +57,19 @@ import retrofit.client.Response;
 import com.nhn.android.maps.NMapCompassManager;
 import com.nhn.android.maps.NMapContext;
 import com.nhn.android.maps.NMapController;
-import com.nhn.android.maps.NMapItemizedOverlay;
 import com.nhn.android.maps.NMapLocationManager;
 import com.nhn.android.maps.NMapOverlay;
 import com.nhn.android.maps.NMapOverlayItem;
 import com.nhn.android.maps.NMapView;
 import com.nhn.android.maps.maplib.NGeoPoint;
 import com.nhn.android.maps.overlay.NMapPOIdata;
-import com.nhn.android.mapviewer.overlay.NMapCalloutOverlay;
 import com.nhn.android.mapviewer.overlay.NMapMyLocationOverlay;
 import com.nhn.android.mapviewer.overlay.NMapOverlayManager;
 import com.nhn.android.mapviewer.overlay.NMapPOIdataOverlay;
 import com.nirhart.parallaxscroll.views.ParallaxListView;
 
-import static android.R.attr.width;
+import static android.view.ViewGroup.LayoutParams.MATCH_PARENT;
+
 
 /**
  * Created by PJC on 2017-02-07.
@@ -81,6 +79,8 @@ public class LocationFragment extends Fragment {
 
     private static final String TAG = LocationFragment.class.getSimpleName();
 
+    public Context mContext;
+
     View rootView = null;
 
     @BindView(R.id.lv_near)
@@ -88,8 +88,8 @@ public class LocationFragment extends Fragment {
 
     @BindView(R.id.pb_bar)
     ProgressBar progressBar;
-    @BindView(R.id.tv_my_location)
-    TextView tvMyLocation;
+//    @BindView(R.id.tv_my_location)
+//    TextView tvMyLocation;
 
     NMapView mMapView;
     NMapContext mMapContext;
@@ -130,6 +130,7 @@ public class LocationFragment extends Fragment {
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+        //container.setLayoutParams(new FrameLayout.LayoutParams(MATCH_PARENT, getContext().getResources().getDisplayMetrics().heightPixels- MainActivity.mToolbar.getLayoutParams().height));
         if (this.rootView == null) {
             View rootView = inflater.inflate(R.layout.fragment_location, container, false);
             ButterKnife.bind(this, rootView);
@@ -152,7 +153,8 @@ public class LocationFragment extends Fragment {
         mMapContext = new NMapContext(getActivity());
         mMapContext.onCreate();
         mMapContext.setupMapView(mMapView);
-        mMapView.setLayoutParams(new NMapView.LayoutParams(NMapView.LayoutParams.MATCH_PARENT, 1300));
+        mMapView.setLayoutParams(new NMapView.LayoutParams(NMapView.LayoutParams.MATCH_PARENT, (getContext().getResources().getDisplayMetrics().heightPixels/5)*3));
+
         mMapView.setClientId(CLIENT_ID);
         // initialize map view
         mMapView.setClickable(true);
@@ -180,7 +182,6 @@ public class LocationFragment extends Fragment {
         mMapController = mMapView.getMapController();
 
         vi = (LayoutInflater) getContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-        view_select = vi.inflate(R.layout.item_near_select, null);
 
         boolean isMyLocationEnabled = mMapLocationManager.enableMyLocation(true);
         if (!isMyLocationEnabled) {
@@ -198,8 +199,8 @@ public class LocationFragment extends Fragment {
         lvNear.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                ProductModel productModel = (ProductModel) nearAdapter.getItem(position-1);
-                System.out.println("productModel.partnerName"+productModel.partnerName);
+                ProductModel productModel = (ProductModel) nearAdapter.getItem(position - 1);
+                System.out.println("productModel.partnerName" + productModel.partnerName);
                 if (!productModel.isFreePartner) {
                     startActivity(new Intent(getActivity(), ProductDetailActivity.class).putExtra("id", productModel.id)
                             .putExtra("gps", true)
@@ -252,12 +253,12 @@ public class LocationFragment extends Fragment {
                             double lat = location.getLatitude();
                             double lng = location.getLongitude();
 
-                            try {
-                                tvMyLocation.setText(GpsUtil.geoToAddress(getActivity(), lat, lng));
-                                //setMarker(lat, lng, "");
-                            } catch (IOException e) {
-                                e.printStackTrace();
-                            }
+//                            try {
+//                                tvMyLocation.setText(GpsUtil.geoToAddress(getActivity(), lat, lng));
+//                                //setMarker(lat, lng, "");
+//                            } catch (IOException e) {
+//                                e.printStackTrace();
+//                            }
 
                             mLat = lat;
                             mLng = lng;
@@ -276,12 +277,12 @@ public class LocationFragment extends Fragment {
 
         double lat = 37.538484;
         double lng = 127.082294;
-
-        try {
-            tvMyLocation.setText(GpsUtil.geoToAddress(getActivity(), lat, lng));
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+//
+//        try {
+//            tvMyLocation.setText(GpsUtil.geoToAddress(getActivity(), lat, lng));
+//        } catch (IOException e) {
+//            e.printStackTrace();
+//        }
 
         mLat = lat;
         mLng = lng;
@@ -366,10 +367,15 @@ public class LocationFragment extends Fragment {
 
         Log.d("nearProduct", page + " " + size);
 
+        final Location mLocation = new Location("MY GEO");
+        mLocation.setLatitude(lat);
+        mLocation.setLongitude(lng);
+
         HttpUtil.api(Product.class).nearProduct(page, size, area, filter, String.valueOf(lat), String.valueOf(lng), new Callback<List<ProductModel>>() {
             @Override
             public void success(List<ProductModel> productModels, Response response) {
-                int markerId = NMapPOIflagType.SPOT;
+                int pin = NMapPOIflagType.PIN;
+                int pin_m = NMapPOIflagType.PIN_M;
 
 
                 Log.d("size", productModels.size() + "");
@@ -383,7 +389,11 @@ public class LocationFragment extends Fragment {
                         double lat = Double.parseDouble(productModels.get(i).lat);
                         double lng = Double.parseDouble(productModels.get(i).lng);
                         String name = productModels.get(i).partnerName;
-                        poiData.addPOIitem(lng, lat, name, markerId, 0);
+                        if (productModels.get(i).isFreePartner) {
+                            poiData.addPOIitem(lng, lat, name, pin_m, 0);
+                        } else {
+                            poiData.addPOIitem(lng, lat, name, pin, 0);
+                        }
                     }
                     firstLoading = false;
                 } else {
@@ -392,7 +402,11 @@ public class LocationFragment extends Fragment {
                         double lat = Double.parseDouble(productModels.get(i).lat);
                         double lng = Double.parseDouble(productModels.get(i).lng);
                         String name = productModels.get(i).partnerName;
-                        poiData.addPOIitem(lng, lat, name, markerId, 0);
+                        if (productModels.get(i).isFreePartner) {
+                            poiData.addPOIitem(lng, lat, name, pin_m, 0);
+                        } else {
+                            poiData.addPOIitem(lng, lat, name, pin, 0);
+                        }
                     }
                 }
 
@@ -405,27 +419,12 @@ public class LocationFragment extends Fragment {
                             String productName = nMapOverlayItem.getTitle();
                             final ProductModel selectProduct = (ProductModel) nearAdapter.getItem(productName);
 
-                            view_select.setOnClickListener(new View.OnClickListener() {
-                                @Override
-                                public void onClick(View view) {
-                                    if (!selectProduct.isFreePartner) {
-                                        startActivity(new Intent(getActivity(), ProductDetailActivity.class).putExtra("id", selectProduct.id)
-                                                .putExtra("gps", true)
-                                                .putExtra("lat", mLat)
-                                                .putExtra("lng", mLng));
-                                    }
-                                }
-                            });
                             if (!isSelectPOI) {
-                                initSelectView(selectProduct, true);
-//                                nearAdapter.add(0, selectProduct);
-//                                nearAdapter.setSelectedIndex(0);
+                                initSelectView(selectProduct, true, mLocation);
                                 nearAdapter.notifyDataSetChanged();
                                 isSelectPOI = true;
                             } else {
-                                initSelectView(selectProduct, false);
-//                                nearAdapter.setItem(0, selectProduct);
-//                                nearAdapter.setSelectedIndex(999);
+                                initSelectView(selectProduct, false, mLocation);
                                 nearAdapter.notifyDataSetChanged();
 
                             }
@@ -436,19 +435,6 @@ public class LocationFragment extends Fragment {
                         return null;
                     }
                 });
-//                poiDataOverlay.setOnFocusChangeListener(new NMapItemizedOverlay.OnFocusChangeListener() {
-//                    @Override
-//                    public void onFocusChanged(NMapItemizedOverlay nMapItemizedOverlay, NMapOverlayItem nMapOverlayItem) {
-//                        try {
-//                            String productName = nMapOverlayItem.getTitle();
-//                            ProductModel selectProduct = (ProductModel) nearAdapter.getItem(productName);
-//                            nearAdapter.add(0, selectProduct);
-//                        } catch (NullPointerException e) {
-//
-//                        }
-//
-//                    }
-//                });
                 poiDataOverlay.showAllPOIdata(0);
 
                 currentPage++;
@@ -462,16 +448,28 @@ public class LocationFragment extends Fragment {
         });
     }
 
-    private void initSelectView(final ProductModel productModel, Boolean isFirst) {
-        if (isFirst) {
-            FrameLayout.LayoutParams param;
+    private void initSelectView(final ProductModel item, Boolean isFirst, Location mLocation) {
 
-            param = new FrameLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
-            param.gravity = Gravity.BOTTOM;
+        System.out.println("FREE : " + item.isFreePartner);
 
-            frameLayout.addView(view_select, param);
-
+        if (!isFirst) {
+            frameLayout.removeView(view_select);
         }
+
+        if (item.isFreePartner) {
+            view_select = vi.inflate(R.layout.item_near_select_free, null);
+        } else {
+            view_select = vi.inflate(R.layout.item_near_select, null);
+        }
+
+        FrameLayout.LayoutParams param;
+
+        param = new FrameLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+        param.gravity = Gravity.BOTTOM;
+
+        frameLayout.addView(view_select, param);
+
+
         TextView tv_km = (TextView) view_select.findViewById(R.id.tv_km);
         TextView tv_name = (TextView) view_select.findViewById(R.id.tv_name);
         TextView tv_address = (TextView) view_select.findViewById(R.id.tv_address);
@@ -479,16 +477,60 @@ public class LocationFragment extends Fragment {
         TextView tv_price_lunch = (TextView) view_select.findViewById(R.id.tv_price_lunch);
         TextView tv_price_dinner = (TextView) view_select.findViewById(R.id.tv_price_dinner);
 
+        if (!item.isFreePartner) {
+            ImageView imvImage = (ImageView) view_select.findViewById(R.id.imv_image);
+            TextView tvDiscount = (TextView) view_select.findViewById(R.id.tv_discount);
 
-//        tv_km.setText(productModel.meter);
-        tv_name.setText(productModel.partnerName);
-        tv_address.setText(productModel.detailAddress);
-        tv_price_morning.setText("조조 " + productModel.morningPrice + "원");
-        tv_price_lunch.setText("평일 " + productModel.lunchPrice + "원");
-        tv_price_dinner.setText("야간 " + productModel.dinnerPrice + "원");
-// insert into main view
+            tvDiscount.setText(item.discount + " 원 할인");
+            Glide.with(getContext()).load(NetworkManager.SERVER_URL + item.mainThumbnail).centerCrop().into(imvImage);
+        }
+
+        if (mLocation != null) {
+
+            if (item.lat != null && item.lng != null) {
+
+                Location target = new Location("TARGET");
+                target.setLatitude(Double.parseDouble(item.lat));
+                target.setLongitude(Double.parseDouble(item.lng));
+
+                int distance = (int) mLocation.distanceTo(target);
+
+                int km = 0;
+                if (distance >= 1000) {
+                    km = distance / 1000;
+                }
+                int meter = distance % 1000;
+                if (meter > 0) {
+                    meter = meter / 100;
+                }
+                String distance_str = String.format("%d.%01d Km", km, meter);
+                tv_km.setText(distance_str);
+            }
+        } else {
+            Log.d("null", "null");
+            tv_km.setVisibility(View.GONE);
+        }
+
+        tv_name.setText("[" + LocationCode.getInstance().getLocation(item.gubunAdress) + "] " + item.partnerName);
+        tv_address.setText(item.detailAddress);
+        tv_price_morning.setText("조조 " + item.morningPrice + "원");
+        tv_price_lunch.setText("평일 " + item.lunchPrice + "원");
+        tv_price_dinner.setText("야간 " + item.dinnerPrice + "원");
+
         frameLayout.invalidate();
         view_select.invalidate();
+
+        view_select.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (!item.isFreePartner) {
+                    startActivity(new Intent(getActivity(), ProductDetailActivity.class).putExtra("id", item.id)
+                            .putExtra("gps", true)
+                            .putExtra("lat", mLat)
+                            .putExtra("lng", mLng));
+                }
+            }
+        });
     }
 
 
@@ -661,7 +703,7 @@ public class LocationFragment extends Fragment {
 
             if (mMapController != null) {
 
-                mMapController.animateTo(_myLocation);
+                //mMapController.animateTo(_myLocation);
                 myLocation = _myLocation;
 
                 progressBar.setVisibility(View.INVISIBLE);
@@ -743,10 +785,12 @@ public class LocationFragment extends Fragment {
         mMapContext.onStop();
         Log.d("frag", "onStop");
     }
+
     @Override
     public void onDestroyView() {
         super.onDestroyView();
     }
+
     @Override
     public void onDestroy() {
         mMapContext.onDestroy();

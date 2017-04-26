@@ -172,10 +172,10 @@ public class NearAdapter extends BaseAdapter {
             tvPriceLunch.setText("평일 " + Integer.parseInt(item.lunchPrice) + "원");
             tvPriceDinner.setText("야간 " + Integer.parseInt(item.dinnerPrice) + "원");
 
-            // Calc the KM
             if (mLocation != null) {
-                Log.d("cat", "cat");
+
                 if (item.lat != null && item.lng != null) {
+
                     Location target = new Location("TARGET");
                     target.setLatitude(Double.parseDouble(item.lat));
                     target.setLongitude(Double.parseDouble(item.lng));
@@ -186,11 +186,16 @@ public class NearAdapter extends BaseAdapter {
                     if (distance >= 1000) {
                         km = distance / 1000;
                     }
-                    int meter = distance % 1000 / 3;
-                    tvKm.setText(km + "." + meter + " Km");
+                    int meter = distance % 1000;
+                    if (meter > 0) {
+                        meter = meter / 100;
+                    }
+                    String distance_str = String.format("%d.%01d Km", km, meter);
+                    tvKm.setText(distance_str);
                 }
             } else {
-                tvKm.setVisibility(View.INVISIBLE);
+                Log.d("null", "null");
+                tvKm.setVisibility(View.GONE);
             }
 
             Glide.with(mContext).load(NetworkManager.SERVER_URL + item.mainThumbnail).centerCrop().into(imvImage);

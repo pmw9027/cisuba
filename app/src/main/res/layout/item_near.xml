@@ -1,18 +1,20 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:layout_marginTop="5dp"
     android:background="@drawable/background_product"
-    android:layout_height="match_parent">
+    android:orientation="vertical">
 
     <FrameLayout
         android:layout_width="match_parent"
         android:layout_height="150dp">
 
         <ImageView
-            android:background="@color/Black"
             android:id="@+id/imv_image"
             android:layout_width="match_parent"
-            android:layout_height="match_parent" />
+            android:layout_height="match_parent"
+            android:background="@color/Black" />
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -20,10 +22,10 @@
             android:orientation="vertical">
 
             <LinearLayout
-                android:paddingRight="@dimen/padding_default"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="horizontal">
+                android:orientation="horizontal"
+                android:paddingRight="@dimen/padding_default">
 
                 <FrameLayout
                     android:id="@+id/frame_km"
@@ -32,65 +34,65 @@
                     android:layout_weight="1">
 
                     <TextView
-                        android:padding="@dimen/padding_default"
-                        android:background="#33000000"
                         android:id="@+id/tv_km"
-                        android:textSize="@dimen/text_size_default"
-                        android:textColor="@color/White"
                         android:layout_width="wrap_content"
-                        android:layout_height="wrap_content" />
+                        android:layout_height="wrap_content"
+                        android:background="#33000000"
+                        android:padding="@dimen/padding_default"
+                        android:textColor="@color/White"
+                        android:textSize="@dimen/text_size_default" />
 
                 </FrameLayout>
 
                 <LinearLayout
-                    android:layout_marginTop="@dimen/padding_default"
-                    android:layout_marginLeft="@dimen/padding_medium"
-                    android:paddingLeft="@dimen/padding_medium"
-                    android:paddingRight="@dimen/padding_medium"
-                    android:background="@drawable/shape_radius_discount"
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent"
-                    android:orientation="horizontal">
+                    android:layout_marginLeft="@dimen/padding_medium"
+                    android:layout_marginTop="@dimen/padding_default"
+                    android:background="@drawable/shape_radius_discount"
+                    android:orientation="horizontal"
+                    android:paddingLeft="@dimen/padding_medium"
+                    android:paddingRight="@dimen/padding_medium">
 
                     <TextView
                         android:id="@+id/tv_discount"
-                        android:textColor="@color/White"
-                        android:text="3,000 원 할인"
-                        android:gravity="center"
-                        android:textSize="@dimen/text_size_small"
                         android:layout_width="match_parent"
-                        android:layout_height="match_parent" />
+                        android:layout_height="match_parent"
+                        android:gravity="center"
+                        android:text="3,000 원 할인"
+                        android:textColor="@color/White"
+                        android:textSize="@dimen/text_size_small" />
 
                 </LinearLayout>
 
             </LinearLayout>
 
             <LinearLayout
-                android:gravity="bottom"
                 android:layout_width="match_parent"
-                android:layout_weight="1"
                 android:layout_height="0dp"
+                android:layout_weight="1"
+                android:gravity="bottom"
                 android:orientation="vertical">
 
                 <LinearLayout
-                    android:alpha="100"
-                    android:gravity="bottom"
-                    android:background="@drawable/gridient"
-                    android:paddingBottom="@dimen/padding_default"
-                    android:paddingLeft="@dimen/padding_medium"
                     android:layout_width="match_parent"
                     android:layout_height="55dp"
-                    android:orientation="vertical">
+                    android:alpha="100"
+                    android:background="@drawable/gridient"
+                    android:gravity="bottom"
+                    android:orientation="vertical"
+                    android:paddingBottom="@dimen/padding_default"
+                    android:paddingLeft="@dimen/padding_medium">
 
                     <TextView
                         android:id="@+id/tv_name"
-                        android:text="[종로] Amare"
-                        android:textStyle="bold"
-                        android:textSize="@dimen/text_size_default"
-                        android:textColor="@color/White"
-                        android:layout_marginBottom="@dimen/margin_small"
                         android:layout_width="wrap_content"
-                        android:layout_height="wrap_content" />
+                        android:layout_height="wrap_content"
+                        android:layout_marginBottom="@dimen/margin_small"
+                        android:text="[종로] Amare"
+                        android:textColor="@color/White"
+                        android:textSize="@dimen/text_size_default"
+                        android:textStyle="bold" />
 
                     <LinearLayout
                         android:layout_width="match_parent"
@@ -99,11 +101,11 @@
 
                         <TextView
                             android:id="@+id/tv_address"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
                             android:text="서울 광진구 군자동 363-1 202호"
                             android:textColor="@color/White"
-                            android:textSize="@dimen/text_size_small"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content" />
+                            android:textSize="@dimen/text_size_small" />
 
                     </LinearLayout>
 
