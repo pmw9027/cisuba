@@ -9,20 +9,30 @@ import android.graphics.Color;
 import android.os.AsyncTask;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.telephony.TelephonyManager;
 import android.text.Html;
+import android.util.Base64;
 import android.util.Log;
+import android.util.TypedValue;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.bumptech.glide.Glide;
 import com.eastblue.cisuba.Fragment.ProfileFragment;
 import com.eastblue.cisuba.Kakao.KakaoLoginControl;
+import com.eastblue.cisuba.Manager.NetworkManager;
+import com.eastblue.cisuba.Model.UserModel;
+import com.eastblue.cisuba.Network.User;
 import com.eastblue.cisuba.R;
+import com.eastblue.cisuba.Util.HttpUtil;
 import com.kakao.auth.ApiResponseCallback;
 import com.kakao.auth.AuthService;
 import com.kakao.auth.AuthType;
@@ -34,6 +44,7 @@ import com.kakao.network.ErrorResult;
 import com.kakao.usermgmt.LoginButton;
 import com.kakao.usermgmt.UserManagement;
 import com.kakao.usermgmt.callback.MeResponseCallback;
+//import com.kakao.usermgmt.response.model.User;
 import com.kakao.usermgmt.response.model.UserProfile;
 import com.kakao.util.exception.KakaoException;
 import com.kakao.util.helper.StoryProtocol;
@@ -55,8 +66,15 @@ import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.crypto.Cipher;
+import javax.crypto.spec.IvParameterSpec;
+import javax.crypto.spec.SecretKeySpec;
+
 import butterknife.ButterKnife;
 import butterknife.OnClick;
+import retrofit.Callback;
+import retrofit.RetrofitError;
+import retrofit.client.Response;
 
 import static com.nhn.android.naverlogin.OAuthLogin.mOAuthLoginHandler;
 import static java.security.AccessController.getContext;
@@ -104,7 +122,13 @@ public class LoginActivity extends AppCompatActivity {// implements View.OnClick
     private TextView tvkakao;
     private ImageView ivkakao;
 
+    private String get_email;
+    private String password;
+    private String username;
+
     TextView join;
+
+    EditText et_eamil, et_password;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -120,6 +144,11 @@ public class LoginActivity extends AppCompatActivity {// implements View.OnClick
         Session.getCurrentSession().checkAndImplicitOpen();
 
         //InitializeNaverAPI();
+
+        et_eamil = (EditText)findViewById(R.id.input_email);
+        et_password = (EditText)findViewById(R.id.input_pass);
+
+        //getItem("hello");
 
         tvnaver = (TextView) findViewById(R.id.naver_text);
         ivnaver = (ImageView) findViewById(R.id.naver_symbol);
@@ -211,6 +240,24 @@ public class LoginActivity extends AppCompatActivity {// implements View.OnClick
     @OnClick(R.id.login_close)
     void loginclose() {
         finish();
+    }
+
+    @OnClick(R.id.email_login)
+    void login_email() {
+        String key = "cisuba";
+        String en,de;
+        System.out.println("email : " + et_eamil.getText().toString());
+        System.out.println("pass  : " + et_password.getText().toString());
+        try {
+            en = Encrypt(et_password.getText().toString(), "hello");
+            System.out.println("pass encrypte : " + en);
+            en = Encrypt(et_password.getText().toString(), key);
+            System.out.println("pass encrypte : " + en);
+            de = Decrypt(en,key);
+            System.out.println("pass decrypte : " + de);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     @OnClick(R.id.btn_join)
@@ -659,5 +706,111 @@ public class LoginActivity extends AppCompatActivity {// implements View.OnClick
             }
             return retBitmap;
         }
+    }
+
+
+    void getItem(String email) {
+        System.out.println("login_test");
+
+        HttpUtil.api(User.class).get_user_inform(email, new Callback<UserModel>() {
+            @Override
+            public void success(UserModel userModel, Response response) {
+
+                get_email = userModel.email;
+                password = userModel.password;
+                username = userModel.username;
+
+                System.out.println("login_test userinform : email-"+get_email+" , pass-"+password+" , name-"+username);
+
+            }
+
+            @Override
+            public void failure(RetrofitError error) {
+
+            }
+        });
+
+    }
+
+    public static String Decrypt(String text, String key) throws Exception
+
+    {
+
+        Cipher cipher = Cipher.getInstance("AES/CBC/PKCS5Padding");
+
+        byte[] keyBytes= new byte[16];
+
+        byte[] b= key.getBytes("UTF-8");
+
+        int len= b.length;
+
+        if (len > keyBytes.length) len = keyBytes.length;
+
+        System.arraycopy(b, 0, keyBytes, 0, len);
+
+        SecretKeySpec keySpec = new SecretKeySpec(keyBytes, "AES");
+
+        IvParameterSpec ivSpec = new IvParameterSpec(keyBytes);
+
+        cipher.init(Cipher.DECRYPT_MODE,keySpec,ivSpec);
+
+
+
+
+
+//               BASE64Decoder decoder = new BASE64Decoder();
+
+//               Base64.decode(input, flags)
+
+//               byte [] results = cipher.doFinal(decoder.decodeBuffer(text));
+
+        // BASE64Decoder decoder = new BASE64Decoder();
+
+        // Base64.decode(input, flags)
+
+        byte [] results = cipher.doFinal(Base64.decode(text, 0));
+
+
+
+        return new String(results,"UTF-8");
+
+    }
+
+
+
+    public static String Encrypt(String text, String key) throws Exception
+
+    {
+
+        Cipher cipher = Cipher.getInstance("AES/CBC/PKCS5Padding");
+
+        byte[] keyBytes= new byte[16];
+
+        byte[] b= key.getBytes("UTF-8");
+
+        int len= b.length;
+
+        if (len > keyBytes.length) len = keyBytes.length;
+
+        System.arraycopy(b, 0, keyBytes, 0, len);
+
+        SecretKeySpec keySpec = new SecretKeySpec(keyBytes, "AES");
+
+        IvParameterSpec ivSpec = new IvParameterSpec(keyBytes);
+
+        cipher.init(Cipher.ENCRYPT_MODE,keySpec,ivSpec);
+
+
+
+        byte[] results = cipher.doFinal(text.getBytes("UTF-8"));
+
+//               BASE64Encoder encoder = new BASE64Encoder();
+
+//               return encoder.encode(results);
+
+
+
+        return Base64.encodeToString(results, 0);
+
     }
 }
