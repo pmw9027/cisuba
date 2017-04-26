@@ -289,6 +289,7 @@ public class ProductDetailActivity extends AppCompatActivity {
 
     @Override
     protected void onResume() {
+        mMapView.getMapController().setMapCenter(lng,lat,11);
         super.onResume();
     }
 
