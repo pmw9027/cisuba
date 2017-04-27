@@ -28,7 +28,7 @@ public interface User {
             Callback<UserModel> callback
     );
 */
-    @GET("/get_user/{email}")
+    @GET("/users/{email}")
     void get_user_inform(
             @Path("email") String email,
             Callback<UserModel> callback

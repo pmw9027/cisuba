@@ -180,7 +180,10 @@
                 android:background="@drawable/inputbox_top"
                 android:hint="이메일주소를 입력해주세요"
                 android:textSize="13sp"
-                android:paddingLeft="10dp"/>
+                android:paddingLeft="10dp"
+                android:nextFocusDown="@+id/next"
+                android:singleLine = "true"
+                android:lines = "1" />
 
             <EditText
                 android:id="@+id/input_pass"
@@ -195,7 +198,10 @@
                 android:background="@drawable/inputbox_bottom"
                 android:hint="비밀번호를 입력해주세요"
                 android:textSize="13sp"
-                android:paddingLeft="10dp"/>
+                android:paddingLeft="10dp"
+                android:nextFocusDown="@+id/next"
+                android:singleLine = "true"
+                android:lines = "1" />
 
             <Button
                 android:id="@+id/email_login"

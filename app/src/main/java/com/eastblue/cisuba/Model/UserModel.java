@@ -1,5 +1,7 @@
 package com.eastblue.cisuba.Model;
 
+import android.support.annotation.StringRes;
+
 import com.google.gson.annotations.SerializedName;
 
 /**

@@ -137,6 +137,14 @@ public class ProductDetailActivity extends AppCompatActivity {
         getItem(getIntent().getStringExtra("id"));
 
     }
+
+    @OnClick(R.id.btn_pay)
+    public void openPayWeb() {
+        //Intent payWebActivity = new Intent(ProductDetailActivity.this, PaymentWebActivity.class);
+        //startActivity(payWebActivity);
+        startActivity(new Intent(this, PaymentWebActivity.class));
+    }
+
     @OnClick(R.id.frame_map)
     public void openMapDetail() {
         if(isRecv) {

@@ -84,7 +84,12 @@ public class ProfileFragment extends Fragment {
                 logout.setEnabled(false);
             }
         }
-        requestMe();
+        if(!Session.getCurrentSession().isClosed()) {
+            MainActivity.profileimage.setEnabled(false);
+            ProfileFragment.profileimage.setEnabled(false);
+            ProfileFragment.logout.setEnabled(true);
+            requestMe();
+        }
 
         return rootView;
     }
@@ -125,6 +130,12 @@ public class ProfileFragment extends Fragment {
                             logout.setEnabled(false);
                         }
 
+                        nickname.setText("로그인을 하세요.");
+                        MainActivity.nickname.setText("로그인을 하세요.");
+                        MainActivity.profileimage.setEnabled(true);
+                        profileimage.setEnabled(true);
+                        logout.setEnabled(false);
+
                     }
                 })
                 .setNegativeButton("아니요", new DialogInterface.OnClickListener() {
@@ -149,13 +160,18 @@ public class ProfileFragment extends Fragment {
 
     @Override
     public void onResume() {
-        //requestMe();
-        /*
+        if(!Session.getCurrentSession().isClosed()) {
+            MainActivity.profileimage.setEnabled(false);
+            ProfileFragment.profileimage.setEnabled(false);
+            ProfileFragment.logout.setEnabled(true);
+            requestMe();
+        }
+
         if(LoginActivity.mOAuthLoginModule != null) {
             if(LoginActivity.mOAuthLoginModule.getState(getActivity()).toString().equals("OK")) {
-                ProfileFragment.nickname.setText(LoginActivity.nickname);
-                MainActivity.nickname.setText(LoginActivity.nickname);
-                System.out.println("resume -- "+LoginActivity.nickname);
+                ProfileFragment.nickname.setText(LoginActivity.name);
+                MainActivity.nickname.setText(LoginActivity.name);
+                System.out.println("resume -- "+LoginActivity.name);
 
                 new Thread(new Runnable() {
                     @Override
@@ -178,7 +194,16 @@ public class ProfileFragment extends Fragment {
                     }
                 }).start();
             }
-        }*/
+        }
+
+        if(LoginActivity.ISLOGIN ) {
+            ProfileFragment.nickname.setText(LoginActivity.login_user_name);
+            MainActivity.nickname.setText(LoginActivity.login_user_name);
+
+            MainActivity.profileimage.setEnabled(false);
+            ProfileFragment.profileimage.setEnabled(false);
+            ProfileFragment.logout.setEnabled(true);
+        }
         super.onResume();
     }
 

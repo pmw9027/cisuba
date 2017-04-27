@@ -105,7 +105,7 @@ public class LoginActivity extends AppCompatActivity {// implements View.OnClick
     String age = "";
     String gender = "";
     String id = "";
-    String name = "";
+    public static String name = "";
     String birthday = "";
 
     String accessToken = "";
@@ -130,6 +130,16 @@ public class LoginActivity extends AppCompatActivity {// implements View.OnClick
 
     EditText et_eamil, et_password;
 
+    public static String user_id = "";
+    public static String user_pass = "";
+    public static String user_name = "";
+
+    public static String login_user_id = "";
+    public static String login_user_name = "";
+
+    public static boolean ISLOGIN = false;
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -147,8 +157,6 @@ public class LoginActivity extends AppCompatActivity {// implements View.OnClick
 
         et_eamil = (EditText)findViewById(R.id.input_email);
         et_password = (EditText)findViewById(R.id.input_pass);
-
-        //getItem("hello");
 
         tvnaver = (TextView) findViewById(R.id.naver_text);
         ivnaver = (ImageView) findViewById(R.id.naver_symbol);
@@ -244,6 +252,11 @@ public class LoginActivity extends AppCompatActivity {// implements View.OnClick
 
     @OnClick(R.id.email_login)
     void login_email() {
+        /*
+        System.out.println("login_test - -"+et_eamil.getText().toString()+"-");
+        getItem(et_eamil.getText().toString());
+        */
+        /*
         String key = "cisuba";
         String en,de;
         System.out.println("email : " + et_eamil.getText().toString());
@@ -258,6 +271,30 @@ public class LoginActivity extends AppCompatActivity {// implements View.OnClick
         } catch (Exception e) {
             e.printStackTrace();
         }
+        */
+        /*
+        if(et_eamil.getText().toString().equals(user_id)) {
+            if(et_password.getText().toString().equals(user_pass)) {
+                login_user_id = user_id;
+                login_user_name = user_name;
+                ProfileFragment.nickname.setText(login_user_name);
+                MainActivity.nickname.setText(login_user_name);
+
+                MainActivity.profileimage.setEnabled(false);
+                ProfileFragment.profileimage.setEnabled(false);
+                ProfileFragment.logout.setEnabled(true);
+
+                ISLOGIN = true;
+
+                finish();
+            } else {
+                Toast.makeText(this,"email, 비밀번호가 틀립니다.",Toast.LENGTH_SHORT).show();
+            }
+        } else {
+            Toast.makeText(this,"email, 비밀번호가 틀립니다.",Toast.LENGTH_SHORT).show();
+        }
+        */
+
     }
 
     @OnClick(R.id.btn_join)
@@ -573,8 +610,8 @@ public class LoginActivity extends AppCompatActivity {// implements View.OnClick
             Log.d("myLog", "name " + name);
             Log.d("myLog", "nickname " + nickname);
 
-            ProfileFragment.nickname.setText(nickname);
-            MainActivity.nickname.setText(nickname);
+            ProfileFragment.nickname.setText(name);
+            MainActivity.nickname.setText(name);
 
             new Thread(new Runnable() {
                 @Override
@@ -671,15 +708,24 @@ public class LoginActivity extends AppCompatActivity {// implements View.OnClick
             } catch (Exception e) {
                 Log.e("dd", "Error in network call", e);
             }
-            email = f_array[0];
-            nickname = f_array[1];
-            enc_id = f_array[2];
-            profile_image = f_array[3];
-            age = f_array[4];
-            gender = f_array[5];
-            id = f_array[6];
-            name = f_array[7];
+            email = f_array[7];
+            nickname = f_array[0];
+            enc_id = f_array[1];
+            profile_image = f_array[2];
+            age = f_array[3];
+            gender = f_array[4];
+            id = f_array[5];
+            name = f_array[6];
             birthday = f_array[8];
+            System.out.println("email:"+email);
+            System.out.println("nickname:"+nickname);
+            System.out.println("enc_id:"+enc_id);
+            System.out.println("profile_image:"+profile_image);
+            System.out.println("age:"+age);
+            System.out.println("gender:"+gender);
+            System.out.println("id:"+id);
+            System.out.println("name:"+name);
+            System.out.println("birthday:"+birthday);
         }
     }
 
@@ -716,17 +762,14 @@ public class LoginActivity extends AppCompatActivity {// implements View.OnClick
             @Override
             public void success(UserModel userModel, Response response) {
 
-                get_email = userModel.email;
-                password = userModel.password;
-                username = userModel.username;
-
-                System.out.println("login_test userinform : email-"+get_email+" , pass-"+password+" , name-"+username);
-
+                user_id = userModel.email;
+                user_pass = userModel.password;
+                user_name = userModel.username;
             }
 
             @Override
             public void failure(RetrofitError error) {
-
+                System.out.println("login_test fail");
             }
         });
 
