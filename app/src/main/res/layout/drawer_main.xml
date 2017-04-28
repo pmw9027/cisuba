@@ -133,7 +133,6 @@
                 android:layout_height="60dp"
                 android:layout_marginTop="80dp"
                 android:src="@drawable/callcenters" />
-
         </LinearLayout>
 
     </ScrollView>

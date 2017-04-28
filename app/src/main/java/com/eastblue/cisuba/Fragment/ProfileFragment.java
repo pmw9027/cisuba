@@ -18,7 +18,9 @@ import android.widget.Toast;
 import com.eastblue.cisuba.Activity.LoginActivity;
 import com.eastblue.cisuba.Activity.MainActivity;
 import com.eastblue.cisuba.Activity.NoticeActivity;
+import com.eastblue.cisuba.Activity.PrivacyActivity;
 import com.eastblue.cisuba.Activity.RequestPartnerActivity;
+import com.eastblue.cisuba.Activity.TermsActivity;
 import com.eastblue.cisuba.R;
 import com.kakao.auth.ErrorCode;
 import com.kakao.auth.Session;
@@ -354,5 +356,13 @@ public class ProfileFragment extends Fragment {
             }
             return retBitmap;
         }
+    }
+    @OnClick(R.id.tv_privacy)
+    void open_privacy() {
+        startActivity(new Intent(getActivity(), PrivacyActivity.class).setFlags(Intent.FLAG_ACTIVITY_NEW_TASK));
+    }
+    @OnClick(R.id.tv_terms)
+    void open_terms() {
+        startActivity(new Intent(getActivity(), TermsActivity.class).setFlags(Intent.FLAG_ACTIVITY_NEW_TASK));
     }
 }
