@@ -1,5 +1,7 @@
 package com.eastblue.cisuba.Model;
 
+import android.support.annotation.StringRes;
+
 import com.google.gson.annotations.SerializedName;
 
 /**
@@ -7,12 +9,11 @@ import com.google.gson.annotations.SerializedName;
  */
 
 public class UserModel {
+    @SerializedName("id")
+    public String id;
 
     @SerializedName("email")
     public String email;
-
-    @SerializedName("password")
-    public String password;
 
     @SerializedName("username")
     public String username;

@@ -5,6 +5,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -40,6 +41,7 @@ import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 
+import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import de.hdodenhof.circleimageview.CircleImageView;
@@ -55,6 +57,8 @@ public class ProfileFragment extends Fragment {
     public static CircleImageView profileimage;
     public static ImageButton logout;
     Bitmap bitmap;
+
+    @BindView(R.id.tv_office_phone) TextView tvPhone;
 
 
 
@@ -86,7 +90,20 @@ public class ProfileFragment extends Fragment {
                 logout.setEnabled(false);
             }
         }
-        requestMe();
+        if(!Session.getCurrentSession().isClosed()) {
+            MainActivity.profileimage.setEnabled(false);
+            ProfileFragment.profileimage.setEnabled(false);
+            ProfileFragment.logout.setEnabled(true);
+            requestMe();
+        }
+
+        tvPhone.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(Intent.ACTION_DIAL, Uri.parse("tel:"+tvPhone.getText()));
+                startActivity(intent);
+            }
+        });
 
         return rootView;
     }
@@ -127,6 +144,12 @@ public class ProfileFragment extends Fragment {
                             logout.setEnabled(false);
                         }
 
+                        nickname.setText("로그인을 하세요.");
+                        MainActivity.nickname.setText("로그인을 하세요.");
+                        MainActivity.profileimage.setEnabled(true);
+                        profileimage.setEnabled(true);
+                        logout.setEnabled(false);
+
                     }
                 })
                 .setNegativeButton("아니요", new DialogInterface.OnClickListener() {
@@ -151,13 +174,18 @@ public class ProfileFragment extends Fragment {
 
     @Override
     public void onResume() {
-        //requestMe();
-        /*
+        if(!Session.getCurrentSession().isClosed()) {
+            MainActivity.profileimage.setEnabled(false);
+            ProfileFragment.profileimage.setEnabled(false);
+            ProfileFragment.logout.setEnabled(true);
+            requestMe();
+        }
+
         if(LoginActivity.mOAuthLoginModule != null) {
             if(LoginActivity.mOAuthLoginModule.getState(getActivity()).toString().equals("OK")) {
-                ProfileFragment.nickname.setText(LoginActivity.nickname);
-                MainActivity.nickname.setText(LoginActivity.nickname);
-                System.out.println("resume -- "+LoginActivity.nickname);
+                ProfileFragment.nickname.setText(LoginActivity.name);
+                MainActivity.nickname.setText(LoginActivity.name);
+                System.out.println("resume -- "+LoginActivity.name);
 
                 new Thread(new Runnable() {
                     @Override
@@ -180,7 +208,16 @@ public class ProfileFragment extends Fragment {
                     }
                 }).start();
             }
-        }*/
+        }
+
+        if(LoginActivity.ISLOGIN ) {
+            ProfileFragment.nickname.setText(LoginActivity.login_user_name);
+            MainActivity.nickname.setText(LoginActivity.login_user_name);
+
+            MainActivity.profileimage.setEnabled(false);
+            ProfileFragment.profileimage.setEnabled(false);
+            ProfileFragment.logout.setEnabled(true);
+        }
         super.onResume();
     }
 

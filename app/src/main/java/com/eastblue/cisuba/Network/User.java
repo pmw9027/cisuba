@@ -1,5 +1,6 @@
 package com.eastblue.cisuba.Network;
 
+import com.eastblue.cisuba.Model.CodeModel;
 import com.eastblue.cisuba.Model.UserModel;
 import com.squareup.okhttp.Call;
 
@@ -16,6 +17,7 @@ import retrofit.http.Field;
 import retrofit.http.FormUrlEncoded;
 import retrofit.http.POST;
 
+
 /**
  * Created by Jo on 2017. 4. 24..
  */
@@ -28,11 +30,18 @@ public interface User {
             Callback<UserModel> callback
     );
 */
-    @GET("/get_user/{email}")
+    @GET("/users/{email}")
     void get_user_inform(
             @Path("email") String email,
             Callback<UserModel> callback
     );
 
+    @FormUrlEncoded
+    @POST("/members")
+    void requsetLogin(
+            @Field("email") String email,
+            @Field("password") String password,
+            Callback<CodeModel> callback
 
+    );
 }

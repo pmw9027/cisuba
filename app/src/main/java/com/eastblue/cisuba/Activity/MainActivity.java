@@ -37,14 +37,21 @@ import com.eastblue.cisuba.Model.BannerModel;
 import com.eastblue.cisuba.Network.Product;
 import com.eastblue.cisuba.R;
 import com.eastblue.cisuba.Util.HttpUtil;
+import com.kakao.auth.Session;
 import com.kakao.kakaolink.AppActionBuilder;
 import com.kakao.kakaolink.KakaoLink;
 import com.kakao.kakaolink.KakaoTalkLinkMessageBuilder;
+import com.kakao.network.ErrorResult;
+import com.kakao.usermgmt.UserManagement;
+import com.kakao.usermgmt.callback.MeResponseCallback;
+import com.kakao.usermgmt.response.model.UserProfile;
 import com.kakao.util.KakaoParameterException;
+import com.kakao.util.helper.log.Logger;
 
 import java.io.InputStream;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.BindView;
@@ -97,11 +104,12 @@ public class MainActivity extends AppCompatActivity {
 
     @Override
     protected void onResume() {
+        System.out.println("----------"+LoginActivity.mOAuthLoginModule);
         if (LoginActivity.mOAuthLoginModule != null) {
             if (LoginActivity.mOAuthLoginModule.getState(this).toString().equals("OK")) {
-                ProfileFragment.nickname.setText(LoginActivity.nickname);
-                MainActivity.nickname.setText(LoginActivity.nickname);
-                System.out.println("resume -- " + LoginActivity.nickname);
+                ProfileFragment.nickname.setText(LoginActivity.name);
+                MainActivity.nickname.setText(LoginActivity.name);
+                System.out.println("resume -- " + LoginActivity.name);
 
                 new Thread(new Runnable() {
                     @Override
@@ -125,7 +133,24 @@ public class MainActivity extends AppCompatActivity {
                 }).start();
             }
         }
-        //requestMe();
+
+        if(!Session.getCurrentSession().isClosed()) {
+            try {
+                MainActivity.profileimage.setEnabled(false);
+                requestMe();
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+
+        if(LoginActivity.ISLOGIN ) {
+            ProfileFragment.nickname.setText(LoginActivity.login_user_name);
+            MainActivity.nickname.setText(LoginActivity.login_user_name);
+
+            MainActivity.profileimage.setEnabled(false);
+            ProfileFragment.profileimage.setEnabled(false);
+            ProfileFragment.logout.setEnabled(true);
+        }
         super.onResume();
     }
 
@@ -289,6 +314,68 @@ public class MainActivity extends AppCompatActivity {
     @OnClick(R.id.drawer_profile)
     public void openLogin() {
         startActivity(new Intent(this, LoginActivity.class));
+    }
+
+    private void requestMe() {
+        final List<String> propertyKeys = new ArrayList<String>();
+        propertyKeys.add("kaccount_email");
+        propertyKeys.add("nickname");
+        propertyKeys.add("profile_image");
+        propertyKeys.add("thumbnail_image");
+
+        UserManagement.requestMe(new MeResponseCallback() {
+            @Override
+            public void onFailure(ErrorResult errorResult) {
+                String message = "failed to get user info. msg=" + errorResult;
+                Logger.d(message);
+
+                //redirectLoginActivity();
+            }
+
+            @Override
+            public void onSessionClosed(ErrorResult errorResult) {
+                nickname.setText("로그인을 하세요.");
+                MainActivity.nickname.setText("로그인을 하세요.");
+                profileimage.setImageResource(R.drawable.ic_launcher);
+                MainActivity.profileimage.setImageResource(R.drawable.ic_launcher);
+                //redirectLoginActivity();
+            }
+
+            @Override
+            public void onSuccess(final UserProfile userProfile) {
+                Logger.d("UserProfile : " + userProfile);
+
+                nickname.setText(userProfile.getNickname());
+                MainActivity.nickname.setText(userProfile.getNickname());
+
+                new Thread(new Runnable() {
+                    @Override
+                    public void run() {
+                        try {
+                            bitmap = getBitmap(userProfile.getThumbnailImagePath());
+                        } catch (Exception e) {
+
+                        } finally {
+                            if(bitmap != null) {
+                                runOnUiThread(new Runnable() {
+                                    @Override
+                                    public void run() {
+                                        profileimage.setImageBitmap(bitmap);
+                                        MainActivity.profileimage.setImageBitmap(bitmap);
+                                    }
+                                });
+                            }
+                        }
+                    }
+                }).start();
+
+            }
+
+            @Override
+            public void onNotSignedUp() {
+                // showSignup();
+            }
+        }, propertyKeys, false);
     }
 
     private Bitmap getBitmap(String url) {

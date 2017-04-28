@@ -11,10 +11,10 @@
 
 
     <include
+        android:id="@+id/login_toolbar"
         layout="@layout/toolbar_login"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:id="@+id/login_toolbar"/>
+        android:layout_height="wrap_content" />
 
     <ImageButton
         android:id="@+id/login_close"
@@ -29,11 +29,12 @@
         android:layout_marginTop="17dp"
         android:background="@drawable/btn_close2" />
 
-    <View style="@style/Divider"
+    <View
+        style="@style/Divider"
         android:layout_width="match_parent"
         android:layout_height="1dp"
-        android:background="#f2f2f2"
-        android:layout_below="@+id/login_toolbar"/>
+        android:layout_below="@+id/login_toolbar"
+        android:background="#f2f2f2" />
 
     <LinearLayout
         android:id="@+id/linearLayout"
@@ -153,7 +154,7 @@
             android:layout_height="wrap_content"
             android:src="@drawable/space" />
 
-        <LinearLayout
+        <!--<LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="3dp"
@@ -179,8 +180,11 @@
                 android:layout_marginTop="5dp"
                 android:background="@drawable/inputbox_top"
                 android:hint="이메일주소를 입력해주세요"
-                android:textSize="13sp"
-                android:paddingLeft="10dp"/>
+                android:lines="1"
+                android:nextFocusDown="@+id/next"
+                android:paddingLeft="10dp"
+                android:singleLine="true"
+                android:textSize="13sp" />
 
             <EditText
                 android:id="@+id/input_pass"
@@ -194,8 +198,11 @@
                 android:layout_marginRight="8dp"
                 android:background="@drawable/inputbox_bottom"
                 android:hint="비밀번호를 입력해주세요"
-                android:textSize="13sp"
-                android:paddingLeft="10dp"/>
+                android:lines="1"
+                android:nextFocusDown="@+id/next"
+                android:paddingLeft="10dp"
+                android:singleLine="true"
+                android:textSize="13sp" />
 
             <Button
                 android:id="@+id/email_login"
@@ -209,18 +216,18 @@
                 android:background="@drawable/btn_join_login"
                 android:gravity="center"
                 android:text="로그인"
+                android:textColor="#FFFFFF"
                 android:textSize="15sp"
-                android:textStyle="bold"
-                android:textColor="#FFFFFF" />
+                android:textStyle="bold" />
 
         </LinearLayout>
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:orientation="vertical"
+            android:layout_marginBottom="10dp"
             android:gravity="bottom"
-            android:layout_marginBottom="10dp">
+            android:orientation="vertical">
 
             <TextView
                 android:layout_width="match_parent"
@@ -238,7 +245,7 @@
                 android:text="회원가입"
                 android:textColor="#1a9eb8" />
 
-        </LinearLayout>
+        </LinearLayout>-->
 
     </LinearLayout>
 
