@@ -19,6 +19,7 @@ import android.widget.ListView;
 import android.widget.ScrollView;
 import android.widget.Spinner;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.daimajia.slider.library.SliderLayout;
 import com.daimajia.slider.library.SliderTypes.BaseSliderView;
@@ -143,6 +144,10 @@ public class HomeFragment extends Fragment {
                 if(!productModel.isFreePartner) {
                     startActivity(new Intent(getActivity(), ProductDetailActivity.class).putExtra("id", productModel.id));
                 }
+                else{
+                    Toast.makeText(getContext(), "제휴 준비중 입니다", Toast.LENGTH_LONG).show();
+
+                }
             }
         });
 
@@ -152,6 +157,10 @@ public class HomeFragment extends Fragment {
                 ProductModel productModel = (ProductModel) nearAdapter.getItem(position);
                 if(!productModel.isFreePartner) {
                     startActivity(new Intent(getActivity(), ProductDetailActivity.class).putExtra("id", productModel.id));
+                }
+                else{
+                    Toast.makeText(getContext(), "제휴 준비중 입니다", Toast.LENGTH_LONG).show();
+
                 }
             }
         });

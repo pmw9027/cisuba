@@ -13,9 +13,9 @@
 
             <padding
                 android:bottom="2dp"
-                android:left="-1dp"
-                android:right="-1dp"
-                android:top="0.4dp" />
+                android:left="0.6dp"
+                android:right="0.6dp"
+                android:top="0.6dp" />
 
         </shape>
     </item>
