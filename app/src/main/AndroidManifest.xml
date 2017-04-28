@@ -35,7 +35,7 @@
             android:screenOrientation="portrait" />
         <activity android:name=".Activity.LoginActivity" />
         <activity android:name=".Activity.TestActivity" />
-        <activity android:name=".Activity.ProductDetailActivity" />
+        <activity android:name=".Activity.ProductDetailActivity"/>
         <activity android:name=".Activity.RequestPartnerActivity" />
         <activity android:name=".Activity.NoticeActivity" />
         <activity android:name=".Activity.LawAdviceActivity" />
@@ -43,10 +43,18 @@
         <activity android:name=".Activity.MapDetailActivity" />
         <activity android:name=".Activity.TicketActivity" />
         <activity android:name=".Activity.JoinActivity" />
+<<<<<<< HEAD
         <activity android:name=".Activity.PaymentWebActivity" />
         <activity android:name="com.nhn.android.naverlogin.ui.OAuthLoginActivity" android:theme="@android:style/Theme.Translucent.NoTitleBar"/>
+=======
+        <activity
+            android:name="com.nhn.android.naverlogin.ui.OAuthLoginActivity"
+            android:theme="@android:style/Theme.Translucent.NoTitleBar" />
+>>>>>>> 503f95eb481774bdd87c716d6f8000a4551f5902
 
-        <activity android:name="com.nhn.android.naverlogin.ui.OAuthLoginInAppBrowserActivity" android:label="OAuth2.0 In-app"/>
+        <activity
+            android:name="com.nhn.android.naverlogin.ui.OAuthLoginInAppBrowserActivity"
+            android:label="OAuth2.0 In-app" />
     </application>
 
 </manifest>

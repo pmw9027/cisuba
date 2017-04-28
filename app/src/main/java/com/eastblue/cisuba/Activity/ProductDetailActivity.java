@@ -1,9 +1,12 @@
 package com.eastblue.cisuba.Activity;
 
+import android.content.ActivityNotFoundException;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Rect;
 import android.net.Uri;
 import android.os.Handler;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
@@ -15,6 +18,7 @@ import android.view.View;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.ListAdapter;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -23,6 +27,7 @@ import com.daimajia.slider.library.SliderLayout;
 import com.daimajia.slider.library.SliderTypes.BaseSliderView;
 import com.daimajia.slider.library.SliderTypes.DefaultSliderView;
 import com.daimajia.slider.library.SliderTypes.TextSliderView;
+import com.eastblue.cisuba.Adapter.ArrayAdapterWithIcon;
 import com.eastblue.cisuba.Manager.NetworkManager;
 import com.eastblue.cisuba.Map.NMapCalloutBasicOverlay;
 import com.eastblue.cisuba.Map.NMapPOIflagType;
@@ -52,6 +57,9 @@ import com.nhn.android.mapviewer.overlay.NMapCalloutOverlay;
 import com.nhn.android.mapviewer.overlay.NMapOverlayManager;
 import com.nhn.android.mapviewer.overlay.NMapPOIdataOverlay;
 
+import net.daum.android.map.MapView;
+
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
@@ -64,21 +72,35 @@ import retrofit.client.Response;
 
 public class ProductDetailActivity extends AppCompatActivity {
 
-    @BindView(R.id.toolbar) Toolbar toolbar;
-    @BindView(R.id.mapView) NMapView mMapView;
-    @BindView(R.id.slider) SliderLayout sliderLayout;
-    @BindView(R.id.frame_map) FrameLayout frameMap;
-    @BindView(R.id.lin_tag) LinearLayout linTag;
-    @BindView(R.id.tv_name) TextView tvName;
-    @BindView(R.id.tv_about) TextView tvAbout;
-    @BindView(R.id.tv_address) TextView tvAddress;
-    @BindView(R.id.tv_time) TextView tvTime;
-    @BindView(R.id.tv_phone) TextView tvPhone;
-   // @BindView(R.id.tv_use_about) TextView tvUseAbout;
-    @BindView(R.id.tv_price_morning) TextView tvPriceMorning;
-    @BindView(R.id.tv_price_lunch) TextView tvPriceLunch;
-    @BindView(R.id.tv_price_dinner) TextView tvPriceDinner;
-    @BindView(R.id.tv_discount) TextView tvPriceDiscount;
+    @BindView(R.id.toolbar)
+    Toolbar toolbar;
+    @BindView(R.id.mapView)
+    NMapView mMapView;
+    @BindView(R.id.slider)
+    SliderLayout sliderLayout;
+    @BindView(R.id.frame_map)
+    FrameLayout frameMap;
+    @BindView(R.id.lin_tag)
+    LinearLayout linTag;
+    @BindView(R.id.tv_name)
+    TextView tvName;
+    @BindView(R.id.tv_about)
+    TextView tvAbout;
+    @BindView(R.id.tv_address)
+    TextView tvAddress;
+    @BindView(R.id.tv_time)
+    TextView tvTime;
+    @BindView(R.id.tv_phone)
+    TextView tvPhone;
+    // @BindView(R.id.tv_use_about) TextView tvUseAbout;
+    @BindView(R.id.tv_price_morning)
+    TextView tvPriceMorning;
+    @BindView(R.id.tv_price_lunch)
+    TextView tvPriceLunch;
+    @BindView(R.id.tv_price_dinner)
+    TextView tvPriceDinner;
+    @BindView(R.id.tv_discount)
+    TextView tvPriceDiscount;
 
     NMapContext mMapContext;
     NMapOverlayManager mOverlayManager;
@@ -120,7 +142,7 @@ public class ProductDetailActivity extends AppCompatActivity {
         mMapView.setFocusable(true);
         mMapView.setFocusableInTouchMode(true);
         mMapView.requestFocus();
-        mMapView.setScalingFactor(2.0f,false);
+        mMapView.setScalingFactor(2.0f, false);
         mMapViewerResourceProvider = new NMapViewerResourceProvider(this);
         mOverlayManager = new NMapOverlayManager(this, mMapView, mMapViewerResourceProvider);
         mMapController = mMapView.getMapController();
@@ -129,7 +151,7 @@ public class ProductDetailActivity extends AppCompatActivity {
         tvPhone.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(Intent.ACTION_DIAL, Uri.parse("tel:"+tvPhone.getText()));
+                Intent intent = new Intent(Intent.ACTION_DIAL, Uri.parse("tel:" + tvPhone.getText()));
                 startActivity(intent);
             }
         });
@@ -138,6 +160,7 @@ public class ProductDetailActivity extends AppCompatActivity {
 
     }
 
+<<<<<<< HEAD
     /*@OnClick(R.id.btn_pay)
     public void openPayWeb() {
         //Intent payWebActivity = new Intent(ProductDetailActivity.this, PaymentWebActivity.class);
@@ -145,14 +168,16 @@ public class ProductDetailActivity extends AppCompatActivity {
         startActivity(new Intent(this, PaymentWebActivity.class));
     }*/
 
+=======
+>>>>>>> 503f95eb481774bdd87c716d6f8000a4551f5902
     @OnClick(R.id.frame_map)
     public void openMapDetail() {
-        if(isRecv) {
+        if (isRecv) {
             Intent mapActivity = new Intent(ProductDetailActivity.this, MapDetailActivity.class);
             mapActivity.putExtra("lat", lat);
             mapActivity.putExtra("lng", lng);
 
-            if(mapActivity.getBooleanExtra("gps", false)) {
+            if (mapActivity.getBooleanExtra("gps", false)) {
                 mapActivity.putExtra("myLat", getIntent().getDoubleExtra("lat", 0));
                 mapActivity.putExtra("myLng", getIntent().getDoubleExtra("lng", 0));
             }
@@ -163,14 +188,14 @@ public class ProductDetailActivity extends AppCompatActivity {
     }
 
     void initScroll(List<ProductImageModel> imgArray) {
-        HashMap<String,String> file_maps = new HashMap<String, String>();
+        HashMap<String, String> file_maps = new HashMap<String, String>();
 
-        for(int i=0; i<imgArray.size(); i++) {
+        for (int i = 0; i < imgArray.size(); i++) {
             file_maps.put("BANNER" + i, NetworkManager.SERVER_URL + imgArray.get(i).image);
             Log.d("IMAGE", imgArray.get(i).image);
         }
 
-        for(String name : file_maps.keySet()){
+        for (String name : file_maps.keySet()) {
             DefaultSliderView textSliderView = new DefaultSliderView(this);
             // initialize a SliderLayout
             textSliderView
@@ -181,7 +206,7 @@ public class ProductDetailActivity extends AppCompatActivity {
             //add your extra information
             textSliderView.bundle(new Bundle());
             textSliderView.getBundle()
-                    .putString("extra",name);
+                    .putString("extra", name);
 
             sliderLayout.addSlider(textSliderView);
         }
@@ -201,7 +226,7 @@ public class ProductDetailActivity extends AppCompatActivity {
                 partnerName = productModel.partnerName;
 
                 // 데이터 바인딩
-                tvName.setText("["+productModel.highlightAddress + "] " +productModel.partnerName);
+                tvName.setText("[" + productModel.highlightAddress + "] " + productModel.partnerName);
                 tvAbout.setText(productModel.detailAbout);
                 tvAddress.setText(productModel.detailAddress);
                 tvPriceMorning.setText("조조 " + productModel.morningPrice + "원");
@@ -211,9 +236,9 @@ public class ProductDetailActivity extends AppCompatActivity {
 
                 tvPhone.setText(productModel.phone);
                 //tvUseAbout.setText(productModel.useAbout);
-                if(productModel.startStime != null && productModel.startEtime != null) {
+                if (productModel.startStime != null && productModel.startEtime != null) {
                     String startTime = productModel.startStime.split(":")[0] + ":" + productModel.startStime.split(":")[1];
-                    String endTime = productModel.startEtime.split(":")[0]+ ":" +  productModel.startEtime.split(":")[1];
+                    String endTime = productModel.startEtime.split(":")[0] + ":" + productModel.startEtime.split(":")[1];
                     tvTime.setText(startTime + "~" + endTime);
                 }
 
@@ -222,7 +247,7 @@ public class ProductDetailActivity extends AppCompatActivity {
 
                 initScroll(productModel.imageList);
 
-                for(int i=0; i<productModel.tagList.size(); i++) {
+                for (int i = 0; i < productModel.tagList.size(); i++) {
 
                     final int size = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 26, getResources().getDisplayMetrics());
                     final int margin = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 1, getResources().getDisplayMetrics());
@@ -256,15 +281,15 @@ public class ProductDetailActivity extends AppCompatActivity {
         NMapPOIdataOverlay poiDataOverlay = mOverlayManager.createPOIdataOverlay(poiData, null);
         poiDataOverlay.showAllPOIdata(0);
 
-        mMapView.getMapController().setMapCenter(lng,lat,11);
-        productPoint = new NGeoPoint((int)(lng * 1E6), (int)(lat * 1e6));
+        mMapView.getMapController().setMapCenter(lng, lat, 11);
+        productPoint = new NGeoPoint((int) (lng * 1E6), (int) (lat * 1e6));
         mMapController.animateTo(productPoint);
     }
 
     @OnClick(R.id.btn_route)
     public void openMapApps() {
+        dialogMapSelect();
 
-        mMapView.executeNaverMap();
 
     }
 
@@ -297,15 +322,81 @@ public class ProductDetailActivity extends AppCompatActivity {
 
     @Override
     protected void onResume() {
-        mMapView.getMapController().setMapCenter(lng,lat,11);
+        mMapView.getMapController().setMapCenter(lng, lat, 11);
         super.onResume();
     }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        if(item.getItemId() == android.R.id.home) {
+        if (item.getItemId() == android.R.id.home) {
             finish();
         }
         return super.onOptionsItemSelected(item);
     }
+
+    void dialogMapSelect() {
+        final String [] items = new String[] {"네이버 지도", "카카오 맵"};
+        final Integer[] icons = new Integer[] {R.drawable.naver_map_icon, R.drawable.kakao_map_icon};
+        ListAdapter adapter = new ArrayAdapterWithIcon(ProductDetailActivity.this, items, icons);
+//
+//        final List<String> ListItems = new ArrayList<>();
+//        ListItems.add("네이버 지도");
+//        ListItems.add("카카오 맵");
+//        final CharSequence[] items = ListItems.toArray(new String[ListItems.size()]);
+
+        new AlertDialog.Builder(ProductDetailActivity.this).setTitle("도보 길찾기")
+                .setAdapter(adapter, new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int index ) {
+                        switch (index) {
+                            case 0:
+                                mMapView.executeNaverMap();
+                                break;
+                            case 1:
+                                try {
+                                    Intent intent = new Intent();
+                                    intent.setAction(Intent.ACTION_VIEW);
+                                    intent.setData(Uri.parse("daummaps://look?p=" + lat + "," + lng + ""));
+                                    startActivity(intent);
+                                } catch (Exception e) {
+                                    Intent intent = new Intent();
+                                    intent.setAction(Intent.ACTION_VIEW);
+                                    intent.setData(Uri.parse("market://details?id=net.daum.android.map"));
+                                    startActivity(intent);
+                                }
+                                break;
+                        }
+                        dialog.dismiss();
+                    }
+                }).show();
+
+//
+//        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+//        builder.setTitle("도보 길찾기");
+//        builder.setItems(items, new DialogInterface.OnClickListener() {
+//            public void onClick(DialogInterface dialog, int index) {
+//                switch (index) {
+//                    case 0:
+//                        mMapView.executeNaverMap();
+//                        break;
+//                    case 1:
+//                        try {
+//                            Intent intent = new Intent();
+//                            intent.setAction(Intent.ACTION_VIEW);
+//                            intent.setData(Uri.parse("daummaps://look?p=" + lat + "," + lng + ""));
+//                            startActivity(intent);
+//                        } catch (Exception e) {
+//                            Intent intent = new Intent();
+//                            intent.setAction(Intent.ACTION_VIEW);
+//                            intent.setData(Uri.parse("market://details?id=net.daum.android.map"));
+//                            startActivity(intent);
+//                        }
+//                        break;
+//                }
+//                dialog.dismiss();
+//            }
+//        });
+//        builder.show();
+    }
+
+
 }

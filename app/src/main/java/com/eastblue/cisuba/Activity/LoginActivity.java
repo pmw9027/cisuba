@@ -161,8 +161,15 @@ public class LoginActivity extends AppCompatActivity {// implements View.OnClick
 
         //InitializeNaverAPI();
 
+<<<<<<< HEAD
         /*et_eamil = (EditText) findViewById(R.id.input_email);
         et_password = (EditText) findViewById(R.id.input_pass);*/
+=======
+        et_eamil = (EditText)findViewById(R.id.input_email);
+        et_password = (EditText)findViewById(R.id.input_pass);
+
+        getItem("hello");
+>>>>>>> 503f95eb481774bdd87c716d6f8000a4551f5902
 
         tvnaver = (TextView) findViewById(R.id.naver_text);
         ivnaver = (ImageView) findViewById(R.id.naver_symbol);
@@ -779,7 +786,11 @@ public class LoginActivity extends AppCompatActivity {// implements View.OnClick
 
             @Override
             public void failure(RetrofitError error) {
+<<<<<<< HEAD
                 System.out.println("login_test fail");
+=======
+                System.out.println("login_test");
+>>>>>>> 503f95eb481774bdd87c716d6f8000a4551f5902
             }
         });
 

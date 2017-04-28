@@ -108,7 +108,7 @@ public class LocationFragment extends Fragment {
     NearAdapter nearAdapter;
 
     int currentPage = 0;
-    int loadSize = 5;
+    int loadSize = 10;
     Boolean firstLoading = true;
     public static Boolean firstSelect = true;
     Boolean lastItemVisibleFlag = false;
@@ -153,7 +153,7 @@ public class LocationFragment extends Fragment {
         mMapContext = new NMapContext(getActivity());
         mMapContext.onCreate();
         mMapContext.setupMapView(mMapView);
-        mMapView.setLayoutParams(new NMapView.LayoutParams(NMapView.LayoutParams.MATCH_PARENT, (getContext().getResources().getDisplayMetrics().heightPixels/5)*3));
+        mMapView.setLayoutParams(new NMapView.LayoutParams(NMapView.LayoutParams.MATCH_PARENT, (getContext().getResources().getDisplayMetrics().heightPixels / 5) * 3));
 
         mMapView.setClientId(CLIENT_ID);
         // initialize map view
@@ -206,6 +206,9 @@ public class LocationFragment extends Fragment {
                             .putExtra("gps", true)
                             .putExtra("lat", mLat)
                             .putExtra("lng", mLng));
+                } else {
+                    Toast.makeText(getContext(), "제휴 준비중 입니다", Toast.LENGTH_LONG).show();
+
                 }
             }
         });
@@ -219,9 +222,7 @@ public class LocationFragment extends Fragment {
             @Override
             public void onScrollStateChanged(AbsListView view, int scrollState) {
                 if (scrollState == AbsListView.OnScrollListener.SCROLL_STATE_IDLE && lastItemVisibleFlag) {
-                    if (!firstLoading) {
-                        nearProduct(currentPage, loadSize, 1, 4, mLat, mLng);
-                    }
+                    nearProduct(currentPage, loadSize, 1, 4, mLat, mLng);
                 }
             }
         });
@@ -407,11 +408,15 @@ public class LocationFragment extends Fragment {
                         } else {
                             poiData.addPOIitem(lng, lat, name, pin, 0);
                         }
+                        Log.d("size", lng + "," + lat + "," + name);
                     }
                 }
-
                 poiData.endPOIdata();
                 poiDataOverlay = mOverlayManager.createPOIdataOverlay(poiData, null);
+                if (productModels.size() == size) {
+                    poiDataOverlay.showAllPOIdata(0);
+                }
+
                 mOverlayManager.setOnCalloutOverlayViewListener(new NMapOverlayManager.OnCalloutOverlayViewListener() {
                     @Override
                     public View onCreateCalloutOverlayView(NMapOverlay nMapOverlay, NMapOverlayItem nMapOverlayItem, Rect rect) {
@@ -435,7 +440,6 @@ public class LocationFragment extends Fragment {
                         return null;
                     }
                 });
-                poiDataOverlay.showAllPOIdata(0);
 
                 currentPage++;
                 nearAdapter.notifyDataSetChanged();
@@ -528,6 +532,9 @@ public class LocationFragment extends Fragment {
                             .putExtra("gps", true)
                             .putExtra("lat", mLat)
                             .putExtra("lng", mLng));
+                } else {
+                    Toast.makeText(getContext(), "제휴 준비중 입니다", Toast.LENGTH_LONG).show();
+
                 }
             }
         });

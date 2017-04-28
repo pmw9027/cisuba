@@ -146,12 +146,12 @@
 
 
             <ListView
-                android:dividerHeight="@dimen/margin_default"
-                android:divider="@color/background"
-                android:padding="@dimen/padding_medium"
                 android:id="@+id/lv_items"
                 android:layout_width="match_parent"
-                android:layout_height="300dp"></ListView>
+                android:layout_height="300dp"
+                android:divider="@color/White"
+                android:dividerHeight="@dimen/margin_medium"
+                android:padding="10dp"></ListView>
 
         </LinearLayout>
 

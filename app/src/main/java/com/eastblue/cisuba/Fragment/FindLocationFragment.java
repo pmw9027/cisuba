@@ -15,6 +15,7 @@ import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.ListView;
+import android.widget.Toast;
 
 import com.eastblue.cisuba.Activity.ProductDetailActivity;
 import com.eastblue.cisuba.Adapter.NearAdapter;
@@ -50,7 +51,7 @@ public class FindLocationFragment extends Fragment{
     int selectArea = 1; // DEFAULT 0
 
     int currentPage = 0;
-    int loadSize = 5;
+    int loadSize = 10;
     int loadType = 3;
     Boolean firstLoading = true;
     Boolean lastItemVisibleFlag = false;
@@ -74,6 +75,10 @@ public class FindLocationFragment extends Fragment{
                 ProductModel productModel = (ProductModel) nearAdapter.getItem(position);
                 if(!productModel.isFreePartner) {
                     startActivity(new Intent(getActivity(), ProductDetailActivity.class).putExtra("id", productModel.id));
+                }
+                else{
+                    Toast.makeText(getContext(), "제휴 준비중 입니다", Toast.LENGTH_LONG).show();
+
                 }
             }
         });
