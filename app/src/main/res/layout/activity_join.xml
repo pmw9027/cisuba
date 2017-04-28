@@ -67,7 +67,10 @@
             android:background="@drawable/inputbox_top"
             android:hint="이메일주소를 입력해주세요"
             android:paddingLeft="10dp"
-            android:textSize="13sp" />
+            android:textSize="13sp"
+            android:nextFocusDown="@+id/next"
+            android:singleLine = "true"
+            android:lines = "1" />
 
         <EditText
             android:id="@+id/input_join_pass"
@@ -81,7 +84,10 @@
             android:background="@drawable/inputbox_mid"
             android:hint="비밀번호를 입력해주세요"
             android:paddingLeft="10dp"
-            android:textSize="13sp" />
+            android:textSize="13sp"
+            android:nextFocusDown="@+id/next"
+            android:singleLine = "true"
+            android:lines = "1" />
 
         <EditText
             android:id="@+id/input_join_pass_config"
@@ -96,7 +102,10 @@
             android:background="@drawable/inputbox_bottom"
             android:hint="비밀번호를 다시 입력해주세요"
             android:paddingLeft="10dp"
-            android:textSize="13sp" />
+            android:textSize="13sp"
+            android:nextFocusDown="@+id/next"
+            android:singleLine = "true"
+            android:lines = "1" />
 
         <EditText
             android:id="@+id/input_join_name"
@@ -112,7 +121,10 @@
             android:background="@drawable/box"
             android:hint="성함을 입력해주세요"
             android:paddingLeft="10dp"
-            android:textSize="13sp" />
+            android:textSize="13sp"
+            android:nextFocusDown="@+id/next"
+            android:singleLine = "true"
+            android:lines = "1" />
 
         <LinearLayout
             android:id="@+id/layout_Therms"

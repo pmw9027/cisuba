@@ -5,6 +5,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -38,6 +39,7 @@ import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 
+import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import de.hdodenhof.circleimageview.CircleImageView;
@@ -53,6 +55,8 @@ public class ProfileFragment extends Fragment {
     public static CircleImageView profileimage;
     public static ImageButton logout;
     Bitmap bitmap;
+
+    @BindView(R.id.tv_office_phone) TextView tvPhone;
 
 
 
@@ -90,6 +94,14 @@ public class ProfileFragment extends Fragment {
             ProfileFragment.logout.setEnabled(true);
             requestMe();
         }
+
+        tvPhone.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(Intent.ACTION_DIAL, Uri.parse("tel:"+tvPhone.getText()));
+                startActivity(intent);
+            }
+        });
 
         return rootView;
     }

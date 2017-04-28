@@ -25,7 +25,7 @@ public class PaymentWebActivity extends AppCompatActivity {
         //mWebSettings = mWebView.getSettings();
         //mWebSettings.setJavaScriptEnabled(true);
 
-        mWebView.loadUrl("http://172.30.1.22:8081/mobile/iamport");
+        mWebView.loadUrl("http://172.30.1.57:8081/mobile/iamport");
         mWebView.setWebViewClient(new WebViewClientClass());
     }
 

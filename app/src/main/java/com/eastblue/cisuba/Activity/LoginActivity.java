@@ -3,6 +3,7 @@ package com.eastblue.cisuba.Activity;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Color;
@@ -29,6 +30,7 @@ import com.bumptech.glide.Glide;
 import com.eastblue.cisuba.Fragment.ProfileFragment;
 import com.eastblue.cisuba.Kakao.KakaoLoginControl;
 import com.eastblue.cisuba.Manager.NetworkManager;
+import com.eastblue.cisuba.Model.CodeModel;
 import com.eastblue.cisuba.Model.UserModel;
 import com.eastblue.cisuba.Network.User;
 import com.eastblue.cisuba.R;
@@ -122,22 +124,18 @@ public class LoginActivity extends AppCompatActivity {// implements View.OnClick
     private TextView tvkakao;
     private ImageView ivkakao;
 
-    private String get_email;
-    private String password;
-    private String username;
-
     TextView join;
 
     EditText et_eamil, et_password;
 
-    public static String user_id = "";
-    public static String user_pass = "";
-    public static String user_name = "";
-
-    public static String login_user_id = "";
     public static String login_user_name = "";
 
     public static boolean ISLOGIN = false;
+
+    SharedPreferences setting;
+    SharedPreferences.Editor editor;
+
+    String loginId, loginPwd;
 
 
     @Override
@@ -149,14 +147,22 @@ public class LoginActivity extends AppCompatActivity {// implements View.OnClick
         setContentView(R.layout.activity_login);
         ButterKnife.bind(this);
 
+        /*
+        setting = getSharedPreferences("login_setting",MODE_PRIVATE);
+        editor = setting.edit();
+
+        loginId = setting.getString("inputId",null);
+        loginPwd = setting.getString("inputPwd",null);
+        */
+
         callback = new SessionCallback();
         Session.getCurrentSession().addCallback(callback);
         Session.getCurrentSession().checkAndImplicitOpen();
 
         //InitializeNaverAPI();
 
-        et_eamil = (EditText)findViewById(R.id.input_email);
-        et_password = (EditText)findViewById(R.id.input_pass);
+        /*et_eamil = (EditText) findViewById(R.id.input_email);
+        et_password = (EditText) findViewById(R.id.input_pass);*/
 
         tvnaver = (TextView) findViewById(R.id.naver_text);
         ivnaver = (ImageView) findViewById(R.id.naver_symbol);
@@ -184,10 +190,10 @@ public class LoginActivity extends AppCompatActivity {// implements View.OnClick
             }
         });
 
-        tvkakao = (TextView)findViewById(R.id.kakao_text);
-        ivkakao = (ImageView)findViewById(R.id.kakao_symbol);
+        tvkakao = (TextView) findViewById(R.id.kakao_text);
+        ivkakao = (ImageView) findViewById(R.id.kakao_symbol);
 
-        kakaoLoginButton = (ViewGroup)findViewById(R.id.kakaologin);
+        kakaoLoginButton = (ViewGroup) findViewById(R.id.kakaologin);
         kakaoLoginButton.setOnTouchListener(new View.OnTouchListener() {
             @Override
             public boolean onTouch(View view, MotionEvent motionEvent) {
@@ -234,8 +240,8 @@ public class LoginActivity extends AppCompatActivity {// implements View.OnClick
             }
         });
 */
-        join = (TextView)findViewById(R.id.btn_join);
-        join.setText(Html.fromHtml("<u>" + "회원가입" + "</u>"));
+        /*join = (TextView) findViewById(R.id.btn_join);
+        join.setText(Html.fromHtml("<u>" + "회원가입" + "</u>"));*/
 
     }
 
@@ -250,13 +256,9 @@ public class LoginActivity extends AppCompatActivity {// implements View.OnClick
         finish();
     }
 
-    @OnClick(R.id.email_login)
+    /*@OnClick(R.id.email_login)
     void login_email() {
-        /*
-        System.out.println("login_test - -"+et_eamil.getText().toString()+"-");
-        getItem(et_eamil.getText().toString());
-        */
-        /*
+        *//*
         String key = "cisuba";
         String en,de;
         System.out.println("email : " + et_eamil.getText().toString());
@@ -271,33 +273,46 @@ public class LoginActivity extends AppCompatActivity {// implements View.OnClick
         } catch (Exception e) {
             e.printStackTrace();
         }
-        */
-        /*
-        if(et_eamil.getText().toString().equals(user_id)) {
-            if(et_password.getText().toString().equals(user_pass)) {
-                login_user_id = user_id;
-                login_user_name = user_name;
-                ProfileFragment.nickname.setText(login_user_name);
-                MainActivity.nickname.setText(login_user_name);
+        *//*
 
-                MainActivity.profileimage.setEnabled(false);
-                ProfileFragment.profileimage.setEnabled(false);
-                ProfileFragment.logout.setEnabled(true);
+        String ID = et_eamil.getText().toString();
+        String PW = et_password.getText().toString();
+        *//*
+        editor.putString("ID", ID);
+        editor.putString("PW", PW);
+        editor.putBoolean("Auto_Login_enabled", true);
+        editor.commit();
+        *//*
+        System.out.println("login_test");
 
-                ISLOGIN = true;
+        HttpUtil.api(User.class).requsetLogin(
+                et_eamil.getText().toString(),
+                et_password.getText().toString(),
+                new Callback<CodeModel>() {
+                    @Override
+                    public void success(CodeModel codeModel, Response response) {
+                        if (codeModel.code.equals("1")) {
+                            Toast.makeText(LoginActivity.this, "login", Toast.LENGTH_SHORT).show();
+                            *//*System.out.println("login_test user -"+codeModel.user);*//*
+                            System.out.println("login_test succeess user_name "+codeModel.user_name);
+                            System.out.println("login_test succeess code = " + codeModel.code);
+                            System.out.println("login_test succeess message = "+codeModel.message);
+                            //finish();
+                        } else {
+                            System.out.println("login_test fail code = " + codeModel.code);
+                            System.out.println("login_test fail message = "+codeModel.message);
+                        }
+                    }
 
-                finish();
-            } else {
-                Toast.makeText(this,"email, 비밀번호가 틀립니다.",Toast.LENGTH_SHORT).show();
-            }
-        } else {
-            Toast.makeText(this,"email, 비밀번호가 틀립니다.",Toast.LENGTH_SHORT).show();
-        }
-        */
+                    @Override
+                    public void failure(RetrofitError error) {
+                        System.out.println("login_test failure");
+                        System.out.println(error);
+                    }
+                });
+    }*/
 
-    }
-
-    @OnClick(R.id.btn_join)
+   /* @OnClick(R.id.btn_join)
     void toJoin() {
         startActivity(new Intent(this, JoinActivity.class));
     }
@@ -319,7 +334,7 @@ public class LoginActivity extends AppCompatActivity {// implements View.OnClick
                 Log.d("login", result.toString());
             }
         });
-    }
+    }*/
 
     private void requestInformation() {
 
@@ -536,8 +551,6 @@ public class LoginActivity extends AppCompatActivity {// implements View.OnClick
             }
         } );
     }*/
-
-
     private void initSetting() {
         //OAuthLoginButton naverLoginButton = ( OAuthLoginButton ) findViewById( R.id.buttonOAuthLoginImg );
         ViewGroup naverLoginButton = (ViewGroup) findViewById(R.id.naver_login);
@@ -717,15 +730,15 @@ public class LoginActivity extends AppCompatActivity {// implements View.OnClick
             id = f_array[5];
             name = f_array[6];
             birthday = f_array[8];
-            System.out.println("email:"+email);
-            System.out.println("nickname:"+nickname);
-            System.out.println("enc_id:"+enc_id);
-            System.out.println("profile_image:"+profile_image);
-            System.out.println("age:"+age);
-            System.out.println("gender:"+gender);
-            System.out.println("id:"+id);
-            System.out.println("name:"+name);
-            System.out.println("birthday:"+birthday);
+            System.out.println("email:" + email);
+            System.out.println("nickname:" + nickname);
+            System.out.println("enc_id:" + enc_id);
+            System.out.println("profile_image:" + profile_image);
+            System.out.println("age:" + age);
+            System.out.println("gender:" + gender);
+            System.out.println("id:" + id);
+            System.out.println("name:" + name);
+            System.out.println("birthday:" + birthday);
         }
     }
 
@@ -762,9 +775,6 @@ public class LoginActivity extends AppCompatActivity {// implements View.OnClick
             @Override
             public void success(UserModel userModel, Response response) {
 
-                user_id = userModel.email;
-                user_pass = userModel.password;
-                user_name = userModel.username;
             }
 
             @Override
@@ -781,11 +791,11 @@ public class LoginActivity extends AppCompatActivity {// implements View.OnClick
 
         Cipher cipher = Cipher.getInstance("AES/CBC/PKCS5Padding");
 
-        byte[] keyBytes= new byte[16];
+        byte[] keyBytes = new byte[16];
 
-        byte[] b= key.getBytes("UTF-8");
+        byte[] b = key.getBytes("UTF-8");
 
-        int len= b.length;
+        int len = b.length;
 
         if (len > keyBytes.length) len = keyBytes.length;
 
@@ -795,10 +805,7 @@ public class LoginActivity extends AppCompatActivity {// implements View.OnClick
 
         IvParameterSpec ivSpec = new IvParameterSpec(keyBytes);
 
-        cipher.init(Cipher.DECRYPT_MODE,keySpec,ivSpec);
-
-
-
+        cipher.init(Cipher.DECRYPT_MODE, keySpec, ivSpec);
 
 
 //               BASE64Decoder decoder = new BASE64Decoder();
@@ -811,14 +818,12 @@ public class LoginActivity extends AppCompatActivity {// implements View.OnClick
 
         // Base64.decode(input, flags)
 
-        byte [] results = cipher.doFinal(Base64.decode(text, 0));
+        byte[] results = cipher.doFinal(Base64.decode(text, 0));
 
 
-
-        return new String(results,"UTF-8");
+        return new String(results, "UTF-8");
 
     }
-
 
 
     public static String Encrypt(String text, String key) throws Exception
@@ -827,11 +832,11 @@ public class LoginActivity extends AppCompatActivity {// implements View.OnClick
 
         Cipher cipher = Cipher.getInstance("AES/CBC/PKCS5Padding");
 
-        byte[] keyBytes= new byte[16];
+        byte[] keyBytes = new byte[16];
 
-        byte[] b= key.getBytes("UTF-8");
+        byte[] b = key.getBytes("UTF-8");
 
-        int len= b.length;
+        int len = b.length;
 
         if (len > keyBytes.length) len = keyBytes.length;
 
@@ -841,8 +846,7 @@ public class LoginActivity extends AppCompatActivity {// implements View.OnClick
 
         IvParameterSpec ivSpec = new IvParameterSpec(keyBytes);
 
-        cipher.init(Cipher.ENCRYPT_MODE,keySpec,ivSpec);
-
+        cipher.init(Cipher.ENCRYPT_MODE, keySpec, ivSpec);
 
 
         byte[] results = cipher.doFinal(text.getBytes("UTF-8"));
@@ -850,7 +854,6 @@ public class LoginActivity extends AppCompatActivity {// implements View.OnClick
 //               BASE64Encoder encoder = new BASE64Encoder();
 
 //               return encoder.encode(results);
-
 
 
         return Base64.encodeToString(results, 0);
